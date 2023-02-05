@@ -16,12 +16,14 @@ export const serverSchema = z.object({
     // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
     // Since NextAuth.js automatically uses the VERCEL_URL if present.
     (str) => process.env.VERCEL_URL ?? str,
-    process.env.VERCEL ? z.string() : z.string().url(),
+    process.env.VERCEL ? z.string() : z.string().url()
   ),
   GITHUB_CLIENT_ID: z.string(),
   GITHUB_CLIENT_SECRET: z.string(),
   ZOHO_CLIENT_ID: z.string(),
   ZOHO_CLIENT_SECRET: z.string(),
+  VERCEL_ACCESS_TOKEN_DEV: z.string(),
+  PROJECT_ID_VERCEL: z.string(),
 });
 
 /**
@@ -38,6 +40,8 @@ export const serverEnv = {
   GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
   ZOHO_CLIENT_ID: process.env.ZOHO_CLIENT_ID,
   ZOHO_CLIENT_SECRET: process.env.ZOHO_CLIENT_SECRET,
+  VERCEL_ACCESS_TOKEN_DEV: process.env.VERCEL_ACCESS_TOKEN_DEV,
+  PROJECT_ID_VERCEL: process.env.PROJECT_ID_VERCEL,
 };
 
 /**

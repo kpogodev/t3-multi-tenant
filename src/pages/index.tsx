@@ -2,6 +2,7 @@ import { type NextPage, type GetServerSideProps } from "next";
 import { getServerAuthSession } from "../server/auth";
 import Head from "next/head";
 import { signOut, useSession } from "next-auth/react";
+import { api } from "../utils/api";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getServerAuthSession(ctx);
@@ -23,6 +24,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 const Home: NextPage = () => {
   const { data: session } = useSession();
 
+  const domain = api.domain.add.useMutation()
+
   return (
     <>
       <Head>
@@ -33,6 +36,12 @@ const Home: NextPage = () => {
       <main>
         <h1 className="text-center text-4xl font-bold">Welcome to T3 App!</h1>
         {session && <button onClick={() => void signOut()}>Sign out</button>}
+        <button
+          className="btn-primary btn"
+          onClick={() => domain.mutate({ name: "devtestingxyz.store" })}
+        >
+          Add Domain
+        </button>
       </main>
     </>
   );
