@@ -20,3 +20,5 @@ export const addDomainToVercelProject = async (domain: string) => {
     console.error(error);
   }
 };
+
+
