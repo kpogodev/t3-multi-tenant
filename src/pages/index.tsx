@@ -1,27 +1,8 @@
-import { type NextPage, type GetServerSideProps } from "next";
-import { getServerAuthSession } from "../server/auth";
+import { type NextPage } from "next";
 import Head from "next/head";
-import { signOut, useSession } from "next-auth/react";
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getServerAuthSession(ctx);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};
 
 const Home: NextPage = () => {
-  const { data: session } = useSession();
+
 
   return (
     <>
@@ -32,7 +13,6 @@ const Home: NextPage = () => {
       </Head>
       <main>
         <h1 className="text-center text-4xl font-bold">Welcome to T3 App!</h1>
-        {session && <button onClick={() => void signOut()}>Sign out</button>}
       </main>
     </>
   );

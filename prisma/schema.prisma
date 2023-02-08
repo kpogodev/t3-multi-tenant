@@ -9,12 +9,30 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-//Domain
+// Platform
 model Domain {
-  id           String              @id @default(cuid())
-  name         String
-  apexName     String
-  verified     Boolean
+  id       String  @id @default(cuid())
+  name     String
+  apexName String
+  verified Boolean
+  siteId   Site?
+}
+
+model Theme {
+  id     String @id @default(cuid())
+  name   String
+  sites  Site[]
+}
+
+model Site {
+  id       String @id @default(cuid())
+  name     String
+  theme    Theme  @relation(fields: [themeId], references: [id], onDelete: Cascade)
+  themeId  String
+  domain   Domain @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  domainId String @unique
+
+  @@index([themeId])
 }
 
 //NextAuth

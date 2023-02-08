@@ -1,21 +1,19 @@
-import { z } from "zod";
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
-import {addDomainToVercelProject} from "../../vercel";
+import { z } from "zod"
+import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc"
+import { addDomainToVercelProject } from "../../vercel"
 
 export const domainRouter = createTRPCRouter({
-  addDomain: protectedProcedure
+  addDomain: publicProcedure
     .input(
       z.object({
         name: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const domain = await addDomainToVercelProject(`${input.name}.devtestingxyz.store`);
-
-      console.log(domain)
+      const domain = await addDomainToVercelProject(`${input.name}.devtestingxyz.store`)
 
       if (!domain) {
-        throw new Error("Domain already exists");
+        throw new Error("Domain already exists")
       }
 
       await ctx.prisma.domain.create({
@@ -23,9 +21,16 @@ export const domainRouter = createTRPCRouter({
           name: domain.name,
           apexName: domain.apexName,
           verified: domain.verified,
-        }
+        },
       })
     }),
+  getDomains: publicProcedure.query(async ({ ctx }) => {
+    const domains = await ctx.prisma.domain.findMany()
+
+    if(!domains) throw new Error("No domains found")
+
+    return domains
+  }),
   checkDomainAvailability: publicProcedure
     .input(
       z.object({
@@ -41,6 +46,6 @@ export const domainRouter = createTRPCRouter({
 
       return {
         available: !domain,
-      };
+      }
     }),
-});
+})

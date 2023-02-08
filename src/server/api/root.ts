@@ -1,4 +1,5 @@
 import { domainRouter } from "./routers/domain";
+import { siteRouter } from "./routers/site";
 import { createTRPCRouter } from "./trpc";
 /**
  * This is the primary router for your server.
@@ -6,7 +7,8 @@ import { createTRPCRouter } from "./trpc";
  * All routers added in /api/routers should be manually added here
  */
 export const appRouter = createTRPCRouter({
-  domain: domainRouter
+  domain: domainRouter,
+  site: siteRouter,
 });
 
 // export type definition of API
