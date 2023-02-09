@@ -7,27 +7,42 @@ export const domainRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
+        isCustom: z.boolean(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const domain = await addDomainToVercelProject(`${input.name}.devtestingxyz.store`)
+      if (input.isCustom) {
+        const customDomain = await addDomainToVercelProject(`${input.name}`)
 
-      if (!domain) {
-        throw new Error("Domain already exists")
+        if (!customDomain) {
+          throw new Error("Domain already exists")
+        }
+
+        const customDomainAdded = await ctx.prisma.domain.create({
+          data: {
+            name: customDomain.name,
+            apexName: customDomain.apexName,
+            verified: customDomain.verified,
+          },
+        })
+
+        return customDomainAdded
       }
 
-      await ctx.prisma.domain.create({
+      const domainAdded = await ctx.prisma.domain.create({
         data: {
-          name: domain.name,
-          apexName: domain.apexName,
-          verified: domain.verified,
+          name: `${input.name}.devtestingxyz.store`,
+          apexName: "devtestingxyz.store",
+          verified: true,
         },
       })
+
+      return domainAdded
     }),
   getDomains: publicProcedure.query(async ({ ctx }) => {
     const domains = await ctx.prisma.domain.findMany()
 
-    if(!domains) throw new Error("No domains found")
+    if (!domains) throw new Error("No domains found")
 
     return domains
   }),

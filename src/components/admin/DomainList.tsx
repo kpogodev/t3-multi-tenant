@@ -1,8 +1,11 @@
 import { api } from "../../utils/api"
+import Heading from "./Heading"
 
-const DomainsList = () => {
+const DomainList = () => {
   const { data: domains } = api.domain.getDomains.useQuery()
   return (
+    <>
+    <Heading text="Domain List" />
     <div className='w-full overflow-x-auto'>
       <table className='table w-full'>
         <thead>
@@ -31,6 +34,7 @@ const DomainsList = () => {
         </tbody>
       </table>
     </div>
+    </>
   )
 }
-export default DomainsList
+export default DomainList

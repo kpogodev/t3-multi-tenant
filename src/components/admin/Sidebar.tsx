@@ -1,11 +1,13 @@
 import PlatformIcon from "../icons/PlatformIcon"
+import SidebarMenu from "./SidebarMenu"
 
 const Sidebar = () => {
   return (
-    <aside className='w-full bg-base-200 py-5 px-4'>
-      <h2 className='text-xl font-bold flex items-center gap-3 mb-16'>
+    <aside className='w-full bg-base-200 py-5 px-4 flex flex-col'>
+      <h2 className='text-xl font-bold flex items-center gap-3 mb-6'>
         <PlatformIcon className='w-16 block' /> Web Platform
       </h2>
+      <SidebarMenu />
     </aside>
   )
 }
