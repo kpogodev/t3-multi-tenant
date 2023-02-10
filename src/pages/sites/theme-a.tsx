@@ -1,7 +1,7 @@
 const ThemeA = () => {
   return (
     <div>
-      <h1>Theme A</h1>
+      <h1>Theme A tutaj</h1>
     </div>
   )
 }

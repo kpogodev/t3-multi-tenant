@@ -7,6 +7,7 @@ const AddSiteForm = () => {
   const domainRef = useRef<HTMLSelectElement>(null)
   const themeRef = useRef<HTMLSelectElement>(null)
   const { data: domains } = api.domain.getAvailableDomains.useQuery()
+  const { data: themes } = api.theme.getThemes.useQuery()
   const addSite = api.site.addSite.useMutation()
 
   const onWebsiteNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,8 +85,8 @@ const AddSiteForm = () => {
           <option disabled selected>
             Choose Theme
           </option>
-          {domains?.map((dom, index) => (
-            <option key={index}>{dom.name}</option>
+          {themes?.map((theme, index) => (
+            <option key={index}>{theme.name}</option>
           ))}
         </select>
       </div>
