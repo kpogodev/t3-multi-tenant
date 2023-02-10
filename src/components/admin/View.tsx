@@ -4,6 +4,7 @@ import DomainList from "./DomainList"
 import AddDomain from "./AddDomain"
 import AddSite from "./AddSite"
 import AddTheme from "./AddTheme"
+import SiteList from "./SiteList"
 
 type ViewType = { [key: string]: JSX.Element }
 
@@ -15,6 +16,7 @@ const View = () => {
     "add-domain": <AddDomain />,
     "domain-list": <DomainList />,
     "add-site": <AddSite />,
+    "site-list": <SiteList />,
     "add-theme": <AddTheme />,
   }
 

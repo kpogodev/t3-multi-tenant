@@ -1,41 +1,28 @@
 import { api } from "../../utils/api"
 import Heading from "./Heading"
-import {generateRandomKey} from "../../utils/generateRandomKey"
+import { generateRandomKey } from "../../utils/generateRandomKey"
+import Table from "./Table"
 
 const DomainList = () => {
   const { data: domains } = api.domain.getDomains.useQuery()
+
+  if (!domains) return <div>Loading...</div>
+
   return (
     <>
       <Heading text='Domain List' />
       <div className='w-full overflow-x-auto'>
-        <table className='table w-full'>
-          <thead>
-            <tr>
-              <th></th>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Apex Name</th>
-              <th>Verified</th>
-            </tr>
-          </thead>
-          <tbody>
-            {domains?.length ? (
-              domains.map((domain, index) => (
-                <tr key={generateRandomKey()}>
-                  <th>{index + 1}</th>
-                  <td>{domain.id}</td>
-                  <td>{domain.name}</td>
-                  <td>{domain.apexName}</td>
-                  <td>{domain.verified ? "Yes" : "No"}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={5}>No domains found</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <Table
+          list={domains}
+          headers={["id", "name", "apexName", "verified"]}
+          emptyMessage='No domains found'
+          renderHeader={(header) => header}
+          renderRow={(item) =>
+            Object.values(item).map((value) => (
+              <td key={generateRandomKey()}>{typeof value === "boolean" ? (value === true ? "Yes" : "No") : value}</td>
+            ))
+          }
+        />
       </div>
     </>
   )

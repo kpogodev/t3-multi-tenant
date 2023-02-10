@@ -33,4 +33,8 @@ export const siteRouter = createTRPCRouter({
 
       return site;
     }),
+    getSites: publicProcedure.query(async ({ ctx }) => {
+      const sites = await ctx.prisma.site.findMany()
+      return sites;
+    }),
 });
