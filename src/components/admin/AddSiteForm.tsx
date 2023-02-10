@@ -1,6 +1,7 @@
-import { useState, useRef, SyntheticEvent } from "react"
+import { useState, useRef } from "react"
 import { api } from "../../utils/api"
 import { toast } from "react-toastify"
+import { generateRandomKey } from "../../utils/generateRandomKey"
 
 const AddSiteForm = () => {
   const [websiteName, setWebsiteName] = useState<string>("")
@@ -72,8 +73,8 @@ const AddSiteForm = () => {
           <option disabled selected>
             Choose Domain
           </option>
-          {domains?.map((dom, index) => (
-            <option key={index}>{dom.name}</option>
+          {domains?.map((dom) => (
+            <option key={generateRandomKey()}>{dom.name}</option>
           ))}
         </select>
       </div>
@@ -85,8 +86,8 @@ const AddSiteForm = () => {
           <option disabled selected>
             Choose Theme
           </option>
-          {themes?.map((theme, index) => (
-            <option key={index}>{theme.name}</option>
+          {themes?.map((theme) => (
+            <option key={generateRandomKey()}>{theme.name}</option>
           ))}
         </select>
       </div>

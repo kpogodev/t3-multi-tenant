@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import { AdminContext } from "./context/AdminContext"
-import cn from 'classnames'
+import cn from "classnames"
+import { generateRandomKey } from "../../utils/generateRandomKey"
 
 const adminMenuStructure = [
   {
@@ -30,14 +31,16 @@ const SidebarMenu = () => {
 
   return (
     <ul className='menu rounded-box w-full bg-base-100 p-2'>
-      {adminMenuStructure.map((item, index) => (
+      {adminMenuStructure.map((item) => (
         <>
-          <li className='menu-title' key={index}>
+          <li className='menu-title' key={generateRandomKey()}>
             <span>{item.category}</span>
           </li>
-          {item.views.map((view, index) => (
-            <li key={index}>
-              <button className={cn({active: view === ctx.currentView})} onClick={handleClick} value={view}>{capitalize(view.replaceAll('-', ' '))}</button>
+          {item.views.map((view) => (
+            <li key={generateRandomKey()}>
+              <button className={cn({ active: view === ctx.currentView })} onClick={handleClick} value={view}>
+                {capitalize(view.replaceAll("-", " "))}
+              </button>
             </li>
           ))}
         </>
