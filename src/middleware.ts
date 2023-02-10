@@ -1,43 +1,29 @@
-import { type NextRequest, NextResponse, NextFetchEvent } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
+import { fetchThemeName } from "./utils/middlewareHelper"
+
+const apexDomain = process.env.NODE_ENV === "development" ? "localhost:3000" : "devtestingxyz.store"
+const protocol = process.env.NODE_ENV === "development" ? "http" : "https"
 
 export const config = {
   matcher: ["/((?!api/|_next/|_static/|[\\w-]+\\.\\w+).*)", "/"],
 }
 
-export default async function middleware(req: NextRequest, event: NextFetchEvent) {
-  const url = req.nextUrl
+export default async function middleware(req: NextRequest) {
   const hostname = req.headers.get("host")
-  const path = url.pathname
-
-  const currentHost = hostname?.replace(".localhost:3000", "") as string
+  const currentHost = hostname?.replace(`.${apexDomain}`, "") as string
 
   if (currentHost === "cms") {
-    return NextResponse.rewrite(`http://localhost:3000/cms`)
+    return NextResponse.rewrite(`${protocol}://${apexDomain}/cms`)
   }
 
   if (currentHost === "admin") {
-    return NextResponse.rewrite(`http://localhost:3000/admin`)
+    return NextResponse.rewrite(`${protocol}://${apexDomain}/admin`)
   }
 
-  const themeName = await fetchThemeName(currentHost)
+  const themeName = await fetchThemeName({ domain: currentHost, protocol, apexDomain })
 
-  if (!themeName) return NextResponse.rewrite(`http://localhost:3000/404`)
+  if (!themeName) return NextResponse.rewrite(`${protocol}://${apexDomain}/404`)
 
-  return NextResponse.rewrite(`http://localhost:3000/sites/${themeName}`)
+  return NextResponse.rewrite(`${protocol}://${apexDomain}/sites/${themeName}`)
 }
 
-
-// Helper function to fetch the theme name from the database
-async function fetchThemeName(domain: string) {
-  const response = await fetch("http://localhost:3000/api/site", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(`${domain}.devtestingxyz.store`),
-  })
-
-  const {themeName} = await response.json() as {themeName: string}
-
-  return themeName
-}
