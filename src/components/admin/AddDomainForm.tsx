@@ -43,7 +43,6 @@ const AddDomainForm = ({ isCustomDomain }: { isCustomDomain?: boolean }) => {
             toast.success("Domain has been successfully added")
           },
           onError: (error) => {
-            console.log(error.data)
             if (error.data) {
               toast.error(`Error: ${error.data.code}`)
             }

@@ -5,15 +5,15 @@ import cn from 'classnames'
 const adminMenuStructure = [
   {
     category: "Domains",
-    views: ["domain-list", "add-domain"],
+    views: ["add-domain", "domain-list"],
   },
   {
     category: "Sites",
-    views: ["site-list", "add-site"],
+    views: ["add-site", "site-list"],
   },
   {
     category: "Themes",
-    views: ["theme-list", "add-theme"],
+    views: ["add-theme", "theme-list"],
   },
 ] as const
 
@@ -27,8 +27,6 @@ const SidebarMenu = () => {
   const capitalize = (s: string) => {
     return s.charAt(0).toUpperCase() + s.slice(1)
   }
-
-  console.log(ctx.currentView)
 
   return (
     <ul className='menu rounded-box w-full bg-base-100 p-2'>

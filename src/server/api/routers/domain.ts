@@ -46,6 +46,17 @@ export const domainRouter = createTRPCRouter({
 
     return domains
   }),
+  getAvailableDomains: publicProcedure.query(async ({ ctx }) => {
+    const domains = await ctx.prisma.domain.findMany({
+      where: {
+        site: null,
+      },
+    })
+
+    if (!domains) throw new Error("No domains found")
+
+    return domains
+  }),
   checkDomainAvailability: publicProcedure
     .input(
       z.object({

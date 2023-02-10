@@ -15,7 +15,8 @@ model Domain {
   name     String
   apexName String
   verified Boolean
-  siteId   Site?
+  site   Site?
+  isCustom Boolean?
 }
 
 model Theme {

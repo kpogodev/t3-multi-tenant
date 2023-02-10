@@ -6,7 +6,7 @@ export const siteRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
-        themeName: z.string(),
+        themeId: z.string(),
         domainId: z.string(),
       })
     )
@@ -20,13 +20,14 @@ export const siteRouter = createTRPCRouter({
             },
           },
           theme: {
-            create: {
-              name: input.themeName,
+            connect: {
+              id: input.themeId,
             }
           }
         },
         include: {
           theme: true,
+          domain: true,
         }
       })
 
