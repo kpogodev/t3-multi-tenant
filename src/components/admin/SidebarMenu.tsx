@@ -32,8 +32,8 @@ const SidebarMenu = () => {
   return (
     <ul className='menu rounded-box w-full bg-base-100 p-2'>
       {adminMenuStructure.map((item) => (
-        <>
-          <li className='menu-title' key={generateRandomKey()}>
+        <div key={generateRandomKey()}>
+          <li className='menu-title'>
             <span>{item.category}</span>
           </li>
           {item.views.map((view) => (
@@ -43,7 +43,7 @@ const SidebarMenu = () => {
               </button>
             </li>
           ))}
-        </>
+        </div>
       ))}
     </ul>
   )

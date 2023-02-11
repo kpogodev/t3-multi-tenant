@@ -5,6 +5,7 @@ import AddDomain from "./AddDomain"
 import AddSite from "./AddSite"
 import AddTheme from "./AddTheme"
 import SiteList from "./SiteList"
+import ThemeList from "./ThemeList"
 
 type ViewType = { [key: string]: JSX.Element }
 
@@ -18,6 +19,7 @@ const View = () => {
     "add-site": <AddSite />,
     "site-list": <SiteList />,
     "add-theme": <AddTheme />,
+    "theme-list": <ThemeList />,
   }
 
   return <main className='flex w-full flex-col gap-10 p-10'>{view[ctx.currentView]}</main>

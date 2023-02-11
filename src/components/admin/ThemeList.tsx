@@ -3,22 +3,22 @@ import Heading from "./Heading"
 import { api } from "../../utils/api"
 import { generateRandomKey } from "../../utils/generateRandomKey"
 
-const SiteList = () => {
-  const { data: sites } = api.site.getSites.useQuery()
+const ThemeList = () => {
+  const { data: themes } = api.theme.getThemes.useQuery()
 
-  if (!sites) return <div>Loading...</div>
+  if (!themes) return <div>Loading...</div>
 
   return (
     <>
-      <Heading text='Site List' />
+      <Heading text='Theme List' />
       <Table
-        list={sites}
-        headers={["id", "name", "theme_id", "domain_id"]}
-        emptyMessage='No sites found'
+        list={themes}
+        headers={["id", "name"]}
+        emptyMessage='No themes found'
         renderHeader={(header) => header}
         renderRow={(item) => Object.values(item).map((value) => <td key={generateRandomKey()}>{value}</td>)}
       />
     </>
   )
 }
-export default SiteList
+export default ThemeList

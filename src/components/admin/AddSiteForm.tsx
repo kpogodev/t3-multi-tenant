@@ -30,7 +30,7 @@ const AddSiteForm = () => {
       return toast.error("Please select a theme")
     }
 
-    const themeId = "123xyz"
+    const themeId = themes?.find((th) => th.name === theme)?.id as string
     const domainId = domains?.find((dom) => dom.name === domain)?.id as string
 
     addSite.mutate(
@@ -69,7 +69,7 @@ const AddSiteForm = () => {
         <label className='label'>
           <span className='label-text'>Associate with domain</span>
         </label>
-        <select className='select-bordered select' ref={domainRef}>
+        <select className='select-bordered select' ref={domainRef} defaultValue='Choose Domain'>
           <option disabled selected>
             Choose Domain
           </option>
