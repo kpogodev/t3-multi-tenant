@@ -8,9 +8,9 @@ import "react-toastify/dist/ReactToastify.css"
 
 const Layout = () => {
   const ctx = useContext(AdminContext)
-  
+
   return (
-    <div className='grid w-full grid-cols-w-sidebar' data-theme={ctx.darkTheme ? "dracula" : "fantasy"}>
+    <div className='grid w-full grid-cols-w-sidebar' data-theme={ctx.darkTheme ? "luxury" : "light"}>
       <>
         <Sidebar />
         <div className='flex min-h-screen w-full flex-col justify-start'>

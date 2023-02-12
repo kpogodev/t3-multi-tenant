@@ -5,11 +5,11 @@ module.exports = {
     extend: {
       gridTemplateColumns: {
         "w-sidebar": "320px 1fr",
-      }
+      },
     },
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["fantasy", "dracula"]
-  }
-};
+    themes: ["light", "luxury"],
+  },
+}

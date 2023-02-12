@@ -1,15 +1,18 @@
-import { useState, useRef } from "react"
+import { useState, useContext } from "react"
 import { api } from "../../utils/api"
 import { toast } from "react-toastify"
-import { generateRandomKey } from "../../utils/generateRandomKey"
+import Select, { type SingleValue } from "react-select"
+import { reactSelectStyles } from "../../utils/reactSelectStyles"
+import { AdminContext } from "./context/AdminContext"
 
 const AddSiteForm = () => {
   const [websiteName, setWebsiteName] = useState<string>("")
-  const domainRef = useRef<HTMLSelectElement>(null)
-  const themeRef = useRef<HTMLSelectElement>(null)
+  const [domainId, setDomainId] = useState<string>("")
+  const [themeId, setThemeId] = useState<string>("")
   const { data: domains } = api.domain.getAvailableDomains.useQuery()
   const { data: themes } = api.theme.getThemes.useQuery()
   const addSite = api.site.addSite.useMutation()
+  const ctx = useContext(AdminContext)
 
   const onWebsiteNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWebsiteName(e.target.value)
@@ -17,21 +20,16 @@ const AddSiteForm = () => {
 
   const onAddSiteSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const domain = domainRef.current?.value
-    const theme = themeRef.current?.value
 
     if (!websiteName.length) {
       return toast.error("Please enter a website name")
     }
-    if (!domain) {
+    if (!domainId.length) {
       return toast.error("Please select a domain")
     }
-    if (!theme) {
+    if (!themeId.length) {
       return toast.error("Please select a theme")
     }
-
-    const themeId = themes?.find((th) => th.name === theme)?.id as string
-    const domainId = domains?.find((dom) => dom.name === domain)?.id as string
 
     addSite.mutate(
       {
@@ -42,13 +40,22 @@ const AddSiteForm = () => {
       {
         onSuccess: (data) => {
           toast.success("Site added successfully")
-          console.log(data)
         },
         onError: (err) => {
           toast.error("Error adding site")
         },
       }
     )
+  }
+
+  const handleDomainChange = (option: SingleValue<{ label: string; value: string }>) => {
+    if (!option) return
+    setDomainId(option.value)
+  }
+
+  const handleThemeChange = (option: SingleValue<{ label: string; value: string }>) => {
+    if (!option) return
+    setThemeId(option.value)
   }
 
   return (
@@ -69,27 +76,21 @@ const AddSiteForm = () => {
         <label className='label'>
           <span className='label-text'>Associate with domain</span>
         </label>
-        <select className='select-bordered select' ref={domainRef} defaultValue='Choose Domain'>
-          <option disabled selected>
-            Choose Domain
-          </option>
-          {domains?.map((dom) => (
-            <option key={generateRandomKey()}>{dom.name}</option>
-          ))}
-        </select>
+        <Select
+          styles={reactSelectStyles}
+          options={domains?.map((dom) => ({ label: dom.name, value: dom.id }))}
+          onChange={(selected) => void handleDomainChange(selected)}
+        />
       </div>
       <div className='form-control w-full max-w-xs'>
         <label className='label'>
           <span className='label-text'>Associate with theme</span>
         </label>
-        <select className='select-bordered select' ref={themeRef}>
-          <option disabled selected>
-            Choose Theme
-          </option>
-          {themes?.map((theme) => (
-            <option key={generateRandomKey()}>{theme.name}</option>
-          ))}
-        </select>
+        <Select
+          styles={reactSelectStyles}
+          options={themes?.map((theme) => ({ label: theme.name, value: theme.id }))}
+          onChange={(selected) => void handleThemeChange(selected)}
+        ></Select>
       </div>
       <button className='btn-primary btn mt-10' type='submit'>
         Add Site
