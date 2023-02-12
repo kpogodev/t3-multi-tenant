@@ -5,25 +5,30 @@ const apexDomain = process.env.NODE_ENV === "development" ? "localhost:3000" : "
 const protocol = process.env.NODE_ENV === "development" ? "http" : "https"
 
 export const config = {
-  matcher: ["/((?!api/|_next/|_static/|[\\w-]+\\.\\w+).*)", "/"],
+  matcher: ["/((?!api/|_next/|_static/|auth|cms|admin|[\\w-]+\\.\\w+).*)", "/"],
 }
 
 export default async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl
   const hostname = req.headers.get("host")
-  const currentHost = hostname?.replace(`.${apexDomain}`, "") as string
+  const subDomain = hostname?.replace(`.${apexDomain}`, "") as string
 
-  if (currentHost === "cms") {
-    return NextResponse.rewrite(`${protocol}://${apexDomain}/cms`)
+  // if (subDomain === "cms") {
+  //   return NextResponse.rewrite(`${protocol}://${apexDomain}/cms`)
+  // }
+  // if (subDomain === "admin") {
+  //   return NextResponse.rewrite(`${protocol}://${apexDomain}/admin`)
+  // }
+
+  if(subDomain.length) {
+    const themeName = await fetchThemeName({ protocol, subDomain, apexDomain })
+
+    if (!themeName) {
+      return NextResponse.rewrite(`${protocol}://${apexDomain}/404`)
+    }
+
+    return NextResponse.rewrite(`${protocol}://${apexDomain}/sites/${themeName}${pathname}`)
   }
 
-  if (currentHost === "admin") {
-    return NextResponse.rewrite(`${protocol}://${apexDomain}/admin`)
-  }
-
-  const themeName = await fetchThemeName({ domain: currentHost, protocol, apexDomain })
-
-  if (!themeName) return NextResponse.rewrite(`${protocol}://${apexDomain}/404`)
-
-  return NextResponse.rewrite(`${protocol}://${apexDomain}/sites/${themeName}`)
+  return NextResponse.next()
 }
-

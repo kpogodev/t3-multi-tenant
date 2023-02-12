@@ -42,10 +42,14 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
         username: user.name,
       },
+
     }),
+    redirect: async ({url, baseUrl}) => {
+      return Promise.resolve(url)
+    },
   },
   pages: {
-    signIn: `/login`,
+    signIn: `/auth/sign-in`,
   },
   providers: [
     GithubProvider({
