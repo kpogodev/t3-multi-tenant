@@ -74,4 +74,23 @@ export const domainRouter = createTRPCRouter({
         available: !domain,
       }
     }),
+  deleteDomain: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
+    const domain = await ctx.prisma.domain.findFirst({
+      where: {
+        id: input,
+      },
+    })
+
+    if (!domain) throw new Error("Domain not found")
+
+    const deletedDomain = await ctx.prisma.domain.delete({
+      where: {
+        id: input,
+      },
+    })
+
+    console.log(deletedDomain)
+
+    return deletedDomain
+  }),
 })
