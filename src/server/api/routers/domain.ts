@@ -1,9 +1,9 @@
 import { z } from "zod"
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { addDomainToVercelProject } from "../../vercel"
 
 export const domainRouter = createTRPCRouter({
-  addDomain: publicProcedure
+  addDomain: protectedProcedure
     .input(
       z.object({
         name: z.string(),
@@ -39,14 +39,14 @@ export const domainRouter = createTRPCRouter({
 
       return domainAdded
     }),
-  getDomains: publicProcedure.query(async ({ ctx }) => {
+  getDomains: protectedProcedure.query(async ({ ctx }) => {
     const domains = await ctx.prisma.domain.findMany()
 
     if (!domains) throw new Error("No domains found")
 
     return domains
   }),
-  getAvailableDomains: publicProcedure.query(async ({ ctx }) => {
+  getAvailableDomains: protectedProcedure.query(async ({ ctx }) => {
     const domains = await ctx.prisma.domain.findMany({
       where: {
         site: null,
@@ -57,7 +57,7 @@ export const domainRouter = createTRPCRouter({
 
     return domains
   }),
-  checkDomainAvailability: publicProcedure
+  checkDomainAvailability: protectedProcedure
     .input(
       z.object({
         name: z.string(),

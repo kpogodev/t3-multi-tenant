@@ -1,8 +1,8 @@
 import { z } from "zod"
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const themeRouter = createTRPCRouter({
-  addTheme: publicProcedure
+  addTheme: protectedProcedure
     .input(
       z.object({
         name: z.string(),
@@ -17,7 +17,7 @@ export const themeRouter = createTRPCRouter({
 
       return theme
     }),
-  getThemes: publicProcedure.query(async ({ ctx }) => {
+  getThemes: protectedProcedure.query(async ({ ctx }) => {
     const themes = await ctx.prisma.theme.findMany()
     return themes
   }),
