@@ -13,7 +13,7 @@ const useAdminStateManager = () => {
   }, [])
 
   const toggleDarkTheme = useCallback(() => {
-    console.log("toggleDarkTheme")
+
     setDarkTheme((prev) => !prev)
   }, [])
 
