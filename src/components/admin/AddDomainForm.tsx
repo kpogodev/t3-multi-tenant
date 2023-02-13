@@ -3,6 +3,7 @@ import { useDebounce } from "use-debounce"
 import cn from "classnames"
 import { api } from "../../utils/api"
 import { toast } from "react-toastify"
+import { slugifyString } from "../../utils/slugifyString"
 
 const AddDomainForm = ({ isCustomDomain }: { isCustomDomain?: boolean }) => {
   const [domainAvailable, setDomainAvailable] = useState<boolean | undefined>()
@@ -33,23 +34,24 @@ const AddDomainForm = ({ isCustomDomain }: { isCustomDomain?: boolean }) => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (domainAvailable) {
-      addDomain.mutate(
-        { name: debouncedDomain, isCustom: isCustomDomain ? isCustomDomain : false },
-        {
-          onSuccess: () => {
-            setDomain("")
-            setDomainAvailable(undefined)
-            toast.success("Domain has been successfully added")
-          },
-          onError: (error) => {
-            if (error.data) {
-              toast.error(`Error: ${error.data.code}`)
-            }
-          },
-        }
-      )
-    }
+
+    if (!domainAvailable) return toast.error("Domain is not available")
+
+    addDomain.mutate(
+      { name: slugifyString(debouncedDomain), isCustom: isCustomDomain ? isCustomDomain : false },
+      {
+        onSuccess: () => {
+          setDomain("")
+          setDomainAvailable(undefined)
+          toast.success("Domain has been successfully added")
+        },
+        onError: (error) => {
+          if (error.data) {
+            toast.error(`Error: ${error.data.code}`)
+          }
+        },
+      }
+    )
   }
 
   return (
