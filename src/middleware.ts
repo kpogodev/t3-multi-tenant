@@ -20,7 +20,7 @@ export default async function middleware(req: NextRequest) {
   //   return NextResponse.rewrite(`${protocol}://${apexDomain}/admin`)
   // }
 
-  if(subDomain.length) {
+  if(subDomain.length && !subDomain.startsWith(apexDomain)) {
     const themeName = await fetchThemeName({ protocol, subDomain, apexDomain })
 
     if (!themeName) {
