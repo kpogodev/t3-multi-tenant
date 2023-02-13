@@ -2,11 +2,12 @@ import Table from "./Table"
 import Heading from "./Heading"
 import { api } from "../../utils/api"
 import { generateRandomKey } from "../../utils/generateRandomKey"
+import LoadingSkeleton from "./LoadingSkeleton"
 
 const ThemeList = () => {
   const { data: themes } = api.theme.getThemes.useQuery()
 
-  if (!themes) return <div>Loading...</div>
+  if (!themes) return <LoadingSkeleton />
 
   return (
     <>

@@ -5,6 +5,7 @@ import Table from "./Table"
 import DeleteIcon from "../icons/DeleteIcon"
 import EditIcon from "../icons/EditIcon"
 import { toast } from "react-toastify"
+import LoadingSkeleton from "./LoadingSkeleton"
 
 const DomainList = () => {
   const { data: domains } = api.domain.getDomains.useQuery()
@@ -22,7 +23,7 @@ const DomainList = () => {
     })
   }
 
-  if (!domains) return <div>Loading...</div>
+  if (!domains) return <LoadingSkeleton />
 
   return (
     <>

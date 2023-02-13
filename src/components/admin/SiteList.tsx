@@ -2,11 +2,12 @@ import Table from "./Table"
 import Heading from "./Heading"
 import { api } from "../../utils/api"
 import { generateRandomKey } from "../../utils/generateRandomKey"
+import LoadingSkeleton from "./LoadingSkeleton"
 
 const SiteList = () => {
   const { data: sites } = api.site.getSites.useQuery()
 
-  if (!sites) return <div>Loading...</div>
+  if (!sites) return <LoadingSkeleton />
 
   return (
     <>

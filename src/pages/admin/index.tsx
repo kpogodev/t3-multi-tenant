@@ -7,9 +7,10 @@ import Layout from "../../components/admin/Layout"
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
 
+  const refPath = context.req.url ?? "/"
+  context.res.setHeader("Set-Cookie", `refPath=${refPath}; HttpOnly`)
+
   if (!session) {
-    const refPath = context.req.url ?? "/"
-    context.res.setHeader("Set-Cookie", `refPath=${refPath}; Path=${refPath}; HttpOnly`)
 
     return {
       redirect: {
