@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import { z } from "zod"
+import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc"
 
 export const siteRouter = createTRPCRouter({
   addSite: protectedProcedure
@@ -22,19 +22,36 @@ export const siteRouter = createTRPCRouter({
           theme: {
             connect: {
               id: input.themeId,
-            }
-          }
+            },
+          },
         },
         include: {
           theme: true,
           domain: true,
-        }
+        },
       })
 
-      return site;
+      return site
     }),
-    getSites: publicProcedure.query(async ({ ctx }) => {
-      const sites = await ctx.prisma.site.findMany()
-      return sites;
-    }),
-});
+  getSites: publicProcedure.query(async ({ ctx }) => {
+    const sites = await ctx.prisma.site.findMany()
+    return sites
+  }),
+  deleteSite: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
+    const site = await ctx.prisma.site.findFirst({
+      where: {
+        id: input,
+      },
+    })
+
+    if (!site) throw new Error("Site not found")
+
+    const deletedSite = await ctx.prisma.site.delete({
+      where: {
+        id: input,
+      },
+    })
+
+    return deletedSite
+  }),
+})

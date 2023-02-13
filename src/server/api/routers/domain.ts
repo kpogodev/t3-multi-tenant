@@ -89,8 +89,6 @@ export const domainRouter = createTRPCRouter({
       },
     })
 
-    console.log(deletedDomain)
-
     return deletedDomain
   }),
 })

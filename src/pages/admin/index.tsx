@@ -11,7 +11,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   context.res.setHeader("Set-Cookie", `refPath=${refPath}; HttpOnly`)
 
   if (!session) {
-
     return {
       redirect: {
         destination: "/auth/sign-in",
