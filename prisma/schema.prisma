@@ -37,13 +37,18 @@ model Site {
 }
 
 //NextAuth
+enum UserRole {
+  ADMIN
+  DEV
+  TENANT
+}
 model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  role          String    @default("TENANT")
+  role          UserRole    @default(TENANT)
   accounts      Account[]
   sessions      Session[]
 }
