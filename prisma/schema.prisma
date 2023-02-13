@@ -63,7 +63,7 @@ model User {
   emailVerified DateTime?
   image         String?
   role          UserRole    @default(TENANT)
-  tenant        Site?
+  site          Site?
   accounts      Account[]
   sessions      Session[]
 }
