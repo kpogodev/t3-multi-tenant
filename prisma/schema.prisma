@@ -32,8 +32,21 @@ model Site {
   themeId  String
   domain   Domain @relation(fields: [domainId], references: [id])
   domainId String @unique
+  pages    Page[]
+  tenant   User?  @relation(fields: [tenantId], references: [id])
+  tenantId String? @unique
 
   @@index([themeId])
+}
+
+model Page {
+  id       String @id @default(cuid())
+  name     String
+  slug     String
+  site     Site   @relation(fields: [siteId], references: [id])
+  siteId   String
+
+  @@index([siteId])
 }
 
 //NextAuth
@@ -42,6 +55,7 @@ enum UserRole {
   DEV
   TENANT
 }
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -49,6 +63,7 @@ model User {
   emailVerified DateTime?
   image         String?
   role          UserRole    @default(TENANT)
+  tenant        Site?
   accounts      Account[]
   sessions      Session[]
 }
