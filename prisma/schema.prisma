@@ -28,9 +28,9 @@ model Theme {
 model Site {
   id       String @id @default(cuid())
   name     String
-  theme    Theme  @relation(fields: [themeId], references: [id], onDelete: Cascade)
+  theme    Theme  @relation(fields: [themeId], references: [id])
   themeId  String
-  domain   Domain @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  domain   Domain @relation(fields: [domainId], references: [id])
   domainId String @unique
 
   @@index([themeId])
@@ -43,6 +43,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  role          String    @default("TENANT")
   accounts      Account[]
   sessions      Session[]
 }
