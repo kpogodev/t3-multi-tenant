@@ -33,8 +33,37 @@ export const siteRouter = createTRPCRouter({
 
       return site
     }),
+  addTenant: protectedProcedure
+    .input(
+      z.object({
+        siteId: z.string(),
+        userId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const site = await ctx.prisma.site.update({
+        where: {
+          id: input.siteId,
+        },
+        data: {
+          tenantId: input.userId,
+        },
+      })
+
+      if (!site) throw new Error("Site not found")
+
+      return site
+    }),
   getSites: publicProcedure.query(async ({ ctx }) => {
     const sites = await ctx.prisma.site.findMany()
+    return sites
+  }),
+  getUnassociatedSites: protectedProcedure.query(async ({ ctx }) => {
+    const sites = await ctx.prisma.site.findMany({
+      where: {
+        tenantId: null,
+      },
+    })
     return sites
   }),
   deleteSite: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {

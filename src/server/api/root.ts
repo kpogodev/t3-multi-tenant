@@ -1,6 +1,7 @@
 import { domainRouter } from "./routers/domain";
 import { siteRouter } from "./routers/site";
 import { themeRouter } from "./routers/theme";
+import { userRouter } from "./routers/user";
 import { createTRPCRouter } from "./trpc";
 /**
  * This is the primary router for your server.
@@ -10,7 +11,8 @@ import { createTRPCRouter } from "./trpc";
 export const appRouter = createTRPCRouter({
   domain: domainRouter,
   site: siteRouter,
-  theme: themeRouter
+  theme: themeRouter,
+  user: userRouter,
 });
 
 // export type definition of API

@@ -33,7 +33,7 @@ const ThemeList = () => {
         headers={["id", "name"]}
         emptyMessage='No themes found'
         renderHeader={(header) => header}
-        renderRow={(item) => Object.values(item).map((value) => <td key={generateRandomKey()}>{value}</td>)}
+        renderRow={(item) => Object.values(item).map((value) => value && <td key={generateRandomKey()}>{value}</td>)}
         renderActionBar={(item) => (
           <td className='flex items-center justify-center gap-1'>
             <button className='btn-ghost btn'>

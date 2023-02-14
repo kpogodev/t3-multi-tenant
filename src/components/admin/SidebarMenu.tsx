@@ -10,7 +10,7 @@ const adminMenuStructure = [
   },
   {
     category: "Sites",
-    views: ["add-site", "site-list"],
+    views: ["add-site", "associate-tenant", "site-list"],
   },
   {
     category: "Themes",

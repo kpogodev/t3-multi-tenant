@@ -6,6 +6,7 @@ import AddSite from "./AddSite"
 import AddTheme from "./AddTheme"
 import SiteList from "./SiteList"
 import ThemeList from "./ThemeList"
+import AssociateTenant from "./AssociateTenant"
 
 type ViewType = { [key: string]: JSX.Element }
 
@@ -15,6 +16,7 @@ const View = () => {
   const view: ViewType = {
     default: <></>,
     "add-domain": <AddDomain />,
+    "associate-tenant": <AssociateTenant />,
     "domain-list": <DomainList />,
     "add-site": <AddSite />,
     "site-list": <SiteList />,

@@ -1,9 +1,9 @@
-import { useState, useContext } from "react"
+import { useState } from "react"
 import { api } from "../../utils/api"
 import { toast } from "react-toastify"
 import Select, { type SingleValue } from "react-select"
 import { reactSelectStyles } from "../../utils/reactSelectStyles"
-import { AdminContext } from "./context/AdminContext"
+
 
 const AddSiteForm = () => {
   const [websiteName, setWebsiteName] = useState<string>("")
@@ -12,7 +12,7 @@ const AddSiteForm = () => {
   const { data: domains } = api.domain.getAvailableDomains.useQuery()
   const { data: themes } = api.theme.getThemes.useQuery()
   const addSite = api.site.addSite.useMutation()
-  const ctx = useContext(AdminContext)
+
 
   const onWebsiteNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWebsiteName(e.target.value)
