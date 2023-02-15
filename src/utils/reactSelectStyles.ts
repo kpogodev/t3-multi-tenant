@@ -1,6 +1,8 @@
-import { StylesConfig, SingleValue } from "react-select"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { StylesConfig, SingleValue } from "react-select"
 
 export const reactSelectStyles: StylesConfig<SingleValue<{ label: string; value: string }>, false> = {
+
   control: (provided, state) => ({
     ...provided,
     backgroundColor: "hsl(var(--b1) / var(--tw-bg-opacity))",
@@ -37,6 +39,7 @@ export const reactSelectStyles: StylesConfig<SingleValue<{ label: string; value:
   }),
   input: (provided, state) => ({
     ...provided,
+    color: "inherit",
   }),
   indicatorSeparator: (provided, state) => ({
     ...provided,
