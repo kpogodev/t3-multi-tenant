@@ -8,8 +8,8 @@ import EditIcon from "../icons/EditIcon"
 import { toast } from "react-toastify"
 
 const ThemeList = () => {
-  const { data: themes } = api.theme.getThemes.useQuery()
-  const { mutate: deleteTheme } = api.theme.deleteTheme.useMutation()
+  const { data: themes } = api.admin.theme.getThemes.useQuery()
+  const { mutate: deleteTheme } = api.admin.theme.deleteTheme.useMutation()
 
   const clinet = api.useContext()
 
@@ -17,7 +17,7 @@ const ThemeList = () => {
     const id = e.currentTarget.value
     deleteTheme(id, {
       onSuccess: (data) => {
-        void clinet.theme.getThemes.invalidate()
+        void clinet.admin.theme.getThemes.invalidate()
         toast.success(`${data.name} deleted successfully`)
       },
     })

@@ -5,7 +5,7 @@ import { toast } from "react-toastify"
 const AddThemeForm = () => {
   const [themeName, setThemeName] = useState<string>()
 
-  const addTheme = api.theme.addTheme.useMutation()
+  const addTheme = api.admin.theme.addTheme.useMutation()
 
   const onThemeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setThemeName(e.target.value)

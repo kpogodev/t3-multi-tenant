@@ -11,8 +11,8 @@ const AddDomainForm = ({ isCustomDomain }: { isCustomDomain?: boolean }) => {
   const [debouncedDomain] = useDebounce(domain, 1500)
   const [isChecking, setIsChecking] = useState<boolean>(false)
 
-  const addDomain = api.domain.addDomain.useMutation()
-  const { data } = api.domain.checkDomainAvailability.useQuery(
+  const addDomain = api.admin.domain.addDomain.useMutation()
+  const { data } = api.admin.domain.checkDomainAvailability.useQuery(
     { name: isCustomDomain ? debouncedDomain : `${debouncedDomain}.devtestingxyz.store` },
     { enabled: debouncedDomain.length > 0 }
   )

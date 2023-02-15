@@ -8,8 +8,8 @@ import EditIcon from "../icons/EditIcon"
 import { toast } from "react-toastify"
 
 const SiteList = () => {
-  const { data: sites } = api.site.getSites.useQuery()
-  const { mutate: deleteSite } = api.site.deleteSite.useMutation()
+  const { data: sites } = api.admin.site.getSites.useQuery()
+  const { mutate: deleteSite } = api.admin.site.deleteSite.useMutation()
 
   const clinet = api.useContext()
 
@@ -17,7 +17,7 @@ const SiteList = () => {
     const id = e.currentTarget.value
     deleteSite(id, {
       onSuccess: (data) => {
-        void clinet.site.getSites.invalidate()
+        void clinet.admin.site.getSites.invalidate()
         toast.success(`${data.name} deleted successfully`)
       },
     })

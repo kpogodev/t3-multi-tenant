@@ -8,8 +8,8 @@ import { toast } from "react-toastify"
 import LoadingSkeleton from "./LoadingSkeleton"
 
 const DomainList = () => {
-  const { data: domains } = api.domain.getDomains.useQuery()
-  const { mutate: deleteDomain } = api.domain.deleteDomain.useMutation()
+  const { data: domains } = api.admin.domain.getDomains.useQuery()
+  const { mutate: deleteDomain } = api.admin.domain.deleteDomain.useMutation()
 
   const clinet = api.useContext()
 
@@ -17,7 +17,7 @@ const DomainList = () => {
     const id = e.currentTarget.value
     deleteDomain(id, {
       onSuccess: (data) => {
-        void clinet.domain.getDomains.invalidate()
+        void clinet.admin.domain.getDomains.invalidate()
         toast.success(`${data.name} deleted successfully`)
       },
     })

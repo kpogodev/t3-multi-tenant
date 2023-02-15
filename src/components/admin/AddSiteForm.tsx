@@ -9,9 +9,9 @@ const AddSiteForm = () => {
   const [websiteName, setWebsiteName] = useState<string>("")
   const [domainId, setDomainId] = useState<string>("")
   const [themeId, setThemeId] = useState<string>("")
-  const { data: domains } = api.domain.getAvailableDomains.useQuery()
-  const { data: themes } = api.theme.getThemes.useQuery()
-  const addSite = api.site.addSite.useMutation()
+  const { data: domains } = api.admin.domain.getAvailableDomains.useQuery()
+  const { data: themes } = api.admin.theme.getThemes.useQuery()
+  const addSite = api.admin.site.addSite.useMutation()
 
 
   const onWebsiteNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

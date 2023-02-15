@@ -7,9 +7,9 @@ import { api } from "../../utils/api"
 const AssociateTenantForm = () => {
   const [siteId, setSiteId] = useState<string>("")
   const [tenantId, setTenantId] = useState<string>("")
-  const { data: potentialTenants } = api.user.getPotentialTenants.useQuery()
-  const { data: unassociatedSites } = api.site.getUnassociatedSites.useQuery()
-  const { mutate: associateTenant } = api.site.addTenant.useMutation()
+  const { data: potentialTenants } = api.admin.user.getPotentialTenants.useQuery()
+  const { data: unassociatedSites } = api.admin.site.getUnassociatedSites.useQuery()
+  const { mutate: associateTenant } = api.admin.site.addTenant.useMutation()
 
   const handleSiteChange = (option: SingleValue<{ label: string; value: string }>) => {
     if (!option) return
