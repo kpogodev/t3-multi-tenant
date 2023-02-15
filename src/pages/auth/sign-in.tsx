@@ -1,8 +1,8 @@
-import type { NextPage, GetServerSideProps, InferGetServerSidePropsType } from "next"
+import type { NextPage, GetServerSideProps } from "next"
 import LoginForm from "../../components/auth/LoginForm"
 import { getServerAuthSession } from "../../server/auth"
 
-const SignIn = () => {
+const SignIn: NextPage = () => {
   return (
     <div className='flex min-h-screen flex-col items-center justify-center bg-[#fafafa]' data-theme='fantasy'>
       <LoginForm />

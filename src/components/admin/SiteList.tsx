@@ -33,7 +33,11 @@ const SiteList = () => {
         headers={["id", "name", "theme_id", "domain_id", "tenant_id"]}
         emptyMessage='No sites found'
         renderHeader={(header) => header}
-        renderRow={(item) => Object.values(item).map((value) => value && <td key={generateRandomKey()}>{value}</td>)}
+        renderRow={(item) =>
+          Object.values(item).map((value) =>
+            value ? <td key={generateRandomKey()}>{value}</td> : <td key={generateRandomKey()}>NULL</td>
+          )
+        }
         renderActionBar={(item) => (
           <td className='flex items-center justify-center gap-1'>
             <button className='btn-ghost btn'>

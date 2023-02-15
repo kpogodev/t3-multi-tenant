@@ -3,10 +3,10 @@ import SignInButtonGithub from "./SignInButtonGithub"
 
 export default function LoginForm() {
   return (
-    <div className='w-full max-w-lg p-10 shadow-md rounded-sm bg-white flex flex-col items-center gap-10'>
-      <div className='flex gap-4 items-center justify-center'>
+    <div className='flex w-full max-w-lg flex-col items-center gap-10 rounded-sm bg-white p-10 shadow-md'>
+      <div className='flex items-center justify-center gap-4'>
         <PlatformIcon className='w-1/6' />
-        <h2 className='text-4xl font-bold leading-none'>CMS Platform</h2>
+        <h2 className='text-4xl font-bold leading-none'>Web Platform</h2>
       </div>
       <div className='flex flex-col items-center gap-4'>
         <SignInButtonGithub />
