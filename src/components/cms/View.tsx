@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { CmsContext } from "./context/CmsContext"
-import Pages from "./pages"
+import PagesView from "./pages/PagesView"
 
 type ViewType = { [key: string]: JSX.Element }
 
@@ -9,7 +9,7 @@ const View = () => {
 
   const view: ViewType = {
     default: <></>,
-    pages: <Pages />,
+    pages: <PagesView />,
   }
 
   return <main className='flex w-full flex-col gap-10 p-10'>{view[ctx.currentView]}</main>
