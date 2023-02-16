@@ -18,7 +18,7 @@ import { prisma } from "./db";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  **/
 
-type UserRole = "ADMIN" | "DEV" | "TENANT";
+export type UserRole = "ADMIN" | "DEV" | "TENANT";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
@@ -31,6 +31,7 @@ declare module "next-auth" {
   interface User {
     // ...other properties
     role: UserRole;
+    site: string;
   }
 }
 
@@ -47,7 +48,7 @@ export const authOptions: NextAuthOptions = {
       },
 
     }),
-    redirect: async ({url, baseUrl}) => {
+    redirect: async ({url}) => {
       return Promise.resolve(url)
     },
   },

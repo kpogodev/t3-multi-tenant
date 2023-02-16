@@ -1,17 +1,20 @@
-import type { GetServerSideProps, NextPage } from "next"
-import { getServerAuthSession } from "../../server/auth"
+import type { GetServerSideProps, NextPage, InferGetServerSidePropsType } from "next"
+import CmsContextProvider from "../../components/cms/context/CmsContext"
+import Layout from "../../components/cms/Layout"
+import { getServerAuthSession, type UserRole } from "../../server/auth"
 
-const CMS: NextPage = () => {
-  return <div>CMS</div>
+interface getSSProps {
+  userId: string
+  role: UserRole
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<getSSProps> = async (context) => {
   const session = await getServerAuthSession(context)
 
-  if (!session) {
-    const refPath = context.req.url ?? "/"
-    context.res.setHeader("Set-Cookie", `refPath=${refPath}; Path=/; HttpOnly`)
+  const refPath = context.req.url ?? "/"
+  context.res.setHeader("Set-Cookie", `refPath=${refPath}; HttpOnly`)
 
+  if (!session) {
     return {
       redirect: {
         destination: "/auth/sign-in",
@@ -21,8 +24,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: {},
+    props: {
+      userId: session.user.id,
+      role: session.user.role,
+    },
   }
+}
+
+const CMS: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ userId, role }) => {
+  return (
+    <CmsContextProvider userId={userId}>
+      <Layout />
+    </CmsContextProvider>
+  )
 }
 
 export default CMS

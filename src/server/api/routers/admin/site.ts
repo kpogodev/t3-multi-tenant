@@ -83,4 +83,13 @@ export const siteRouter = createTRPCRouter({
 
     return deletedSite
   }),
+  getSiteByTenantId: protectedProcedure.input(z.string()).query(async ({ input, ctx }) => {
+    const site = await ctx.prisma.site.findUnique({
+      where: {
+        tenantId: input,
+      },
+    })
+
+    return site
+  }),
 })
