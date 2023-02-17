@@ -39,14 +39,26 @@ model Site {
   @@index([themeId])
 }
 
+//Site
 model Page {
   id       String @id @default(cuid())
   name     String
   slug     String
   site     Site   @relation(fields: [siteId], references: [id])
   siteId   String
+  subpages Subpage[]
 
   @@index([siteId])
+}
+
+model Subpage {
+  id       String @id @default(cuid())
+  name     String
+  slug     String
+  page     Page   @relation(fields: [pageId], references: [id])
+  pageId   String
+
+  @@index([pageId])
 }
 
 //NextAuth
