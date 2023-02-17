@@ -5,7 +5,7 @@ import Heading from "../Heading"
 
 const AddPages = () => {
   const ctx = useContext(CmsContext)
-  const [name, setName] = useState("")
+  const [name, setName] = useState<string>("")
   const { mutate: addPage } = api.cms.page.addPage.useMutation()
   const clinet = api.useContext()
 
@@ -19,6 +19,7 @@ const AddPages = () => {
       {
         onSuccess: () => {
           void clinet.cms.page.getPages.invalidate()
+          setName("")
         },
       }
     )
@@ -32,13 +33,16 @@ const AddPages = () => {
         many pages might affect the layout of your navigation bar.
       </p>
       <form className='form-control mt-4' onSubmit={onAddPageSubmit}>
-        <label htmlFor="page-name-input" className="label-text mb-1">Page Name</label>
+        <label htmlFor='page-name-input' className='label-text mb-1'>
+          Page Name
+        </label>
         <div className='input-group'>
           <input
-            id="page-name-input"
+            id='page-name-input'
             type='text'
-            placeholder='Search…'
+            placeholder='About Us...'
             className='input-bordered input'
+            value={name}
             onChange={(e) => void setName(e.target.value)}
           />
           <button type='submit' className='btn'>

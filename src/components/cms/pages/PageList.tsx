@@ -14,8 +14,9 @@ const capitalize = (s: string) => {
 const PageList = () => {
   const ctx = useContext(CmsContext)
   const { data: pages } = api.cms.page.getPages.useQuery(ctx.site?.id ?? "")
+  
   return (
-    <div className='flex flex-wrap gap-4'>
+    <div className='grid grid-cols-[repeat(auto-fit,_minmax(240px,_1fr))] gap-4'>
       {pages?.map((page) => (
         <div
           className='relative z-0 flex h-[300px] grow flex-col items-center rounded-md bg-base-200 p-4 shadow-md'
