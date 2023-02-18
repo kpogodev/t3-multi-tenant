@@ -1,8 +1,10 @@
 import { useContext } from "react"
 import { CmsContext } from "./context/CmsContext"
-import PagesView from "./pages/PagesView"
+import dynamic from "next/dynamic"
 
 type ViewType = { [key: string]: JSX.Element }
+
+const PagesView = dynamic(() => import("./pages/PagesView"))
 
 const View = () => {
   const ctx = useContext(CmsContext)

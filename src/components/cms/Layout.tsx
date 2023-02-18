@@ -11,13 +11,11 @@ const Layout = () => {
 
   return (
     <div className='grid w-full grid-cols-w-sidebar' data-theme={ctx.darkTheme ? "luxury" : "light"}>
-      <>
-        <Sidebar />
-        <div className='flex min-h-screen w-full flex-col justify-start'>
-          <Navbar />
-          <View />
-        </div>
-      </>
+      <Sidebar />
+      <div className='flex min-h-screen w-full flex-col justify-start'>
+        <Navbar />
+        <View />
+      </div>
       <ToastContainer
         position='bottom-center'
         autoClose={5000}
