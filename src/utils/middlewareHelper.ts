@@ -11,7 +11,7 @@ export async function fetchThemeName({protocol, subDomain, apexDomain}: inputTyp
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(`${subDomain}.devtestingxyz.store`),
+    body: JSON.stringify(`${subDomain}.kpwebdev.com`),
   })
 
   const {themeName} = await response.json() as {themeName: string}

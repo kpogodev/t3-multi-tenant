@@ -13,7 +13,7 @@ const AddDomainForm = ({ isCustomDomain }: { isCustomDomain?: boolean }) => {
 
   const addDomain = api.admin.domain.addDomain.useMutation()
   const { data } = api.admin.domain.checkDomainAvailability.useQuery(
-    { name: isCustomDomain ? debouncedDomain : `${debouncedDomain}.devtestingxyz.store` },
+    { name: isCustomDomain ? debouncedDomain : `${debouncedDomain}.kpwebdev.com` },
     { enabled: debouncedDomain.length > 0 }
   )
 
@@ -72,7 +72,7 @@ const AddDomainForm = ({ isCustomDomain }: { isCustomDomain?: boolean }) => {
             value={domain}
             onChange={onDomainTyping}
           />
-          {!isCustomDomain && <span className='bg-accent'>.devtestingxyz.store</span>}
+          {!isCustomDomain && <span className='bg-accent'>.kpwebdev.com</span>}
           <button type='submit' className='btn-secondary btn' disabled={!domainAvailable || isChecking}>
             Add Domain
           </button>

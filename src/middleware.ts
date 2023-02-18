@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { fetchThemeName } from "./utils/middlewareHelper"
 
-const apexDomain = process.env.NODE_ENV === "development" ? "localhost:3000" : "devtestingxyz.store"
+const apexDomain = process.env.NODE_ENV === "development" ? "localhost:3000" : "kpwebdev.com"
 const protocol = process.env.NODE_ENV === "development" ? "http" : "https"
 
 export const config = {

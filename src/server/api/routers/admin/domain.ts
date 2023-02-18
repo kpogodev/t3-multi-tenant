@@ -31,8 +31,8 @@ export const domainRouter = createTRPCRouter({
 
       const domainAdded = await ctx.prisma.domain.create({
         data: {
-          name: `${input.name}.devtestingxyz.store`,
-          apexName: "devtestingxyz.store",
+          name: `${input.name}.kpwebdev.com`,
+          apexName: "kpwebdev.com",
           verified: true,
         },
       })
