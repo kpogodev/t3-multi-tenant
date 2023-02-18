@@ -1,22 +1,16 @@
 import type { NextPage, GetServerSideProps, GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
-import { getSitePages } from "../../../utils/getSitePages"
+import PageNotFoundHelper from "../../../utils/PageNotFoundHelper"
 
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-  const slug = context.params?.slug
-  const hostDomain = context.req.headers.host
-
-  if (!hostDomain) return { notFound: true }
-  const sitePages = await getSitePages(hostDomain)
-  const existingSlugs = sitePages.map((page) => page.slug)
-
-  if (slug && !existingSlugs.includes([...slug].join("/"))) return { notFound: true }
-
-  return {
-    props: {
-      slug,
-    },
-  }
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  // helper function to check if the route exists and return 404 if not
+  return await PageNotFoundHelper(context, () => {
+    return {
+      props: {
+        // props for your component
+      },
+    }
+  })
 }
 
 const Page: NextPage = () => {
