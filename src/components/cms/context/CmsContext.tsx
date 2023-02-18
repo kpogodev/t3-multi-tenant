@@ -1,5 +1,5 @@
 import { createContext, useState, useCallback } from "react"
-import { useSession } from "next-auth/react"
+// import { useSession } from "next-auth/react"
 import { api } from "../../../utils/api"
 
 type UseCmsStateManagerResult = ReturnType<typeof useCmsStateManager>
@@ -7,27 +7,35 @@ type UseCmsStateManagerResult = ReturnType<typeof useCmsStateManager>
 export const CmsContext = createContext<UseCmsStateManagerResult>({} as UseCmsStateManagerResult)
 
 const useCmsStateManager = (userId: string) => {
+  const [prevView, setPrevView] = useState<string>("default")
   const [currentView, setCurrentView] = useState<string>("default")
+  const [currentPageId, setCurrentPageId] = useState<string>("")
   const [darkTheme, setDarkTheme] = useState<boolean>(false)
 
-  const { data: session } = useSession()
+  const { data: site } = api.admin.site.getSiteByTenantId.useQuery(userId)
 
-  const { data:site } = api.admin.site.getSiteByTenantId.useQuery(userId)
-
-  const changeView = useCallback((view: string) => {
-    setCurrentView(view)
+  const changeCurrentPageId = useCallback((id: string) => {
+    setCurrentPageId(id)
   }, [])
 
   const toggleDarkTheme = useCallback(() => {
     setDarkTheme((prev) => !prev)
   }, [])
 
+  const changeView = (view: string) => {
+    setPrevView(currentView)
+    setCurrentView(view)
+  }
+
   return {
     site,
     currentView,
     darkTheme,
+    currentPageId,
+    prevView,
     changeView,
     toggleDarkTheme,
+    changeCurrentPageId,
   }
 }
 
