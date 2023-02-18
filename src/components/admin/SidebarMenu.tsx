@@ -2,6 +2,7 @@ import { useContext } from "react"
 import { AdminContext } from "./context/AdminContext"
 import cn from "classnames"
 import { generateRandomKey } from "../../utils/generateRandomKey"
+import { capitalizeString } from "../../utils/capitalizeString"
 
 const adminMenuStructure = [
   {
@@ -25,14 +26,6 @@ const SidebarMenu = () => {
     ctx.changeView(e.currentTarget.value)
   }
 
-  const capitalize = (s: string) => {
-    return s
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")
-  }
-
   return (
     <ul className='menu rounded-box w-full bg-base-100 p-2'>
       {adminMenuStructure.map((item) => (
@@ -43,7 +36,7 @@ const SidebarMenu = () => {
           {item.views.map((view) => (
             <li key={generateRandomKey()}>
               <button className={cn({ active: view === ctx.currentView })} onClick={handleClick} value={view}>
-                {capitalize(view.replaceAll("-", " "))}
+                {capitalizeString(view.replaceAll("-", " "))}
               </button>
             </li>
           ))}
