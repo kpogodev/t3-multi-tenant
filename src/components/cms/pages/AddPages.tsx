@@ -1,28 +1,20 @@
 import { useState, useContext } from "react"
-import { CmsContext } from "../context/CmsContext"
 import { api } from "../../../utils/api"
 import Heading from "../Heading"
 
 const AddPages = () => {
-  const ctx = useContext(CmsContext)
   const [name, setName] = useState<string>("")
   const { mutate: addPage } = api.cms.page.addPage.useMutation()
   const clinet = api.useContext()
 
   const onAddPageSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    addPage(
-      {
-        name,
-        siteId: ctx.site?.id ?? "",
+    addPage(name, {
+      onSuccess: () => {
+        void clinet.cms.page.getPagesBySiteId.invalidate()
+        setName("")
       },
-      {
-        onSuccess: () => {
-          void clinet.cms.page.getPagesBySiteId.invalidate()
-          setName("")
-        },
-      }
-    )
+    })
   }
 
   return (

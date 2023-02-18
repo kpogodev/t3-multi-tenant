@@ -4,18 +4,22 @@ import { slugifyString } from "../../../../utils/slugifyString"
 
 export const pageRouter = createTRPCRouter({
   addPage: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        siteId: z.string(),
-      })
-    )
+    .input(z.string())
     .mutation(async ({ input, ctx }) => {
+
+      const site = await ctx.prisma.site.findUnique({
+        where: {
+          tenantId: ctx.session.user.id,
+        },
+      })
+
+      if (!site) throw new Error("Site not found")
+
       const page = await ctx.prisma.page.create({
         data: {
-          name: input.name,
-          siteId: input.siteId,
-          slug: slugifyString(input.name),
+          name: input,
+          siteId: site.id,
+          slug: slugifyString(input),
         },
       })
       return page
@@ -58,10 +62,18 @@ export const pageRouter = createTRPCRouter({
     })
     return page
   }),
-  getPagesBySiteId: publicProcedure.input(z.string()).query(async ({ input, ctx }) => {
+  getPagesBySiteId: protectedProcedure.query(async ({ ctx }) => {
+    const site = await ctx.prisma.site.findUnique({
+      where: {
+        tenantId: ctx.session.user.id,
+      },
+    })
+
+    if (!site) throw new Error("Site not found")
+
     const pages = await ctx.prisma.page.findMany({
       where: {
-        siteId: input,
+        siteId: site.id,
       },
     })
     return pages
