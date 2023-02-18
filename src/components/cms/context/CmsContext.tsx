@@ -12,7 +12,7 @@ const useCmsStateManager = (userId: string) => {
   const [currentPageId, setCurrentPageId] = useState<string>("")
   const [darkTheme, setDarkTheme] = useState<boolean>(false)
 
-  const { data: site } = api.admin.site.getSiteByTenantId.useQuery(userId)
+  const { data: site } = api.admin.site.getSiteByTenantId.useQuery(userId, { enabled: userId ? true : false })
 
   const changeCurrentPageId = useCallback((id: string) => {
     setCurrentPageId(id)
