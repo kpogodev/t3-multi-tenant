@@ -18,7 +18,7 @@ const AddPages = () => {
       },
       {
         onSuccess: () => {
-          void clinet.cms.page.getPages.invalidate()
+          void clinet.cms.page.getPagesBySiteId.invalidate()
           setName("")
         },
       }

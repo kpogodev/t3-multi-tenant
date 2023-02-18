@@ -13,8 +13,8 @@ const capitalize = (s: string) => {
 
 const PageList = () => {
   const ctx = useContext(CmsContext)
-  const { data: pages } = api.cms.page.getPages.useQuery(ctx.site?.id ?? "")
-  
+  const { data: pages } = api.cms.page.getPagesBySiteId.useQuery(ctx.site?.id ?? "")
+
   return (
     <div className='grid grid-cols-[repeat(auto-fit,_minmax(240px,_1fr))] gap-4'>
       {pages?.map((page) => (
