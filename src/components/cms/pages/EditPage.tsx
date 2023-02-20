@@ -3,6 +3,7 @@ import { CmsContext } from "../context/CmsContext"
 import AddSubpages from "./AddSubpages"
 import SubpagesList from "./SubpagesList"
 import Heading from "../../common/Heading"
+import RichTextEditor from "../../common/RichTextEditor"
 
 const EditPage = () => {
   const ctx = useContext(CmsContext)
@@ -15,6 +16,7 @@ const EditPage = () => {
           Go Back
         </button>
       </div>
+      <RichTextEditor />
       <div className='divider'></div>
       <AddSubpages />
       <SubpagesList />
