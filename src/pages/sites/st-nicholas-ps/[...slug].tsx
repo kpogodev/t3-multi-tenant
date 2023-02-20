@@ -1,10 +1,10 @@
 import type { NextPage, GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
-import pageNotFoundHelper from "../../../utils/pageNotFoundHelper"
+import PageNotFoundHelper from "../../../utils/pageNotFoundHelper"
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   // helper function to check if the route exists and return 404 if not
-  return await pageNotFoundHelper(context, () => {
+  return await PageNotFoundHelper(context, () => {
     return {
       props: {
         // props for your component
