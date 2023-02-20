@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import { CmsContext } from "../context/CmsContext"
 import AddSubpages from "./AddSubpages"
+import SubpagesList from "./SubpagesList"
 
 const EditPage = () => {
   const ctx = useContext(CmsContext)
@@ -12,6 +13,7 @@ const EditPage = () => {
       </button>
       <div className='divider'></div>
       <AddSubpages />
+      <SubpagesList />
     </div>
   )
 }
