@@ -1,8 +1,7 @@
 import AssociateTenantForm from "./AssociateTenantForm"
-import Heading from "./Heading"
+import Heading from "../common/Heading"
 
 const AssociateTenant = () => {
-
   return (
     <div className='w-100 flex flex-col gap-3'>
       <Heading text='Associate Tenant' />

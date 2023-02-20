@@ -1,5 +1,5 @@
 import Table from "./Table"
-import Heading from "./Heading"
+import Heading from "../common/Heading"
 import { api } from "../../utils/api"
 import { generateRandomKey } from "../../utils/generateRandomKey"
 import LoadingSkeleton from "./LoadingSkeleton"

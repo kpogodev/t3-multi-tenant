@@ -3,7 +3,7 @@ import { type SVGIcon } from "../../types/icons"
 export default function PageIcon({ ...props }: SVGIcon) {
   return (
     <svg
-      enable-background='new 0 0 68 68'
+      enableBackground='new 0 0 68 68'
       viewBox='0 0 68 68'
       className={props.className}
       xmlns='http://www.w3.org/2000/svg'

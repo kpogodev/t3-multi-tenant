@@ -1,5 +1,5 @@
 import { api } from "../../utils/api"
-import Heading from "./Heading"
+import Heading from "../common/Heading"
 import { generateRandomKey } from "../../utils/generateRandomKey"
 import Table from "./Table"
 import DeleteIcon from "../icons/DeleteIcon"

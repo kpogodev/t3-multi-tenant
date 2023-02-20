@@ -1,6 +1,6 @@
 import WarningIcon from "../icons/WarningIcon"
 import AddDomainForm from "./AddDomainForm"
-import Heading from "./Heading"
+import Heading from "../common/Heading"
 
 const AddDomain = () => {
   return (

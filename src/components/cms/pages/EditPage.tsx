@@ -2,15 +2,19 @@ import { useContext } from "react"
 import { CmsContext } from "../context/CmsContext"
 import AddSubpages from "./AddSubpages"
 import SubpagesList from "./SubpagesList"
+import Heading from "../../common/Heading"
 
 const EditPage = () => {
   const ctx = useContext(CmsContext)
 
   return (
-    <div className='flex w-full items-start flex-col gap-10'>
-      <button className='btn-secondary btn' onClick={() => void ctx.changeView(ctx.prevView)}>
-        Go Back
-      </button>
+    <div className='flex w-full flex-col items-start gap-10'>
+      <div className='flex w-full items-center justify-between'>
+        <Heading text='Edit Page Content' />
+        <button className='btn-secondary btn' onClick={() => void ctx.changeView(ctx.prevView)}>
+          Go Back
+        </button>
+      </div>
       <div className='divider'></div>
       <AddSubpages />
       <SubpagesList />

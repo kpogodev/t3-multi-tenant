@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { api } from "../../../utils/api"
-import Heading from "../Heading"
+import Heading from "../../common/Heading"
 
 const AddPages = () => {
   const [name, setName] = useState<string>("")
