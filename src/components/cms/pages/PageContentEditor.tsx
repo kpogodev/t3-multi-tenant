@@ -5,6 +5,7 @@ import { CmsContext } from "../context/CmsContext"
 import { api } from "../../../utils/api"
 import RichTextEditor from "../../common/RichTextEditor"
 import type { RawDraftContentState } from "react-draft-wysiwyg"
+import DisplayRichText from "../../common/DisplayRichText"
 
 const PageContentEditor = () => {
   const ctx = useContext(CmsContext)
@@ -80,6 +81,7 @@ const PageContentEditor = () => {
           Publish
         </button>
       </div>
+      <DisplayRichText data={pageDraftContent} className='w-full prose prose-lg mr-auto' />
     </div>
   )
 }
