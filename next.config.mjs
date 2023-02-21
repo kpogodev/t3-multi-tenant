@@ -23,5 +23,6 @@ const config = {
   images: {
     domains: ["avatars.githubusercontent.com"],
   },
+  skipMiddlewareUrlNormalize: true,
 }
 export default config;
