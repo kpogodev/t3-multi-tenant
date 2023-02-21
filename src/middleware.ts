@@ -25,7 +25,7 @@ export default async function middleware(req: NextRequest) {
     if(process.env.NODE_ENV === "development") {
       return NextResponse.rewrite(`${protocol}://${apexDomain}/sites/${themeName}${pathname}`)
     } else {
-        return NextResponse.rewrite(new URL(`/sites/${themeName}${pathname}`), req.url)
+        return NextResponse.rewrite(new URL(`/sites/${themeName}${pathname}`))
     }
   }
 
