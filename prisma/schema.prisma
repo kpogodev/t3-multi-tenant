@@ -64,7 +64,7 @@ model Subpage {
 
 model PageContent {
   id       String @id @default(cuid())
-  page     Page   @relation(fields: [pageId], references: [id])
+  page     Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId   String @unique
   draft    Json?
   published Json?
