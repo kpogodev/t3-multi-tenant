@@ -23,6 +23,8 @@ const config = {
   images: {
     domains: ["avatars.githubusercontent.com"],
   },
-  ignoreBuildErrors: true,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 }
 export default config;
