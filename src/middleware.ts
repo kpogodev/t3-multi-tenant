@@ -23,8 +23,6 @@ export default async function middleware(req: NextRequest) {
     }
 
     url.pathname = `/sites/${themeName}${pathname}`
-
-    // return NextResponse.rewrite(`${protocol}://${apexDomain}/sites/${themeName}${pathname}`)
     return NextResponse.rewrite(new URL(url))
   }
 
