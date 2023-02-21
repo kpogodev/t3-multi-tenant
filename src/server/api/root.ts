@@ -3,6 +3,7 @@ import { siteRouter } from "./routers/admin/site";
 import { themeRouter } from "./routers/admin/theme";
 import { userRouter } from "./routers/admin/user";
 import { pageRouter } from "./routers/cms/page";
+import { pageContentRouter } from "./routers/cms/pageContent";
 import { createTRPCRouter } from "./trpc";
 /**
  * This is the primary router for your server.
@@ -17,7 +18,8 @@ export const appRouter = createTRPCRouter({
     user: userRouter,
   }),
   cms: createTRPCRouter({
-    page: pageRouter
+    page: pageRouter,
+    pageContent: pageContentRouter
   }),
 });
 

@@ -20,6 +20,9 @@ export const pageRouter = createTRPCRouter({
           name: input,
           siteId: site.id,
           slug: slugifyString(input),
+          content: {
+            create: {}
+          }
         },
       })
       return page
