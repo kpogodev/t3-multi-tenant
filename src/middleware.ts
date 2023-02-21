@@ -5,7 +5,7 @@ const apexDomain = process.env.NODE_ENV === "development" ? "localhost:3000" : "
 const protocol = process.env.NODE_ENV === "development" ? "http" : "https"
 
 export const config = {
-  matcher: ["/((?!api/|_next/|_static/|auth|cms|admin|[\\w-]+\\.\\w+).*)", "/"],
+  matcher: ["/((?!api/|_next/|_static/|auth|cms|admin|sites|[\\w-]+\\.\\w+).*)", "/"],
 }
 
 export default async function middleware(req: NextRequest) {
