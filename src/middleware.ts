@@ -9,18 +9,23 @@ export const config = {
 }
 
 export default async function middleware(req: NextRequest) {
+  const url = req.nextUrl.clone()
   const { pathname } = req.nextUrl
   const hostname = req.headers.get("host")
   const subDomain = hostname?.replace(`.${apexDomain}`, "") as string
 
   if(subDomain.length && !subDomain.startsWith(apexDomain)) {
+
     const themeName = await fetchThemeName({ protocol, subDomain, apexDomain })
 
     if (!themeName) {
       return NextResponse.rewrite(`${protocol}://${apexDomain}/404`)
     }
 
-    return NextResponse.rewrite(`${protocol}://${apexDomain}/sites/${themeName}${pathname}`)
+    url.pathname = `/sites/${themeName}${pathname}`
+
+    // return NextResponse.rewrite(`${protocol}://${apexDomain}/sites/${themeName}${pathname}`)
+    return NextResponse.rewrite(new URL(url))
   }
 
   return NextResponse.next()
