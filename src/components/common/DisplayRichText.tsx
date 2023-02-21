@@ -1,7 +1,7 @@
 import { convertToHTML } from "draft-convert"
 import { convertFromRaw } from "draft-js"
 import type { RawDraftContentState } from "react-draft-wysiwyg"
-import DOMPurify from "dompurify"
+import { sanitize } from "dompurify"
 
 interface DisplayRichTextProps {
   data: string | undefined
@@ -13,8 +13,8 @@ const DisplayRichText = ({ data, className }: DisplayRichTextProps) => {
 
   const rawData = JSON.parse(data) as RawDraftContentState
   const html = convertToHTML(convertFromRaw(rawData))
-  const sanitizedHtml = DOMPurify.sanitize(html)
 
-  return <div className={className} dangerouslySetInnerHTML={{ __html: sanitizedHtml }}></div>
+
+  return <div className={className} dangerouslySetInnerHTML={{ __html: html }}></div>
 }
 export default DisplayRichText
