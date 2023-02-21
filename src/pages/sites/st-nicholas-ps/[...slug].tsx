@@ -1,3 +1,4 @@
+/*eslint-disable */
 import type { NextPage, InferGetServerSidePropsType, GetServerSidePropsContext } from "next"
 import { createProxySSGHelpers } from "@trpc/react-query/ssg"
 import superjson from "superjson"
@@ -7,8 +8,6 @@ import { createInnerTRPCContext } from "../../../server/api/trpc"
 import { useRouter } from "next/router"
 import { appRouter } from "../../../server/api/root"
 import DisplayRichText from "../../../components/common/DisplayRichText"
-
-
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const host = context.req.headers.host
@@ -45,3 +44,4 @@ const Page: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   )
 }
 export default Page
+/*eslint-enable */
