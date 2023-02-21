@@ -22,7 +22,11 @@ export default async function middleware(req: NextRequest) {
 
     console.log('Im here', `${protocol}://${apexDomain}/sites/${themeName}${pathname}`)
 
-    return NextResponse.rewrite(`${protocol}://${apexDomain}/sites/${themeName}${pathname}`)
+    if(process.env.NODE_ENV === "development") {
+      return NextResponse.rewrite(`${protocol}://${apexDomain}/sites/${themeName}${pathname}`)
+    } else {
+        return NextResponse.rewrite(new URL(`/sites/${themeName}${pathname}`), req.url)
+    }
   }
 
   return NextResponse.next()
