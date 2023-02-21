@@ -46,6 +46,7 @@ model Page {
   slug     String
   site     Site   @relation(fields: [siteId], references: [id])
   siteId   String
+  content  PageContent?
   subpages Subpage[]
 
   @@index([siteId])
@@ -57,6 +58,18 @@ model Subpage {
   slug     String
   page     Page   @relation(fields: [pageId], references: [id])
   pageId   String
+
+  @@index([pageId])
+}
+
+model PageContent {
+  id       String @id @default(cuid())
+  page     Page   @relation(fields: [pageId], references: [id])
+  pageId   String @unique
+  draft    Json?
+  published Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([pageId])
 }
