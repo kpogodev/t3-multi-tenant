@@ -1,7 +1,7 @@
 import { prisma } from "../server/db"
 import type { GetServerSidePropsContext, GetServerSidePropsResult } from "next"
 
-const PageNotFoundHelper = async (
+const PageNotFoundRedirectHelper = async (
   context: GetServerSidePropsContext,
   cb: () => GetServerSidePropsResult<{ [key: string]: any }>
 ) => {
@@ -43,4 +43,4 @@ const PageNotFoundHelper = async (
   return cb()
 }
 
-export default PageNotFoundHelper
+export default PageNotFoundRedirectHelper
