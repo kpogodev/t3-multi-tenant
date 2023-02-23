@@ -12,6 +12,7 @@ export const navigationRouter = createTRPCRouter({
         },
       },
       select: {
+        name: true,
         pages: true,
       }
     })

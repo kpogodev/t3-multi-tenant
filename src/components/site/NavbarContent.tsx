@@ -10,7 +10,7 @@ const NavbarContent = () => {
     <nav className='navbar bg-slate-200 shadow-md'>
       <div className='flex-1'>
         <Link className='btn-ghost btn text-xl normal-case' href='/'>
-          St Nicholas PS
+          {ctx.navData?.name}
         </Link>
       </div>
       <div className='flex-none'>

@@ -1,9 +1,28 @@
-import type { NextPage } from "next"
-import { useRouter } from "next/router"
+import type { NextPage, GetServerSidePropsContext } from "next"
+import PageNotFoundRedirectHelper from "../../../utils/sites/PageNotFoundRedirectHelper"
+import ContentPageContainer from "../../../components/site/ContentPageContainer"
+import ContentPageContextProvider from "../../../components/site/context/ContentPageContext"
+import MainContent from "../../../components/site/MainContent"
+import PrefetchPageData from "../../../utils/sites/PrefetchPageData"
+import NavbarContent from "../../../components/site/NavbarContent"
 
-const Page: NextPage = () => {
-  const router = useRouter()
-  const { slug } = router.query
-  return <div>Welcome to St. George Template - {slug?.length && slug[slug.length - 1]}</div>
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  return await PageNotFoundRedirectHelper(context, () => PrefetchPageData(context))
+}
+
+export interface IPageProps {
+  domain: string
+  slug: string | string[]
+}
+
+const Page: NextPage<IPageProps> = ({ domain, slug }) => {
+  return (
+    <ContentPageContextProvider initialParams={{ slug, domain }}>
+      <ContentPageContainer>
+        <NavbarContent />
+        <MainContent />
+      </ContentPageContainer>
+    </ContentPageContextProvider>
+  )
 }
 export default Page
