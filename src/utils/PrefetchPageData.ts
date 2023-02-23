@@ -15,8 +15,10 @@ const PrefetchPageData = async (context: GetServerSidePropsContext) => {
       transformer: superjson,
     })
 
+    // prefetch data
     if (domain && slug) {
       await ssg.sites.content.getPageContent.prefetch({ domain, pageSlug: slug })
+      await ssg.sites.content.getNavigation.prefetch(domain)
     }
 
     return {
