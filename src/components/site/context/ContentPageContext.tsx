@@ -13,7 +13,7 @@ const useContentPageStateManager = ({ slug, domain }: IProviderProps["initialPar
     { enabled: !!domain || !!slug }
   )
 
-  const { data: navData } = api.sites.content.getNavigation.useQuery(domain, {
+  const { data: navData } = api.sites.navigation.getNavigation.useQuery(domain, {
     enabled: !!domain,
   })
 

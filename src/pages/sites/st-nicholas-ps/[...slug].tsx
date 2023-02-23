@@ -1,10 +1,10 @@
 import type { NextPage, GetServerSidePropsContext } from "next"
-import PageNotFoundRedirectHelper from "../../../utils/PageNotFoundRedirectHelper"
+import PageNotFoundRedirectHelper from "../../../utils/sites/PageNotFoundRedirectHelper"
 import ContentPageContainer from "../../../components/site/ContentPageContainer"
 import ContentPageContextProvider from "../../../components/site/context/ContentPageContext"
 import MainContent from "../../../components/site/MainContent"
-import PrefetchPageData from "../../../utils/PrefetchPageData"
-import Navbar from "../../../components/site/Navbar"
+import PrefetchPageData from "../../../utils/sites/PrefetchPageData"
+import NavbarContent from "../../../components/site/NavbarContent"
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   return await PageNotFoundRedirectHelper(context, () => PrefetchPageData(context))
@@ -19,7 +19,7 @@ const Page: NextPage<IPageProps> = ({ domain, slug }) => {
   return (
     <ContentPageContextProvider initialParams={{ slug, domain }}>
       <ContentPageContainer>
-        <Navbar />
+        <NavbarContent />
         <MainContent />
       </ContentPageContainer>
     </ContentPageContextProvider>

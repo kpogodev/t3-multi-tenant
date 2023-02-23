@@ -5,6 +5,8 @@ import { userRouter } from "./routers/admin/user";
 import { pageRouter } from "./routers/cms/page";
 import { pageContentRouter } from "./routers/cms/pageContent";
 import { contentRouter } from "./routers/sites/content";
+import { homepageRouter } from "./routers/sites/homepage";
+import { navigationRouter } from "./routers/sites/navigation";
 import { createTRPCRouter } from "./trpc";
 /**
  * This is the primary router for your server.
@@ -23,7 +25,9 @@ export const appRouter = createTRPCRouter({
     pageContent: pageContentRouter
   }),
   sites: createTRPCRouter({
-    content: contentRouter
+    content: contentRouter,
+    homepage: homepageRouter,
+    navigation: navigationRouter,
   }),
 });
 

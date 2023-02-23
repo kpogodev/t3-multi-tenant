@@ -1,9 +1,9 @@
 import Link from "next/link"
 import { useContext } from "react"
-import { ContentPageContext } from "./context/ContentPageContext"
+import { HomepageContext } from "./context/HomepageContext"
 
-const Navbar = () => {
-  const ctx = useContext(ContentPageContext)
+const NavbarHome = () => {
+  const ctx = useContext(HomepageContext)
   const pages = ctx.navData?.pages
 
   return (
@@ -26,4 +26,4 @@ const Navbar = () => {
     </nav>
   )
 }
-export default Navbar
+export default NavbarHome

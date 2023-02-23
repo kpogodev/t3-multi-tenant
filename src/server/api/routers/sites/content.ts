@@ -41,20 +41,4 @@ export const contentRouter = createTRPCRouter({
 
     return responseObj
   }),
-  getNavigation: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const domainToLookFor = process.env.NODE_ENV === "production" ? input : input.replace(".localhost:3000", ".kpwebdev.com")
-
-    const pages = await ctx.prisma.site.findFirst({
-      where: {
-        domain: {
-          name: domainToLookFor,
-        },
-      },
-      select: {
-        pages: true,
-      }
-    })
-
-    return pages
-  })
 })
