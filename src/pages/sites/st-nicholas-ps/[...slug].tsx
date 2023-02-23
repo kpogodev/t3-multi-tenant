@@ -1,57 +1,26 @@
 import type { NextPage, GetServerSidePropsContext } from "next"
-import { createProxySSGHelpers } from "@trpc/react-query/ssg"
-import superjson from "superjson"
 import PageNotFoundRedirectHelper from "../../../utils/PageNotFoundRedirectHelper"
-import { api } from "../../../utils/api"
-import { createInnerTRPCContext } from "../../../server/api/trpc"
-import { appRouter } from "../../../server/api/root"
-import DisplayRichText from "../../../components/common/DisplayRichText"
-import { useRouter } from "next/router"
-import ContentPageLayout from "../../../components/site/ContentPageLayout"
+import ContentPageContainer from "../../../components/site/ContentPageContainer"
+import ContentPageContextProvider from "../../../components/site/context/ContentPageContext"
+import MainContent from "../../../components/site/MainContent"
+import PrefetchPageData from "../../../utils/PrefetchPageData"
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  return await PageNotFoundRedirectHelper(context, async () => {
-    const domain = context.req.headers.host
-    const slug = context.params?.slug
-
-    const ssg = createProxySSGHelpers({
-      router: appRouter,
-      ctx: createInnerTRPCContext({ session: null }),
-      transformer: superjson,
-    })
-
-    if (domain && slug) {
-      await ssg.sites.content.getPageContent.prefetch({ domain, pageSlug: slug })
-    }
-
-    return {
-      props: {
-        trpcState: ssg.dehydrate(),
-        domain,
-        slug,
-      },
-    }
-  })
+  return await PageNotFoundRedirectHelper(context, () => PrefetchPageData(context))
 }
 
-interface PageProps {
+export interface IPageProps {
   domain: string
   slug: string | string[]
 }
 
-const Page: NextPage<PageProps> = ({ domain, slug }) => {
-  const { data: pageData } = api.sites.content.getPageContent.useQuery(
-    { pageSlug: slug, domain },
-    { enabled: !!domain || !!slug }
-  )
-
+const Page: NextPage<IPageProps> = ({ domain, slug }) => {
   return (
-    <ContentPageLayout>
-      <div className="max-w-screen-md flex flex-col gap-5 mx-auto py-10 px-5">
-        <h1 className='text-4xl font-extrabold'>{pageData?.pageName}</h1>
-        <DisplayRichText className="prose prose-lg" data={pageData?.content?.published} />
-      </div>
-    </ContentPageLayout>
+    <ContentPageContextProvider initialParams={{ slug, domain }}>
+      <ContentPageContainer>
+        <MainContent />
+      </ContentPageContainer>
+    </ContentPageContextProvider>
   )
 }
 export default Page
