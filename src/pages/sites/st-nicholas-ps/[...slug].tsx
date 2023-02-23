@@ -1,47 +1,57 @@
-/*eslint-disable */
-import type { NextPage, InferGetServerSidePropsType, GetServerSidePropsContext } from "next"
+import type { NextPage, GetServerSidePropsContext } from "next"
 import { createProxySSGHelpers } from "@trpc/react-query/ssg"
 import superjson from "superjson"
 import PageNotFoundRedirectHelper from "../../../utils/PageNotFoundRedirectHelper"
 import { api } from "../../../utils/api"
 import { createInnerTRPCContext } from "../../../server/api/trpc"
-import { useRouter } from "next/router"
 import { appRouter } from "../../../server/api/root"
 import DisplayRichText from "../../../components/common/DisplayRichText"
+import { useRouter } from "next/router"
+import ContentPageLayout from "../../../components/site/ContentPageLayout"
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const host = context.req.headers.host
-  const domain = host?.split(".")[0] as string
+  return await PageNotFoundRedirectHelper(context, async () => {
+    const domain = context.req.headers.host
+    const slug = context.params?.slug
 
-  const ssg = createProxySSGHelpers({
-    router: appRouter,
-    ctx: createInnerTRPCContext({ session: null }),
-    transformer: superjson,
-  })
+    const ssg = createProxySSGHelpers({
+      router: appRouter,
+      ctx: createInnerTRPCContext({ session: null }),
+      transformer: superjson,
+    })
 
-  await ssg.sites.content.getPageContent.prefetch(domain)
+    if (domain && slug) {
+      await ssg.sites.content.getPageContent.prefetch({ domain, pageSlug: slug })
+    }
 
-  // helper function to check if the route exists and return 404 if not
-  return await PageNotFoundRedirectHelper(context, () => {
     return {
       props: {
         trpcState: ssg.dehydrate(),
         domain,
+        slug,
       },
     }
   })
 }
 
-const Page: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (props) => {
-  const { data } = api.sites.content.getPageContent.useQuery(props.domain, { enabled: !!props.domain })
-  const router = useRouter()
-  const content = data?.find((item) => item.slug === router.query.slug?.join("/")).content.published
+interface PageProps {
+  domain: string
+  slug: string | string[]
+}
+
+const Page: NextPage<PageProps> = ({ domain, slug }) => {
+  const { data: pageData } = api.sites.content.getPageContent.useQuery(
+    { pageSlug: slug, domain },
+    { enabled: !!domain || !!slug }
+  )
 
   return (
-    <div className=''>
-      <DisplayRichText data={content} className='prose mx-auto py-20' />
-    </div>
+    <ContentPageLayout>
+      <div className="max-w-screen-md flex flex-col gap-5 mx-auto py-10 px-5">
+        <h1 className='text-4xl font-extrabold'>{pageData?.pageName}</h1>
+        <DisplayRichText className="prose prose-lg" data={pageData?.content?.published} />
+      </div>
+    </ContentPageLayout>
   )
 }
 export default Page
-/*eslint-enable */
