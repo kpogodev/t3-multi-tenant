@@ -1,8 +1,6 @@
-import { convertToHTML } from "draft-convert"
-import { convertFromRaw } from "draft-js"
 import type { RawDraftContentState } from "react-draft-wysiwyg"
-import { sanitize } from "dompurify"
-import { JSONValue } from "superjson/dist/types"
+import type { JSONValue } from "superjson/dist/types"
+import draftToHtml from "draftjs-to-html"
 
 interface DisplayRichTextProps {
   data: string | undefined | JSONValue
@@ -13,7 +11,7 @@ const DisplayRichText = ({ data, className }: DisplayRichTextProps) => {
   if (!data) return <p>Currently, there is no content to display</p>
 
   const rawData = JSON.parse(data as string) as RawDraftContentState
-  const html = convertToHTML(convertFromRaw(rawData))
+  const html = draftToHtml(rawData) as string
 
   return <div className={className} dangerouslySetInnerHTML={{ __html: html }}></div>
 }

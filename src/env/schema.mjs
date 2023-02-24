@@ -8,10 +8,7 @@ import { z } from "zod";
 export const serverSchema = z.object({
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
-  NEXTAUTH_SECRET:
-    process.env.NODE_ENV === "production"
-      ? z.string().min(1)
-      : z.string().min(1).optional(),
+  NEXTAUTH_SECRET: process.env.NODE_ENV === "production" ? z.string().min(1) : z.string().min(1).optional(),
   NEXTAUTH_URL: z.preprocess(
     // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
     // Since NextAuth.js automatically uses the VERCEL_URL if present.
@@ -24,7 +21,11 @@ export const serverSchema = z.object({
   ZOHO_CLIENT_SECRET: z.string(),
   VERCEL_ACCESS_TOKEN_DEV: z.string(),
   PROJECT_ID_VERCEL: z.string(),
-});
+  S3_BUCKET_NAME: z.string(),
+  S3_BUCKET_REGION: z.string(),
+  S3_BUCKET_ACCESS_KEY_ID: z.string(),
+  S3_BUCKET_SECRET: z.string(),
+})
 
 /**
  * You can't destruct `process.env` as a regular object in the Next.js
@@ -42,6 +43,10 @@ export const serverEnv = {
   ZOHO_CLIENT_SECRET: process.env.ZOHO_CLIENT_SECRET,
   VERCEL_ACCESS_TOKEN_DEV: process.env.VERCEL_ACCESS_TOKEN_DEV,
   PROJECT_ID_VERCEL: process.env.PROJECT_ID_VERCEL,
+  S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+  S3_BUCKET_REGION: process.env.S3_BUCKET_REGION,
+  S3_BUCKET_ACCESS_KEY_ID: process.env.S3_BUCKET_ACCESS_KEY_ID,
+  S3_BUCKET_SECRET: process.env.S3_BUCKET_SECRET,
 };
 
 /**
