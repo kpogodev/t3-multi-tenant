@@ -9,7 +9,7 @@ export const pageRouter = createTRPCRouter({
 
       const site = await ctx.prisma.site.findUnique({
         where: {
-          tenantId: ctx.session.user.id,
+          userId: ctx.session.user.id,
         },
       })
 
@@ -68,7 +68,7 @@ export const pageRouter = createTRPCRouter({
   getPagesBySiteId: protectedProcedure.query(async ({ ctx }) => {
     const site = await ctx.prisma.site.findUnique({
       where: {
-        tenantId: ctx.session.user.id,
+        userId: ctx.session.user.id,
       },
     })
 

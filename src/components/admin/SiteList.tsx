@@ -30,7 +30,7 @@ const SiteList = () => {
       <Heading text='Site List' />
       <Table
         list={sites}
-        headers={["id", "name", "theme_id", "domain_id", "tenant_id"]}
+        headers={["id", "name", "theme id", "domain id", "tenant id"]}
         emptyMessage='No sites found'
         renderHeader={(header) => header}
         renderRow={(item) =>

@@ -46,7 +46,7 @@ export const siteRouter = createTRPCRouter({
           id: input.siteId,
         },
         data: {
-          tenantId: input.userId,
+          userId: input.userId,
         },
       })
 
@@ -61,7 +61,7 @@ export const siteRouter = createTRPCRouter({
   getUnassociatedSites: protectedProcedure.query(async ({ ctx }) => {
     const sites = await ctx.prisma.site.findMany({
       where: {
-        tenantId: null,
+        userId: null,
       },
     })
     return sites
@@ -86,7 +86,7 @@ export const siteRouter = createTRPCRouter({
   getSiteByTenantId: protectedProcedure.input(z.string()).query(async ({ input, ctx }) => {
     const site = await ctx.prisma.site.findUnique({
       where: {
-        tenantId: input,
+        userId: input,
       },
     })
 

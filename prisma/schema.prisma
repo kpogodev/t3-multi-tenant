@@ -10,6 +10,19 @@ datasource db {
 }
 
 // Platform
+model Site {
+  id       String @id @default(cuid())
+  name     String
+  theme    Theme  @relation(fields: [themeId], references: [id])
+  themeId  String
+  domain   Domain @relation(fields: [domainId], references: [id])
+  domainId String @unique
+  pages    Page[]
+  user     User?  @relation(fields: [userId], references: [id])
+  userId   String? @unique
+
+  @@index([themeId])
+}
 model Domain {
   id       String  @id @default(cuid())
   name     String
@@ -25,19 +38,6 @@ model Theme {
   sites  Site[]
 }
 
-model Site {
-  id       String @id @default(cuid())
-  name     String
-  theme    Theme  @relation(fields: [themeId], references: [id])
-  themeId  String
-  domain   Domain @relation(fields: [domainId], references: [id])
-  domainId String @unique
-  pages    Page[]
-  tenant   User?  @relation(fields: [tenantId], references: [id])
-  tenantId String? @unique
-
-  @@index([themeId])
-}
 
 //Site
 model Page {
