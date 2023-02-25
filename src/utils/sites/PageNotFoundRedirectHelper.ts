@@ -12,10 +12,7 @@ const PageNotFoundRedirectHelper = async (
   )
     return { notFound: true }
 
-  const { slug } = context.params
-  const formattedSlug = [...slug].join("/")
   const hostDomain = context.req.headers.host
-
   const domainToCheck =
     process.env.NODE_ENV === "production" ? hostDomain : hostDomain.replace(".localhost:3000", ".kpwebdev.com")
 
@@ -29,13 +26,16 @@ const PageNotFoundRedirectHelper = async (
     },
     select: {
       slug: true,
-      subpages: true,
+      children: true,
     },
   })
 
+  const { slug } = context.params
+  const formattedSlug = [...slug].join("/")
+
   const formattedSiteRouts = [
     ...siteSlugs.map((page) => page.slug),
-    ...siteSlugs.map((page) => page.subpages.map((subpage) => subpage.slug)).flat(),
+    ...siteSlugs.map((page) => page.children.map((child) => `${page.slug}/${child.slug}`)).flat(),
   ]
 
   if (!formattedSiteRouts.includes(formattedSlug)) return { notFound: true }

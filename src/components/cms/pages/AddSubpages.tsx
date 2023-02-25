@@ -6,7 +6,7 @@ import { CmsContext } from "../context/CmsContext"
 const AddSubpages = () => {
   const ctx = useContext(CmsContext)
   const [name, setName] = useState<string>("")
-  const { mutate: addPage } = api.cms.page.addSubpage.useMutation()
+  const { mutate: addPage } = api.cms.page.addSubPage.useMutation()
   const clinet = api.useContext()
 
   const onAddSubpageSubmit = (e: React.FormEvent<HTMLFormElement>) => {
