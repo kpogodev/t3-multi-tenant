@@ -105,11 +105,33 @@ export const pageRouter = createTRPCRouter({
       return page
     }),
   deletePage: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
+    // Delete all subpages
+    await ctx.prisma.page.deleteMany({
+      where: {
+        parentId: input,
+        AND: {
+          id: {
+            not: input,
+          }
+        }
+      },
+    })
+
     const page = await ctx.prisma.page.delete({
       where: {
         id: input,
       },
     })
+
     return page
   }),
+ deleteSubpage: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
+    const page = await ctx.prisma.page.delete({
+      where: {
+        id: input,
+      },
+    })
+
+    return page
+  })
 })

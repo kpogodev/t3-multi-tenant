@@ -15,5 +15,3 @@ const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { s
 }
 
 export default api.withTRPC(MyApp)
-
-
