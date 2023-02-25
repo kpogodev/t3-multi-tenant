@@ -80,6 +80,7 @@ export const pageRouter = createTRPCRouter({
     const pages = await ctx.prisma.page.findMany({
       where: {
         siteId: site.id,
+        parentId: null,
       },
     })
     return pages

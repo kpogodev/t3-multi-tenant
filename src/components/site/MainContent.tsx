@@ -8,7 +8,7 @@ const MainContent = () => {
   return (
     <div className='mx-auto flex max-w-screen-md flex-col gap-5 py-10 px-5'>
       <h1 className='text-4xl font-extrabold'>{pageData?.pageName}</h1>
-      <DisplayRichText className='prose prose-lg' data={pageData?.content?.published} />
+      <DisplayRichText className='prose prose-lg' data={pageData?.content?.richText} />
     </div>
   )
 }

@@ -12,8 +12,7 @@ const DisplayRichText = ({ data, className }: DisplayRichTextProps) => {
 
   const rawData = JSON.parse(data as string) as RawDraftContentState
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  const html = draftToHtml(rawData) as string
+  const html = draftToHtml(rawData)
 
   return <div className={className} dangerouslySetInnerHTML={{ __html: html }}></div>
 }

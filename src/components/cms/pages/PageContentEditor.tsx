@@ -18,15 +18,14 @@ const PageContentEditor = () => {
   const { mutate: saveDraft } = api.cms.pageContent.updateDraft.useMutation()
   const { mutate: publish } = api.cms.pageContent.updatePublished.useMutation()
 
-  const { data: pagePublishedContent } = api.cms.pageContent.getPublishedByPageId.useQuery(ctx.currentPageId, {
-    onSuccess: (published: string) => {
-      if (published) {
-        const publishedContent = JSON.parse(published) as RawDraftContentState
-        setEditorState(EditorState.createWithContent(convertFromRaw(publishedContent)))
-      }
-    },
-  })
-
+    const { data: pagePublishedContent } = api.cms.pageContent.getPublishedByPageId.useQuery(ctx.currentPageId, {
+      onSuccess: (published: string) => {
+        if (published) {
+          const publishedContent = JSON.parse(published) as RawDraftContentState
+          setEditorState(EditorState.createWithContent(convertFromRaw(publishedContent)))
+        }
+      },
+    })
   const { data: pageDraftContent } = api.cms.pageContent.getDraftByPageId.useQuery(ctx.currentPageId, {
     onSuccess: (draft: string) => {
       if (draft) {
@@ -61,8 +60,8 @@ const PageContentEditor = () => {
       {
         onSuccess: () => {
           toast.success("Page published")
-          void client.cms.pageContent.getPublishedByPageId.invalidate()
-          void client.cms.pageContent.getDraftByPageId.invalidate()
+     void client.cms.pageContent.getPublishedByPageId.invalidate()
+     void client.cms.pageContent.getDraftByPageId.invalidate()
         },
         onError: () => toast.error("Failed to publish page"),
       }

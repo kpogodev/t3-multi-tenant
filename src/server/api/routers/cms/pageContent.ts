@@ -18,18 +18,28 @@ export const pageContentRouter = createTRPCRouter({
       where: {
         pageId: input,
       },
+      select: {
+        richTextDraft: true,
+      }
     })
 
-    return pageContent?.draft
+    const draft = pageContent?.richTextDraft
+
+    return draft
   }),
   getPublishedByPageId: protectedProcedure.input(z.string()).query(async ({ input, ctx }) => {
     const pageContent = await ctx.prisma.pageContent.findUnique({
       where: {
         pageId: input,
       },
+      select: {
+        richText: true,
+      }
     })
 
-    return pageContent?.published
+    const published = pageContent?.richText
+
+    return published
   }),
   updateDraft: protectedProcedure
     .input(
@@ -44,7 +54,7 @@ export const pageContentRouter = createTRPCRouter({
           pageId: input.pageId,
         },
         data: {
-          draft: input.draft,
+          richTextDraft: input.draft,
         },
       })
 
@@ -63,8 +73,8 @@ export const pageContentRouter = createTRPCRouter({
           pageId: input.pageId,
         },
         data: {
-          published: input.published,
-          draft: Prisma.DbNull,
+          richText: input.published,
+          richTextDraft: Prisma.DbNull,
         },
       })
 
