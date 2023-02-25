@@ -11,65 +11,59 @@ datasource db {
 
 // Platform
 model Site {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   name     String
-  theme    Theme  @relation(fields: [themeId], references: [id])
+  theme    Theme   @relation(fields: [themeId], references: [id])
   themeId  String
-  domain   Domain @relation(fields: [domainId], references: [id])
-  domainId String @unique
-  pages    Page[]
-  user     User?  @relation(fields: [userId], references: [id])
+  domain   Domain  @relation(fields: [domainId], references: [id])
+  domainId String  @unique
+  user     User?   @relation(fields: [userId], references: [id])
   userId   String? @unique
+  pages    Page[]
 
   @@index([themeId])
 }
+
 model Domain {
-  id       String  @id @default(cuid())
+  id       String   @id @default(cuid())
   name     String
   apexName String
   verified Boolean
-  site   Site?
+  site     Site?
   isCustom Boolean?
 }
 
 model Theme {
-  id     String @id @default(cuid())
-  name   String
-  sites  Site[]
+  id    String @id @default(cuid())
+  name  String
+  sites Site[]
 }
-
 
 //Site
 model Page {
-  id       String @id @default(cuid())
-  name     String
-  slug     String
-  site     Site   @relation(fields: [siteId], references: [id])
-  siteId   String
-  content  PageContent?
-  subpages Subpage[]
+  id        String       @id @default(cuid())
+  name      String
+  slug      String
+  site      Site         @relation(fields: [siteId], references: [id])
+  siteId    String
+  content   PageContent?
+  parentId  String?
+  parent    Page?        @relation("PageToPage", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children  Page[]       @relation("PageToPage")
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 
-  @@index([siteId])
-}
-
-model Subpage {
-  id       String @id @default(cuid())
-  name     String
-  slug     String
-  page     Page   @relation(fields: [pageId], references: [id])
-  pageId   String
-
-  @@index([pageId])
+  @@index([siteId, parentId])
 }
 
 model PageContent {
-  id       String @id @default(cuid())
-  page     Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  pageId   String @unique
-  draft    Json?
-  published Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(cuid())
+  page         Page     @relation(fields: [pageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  pageId       String   @unique
+  richTextDraf Json?
+  richText     Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@index([pageId])
 }
@@ -87,7 +81,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  role          UserRole    @default(TENANT)
+  role          UserRole  @default(TENANT)
   site          Site?
   accounts      Account[]
   sessions      Session[]
