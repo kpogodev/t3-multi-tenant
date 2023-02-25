@@ -70,7 +70,7 @@ export const pageContentRouter = createTRPCRouter({
 
       return pageContent
     }),
-  getPreSignedUrlS3: protectedProcedure
+  getPreSignedPostUrl: protectedProcedure
     .input(
       z.object({
         fileType: z.string(),
@@ -99,7 +99,7 @@ export const pageContentRouter = createTRPCRouter({
 
       return { url, key: Key }
     }),
-  getPreSignedImgUrlS3: protectedProcedure.input(z.string()).mutation(({ input }) => {
+  getSignedImgUrl: protectedProcedure.input(z.string()).mutation(({ input }) => {
     const s3Params = {
       Bucket: process.env.S3_BUCKET_NAME,
       Key: input,

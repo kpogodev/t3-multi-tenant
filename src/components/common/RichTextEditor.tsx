@@ -14,8 +14,8 @@ const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Edi
 })
 
 const RichTextEditor = ({ editorState, onEditorStateChange }: RichTextEditorProps) => {
-  const { mutateAsync: getPreSignedUrlS3 } = api.cms.pageContent.getPreSignedUrlS3.useMutation()
-  const { mutateAsync: getImgLink } = api.cms.pageContent.getPreSignedImgUrlS3.useMutation()
+  const { mutateAsync: getPreSignedUrlS3 } = api.cms.pageContent.getPreSignedPostUrl.useMutation()
+  const { mutateAsync: getImgLink } = api.cms.pageContent.getSignedImgUrl.useMutation()
 
   const uploadImageCallBack = async (file: File) => {
     const { url, key } = await getPreSignedUrlS3({ fileType: file.type })
@@ -26,9 +26,11 @@ const RichTextEditor = ({ editorState, onEditorStateChange }: RichTextEditorProp
     }
 
     const formData = new FormData()
-    for (const name in data) {
-      formData.append(name, data[name])
-    }
+
+    Object.keys(data).forEach((key) => {
+      const formDataKey = key as keyof typeof data
+      formData.append(formDataKey, data[formDataKey])
+    })
 
     const response = await fetch(url.url, {
       method: "POST",

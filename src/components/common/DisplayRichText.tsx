@@ -11,6 +11,8 @@ const DisplayRichText = ({ data, className }: DisplayRichTextProps) => {
   if (!data) return <p>Currently, there is no content to display</p>
 
   const rawData = JSON.parse(data as string) as RawDraftContentState
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const html = draftToHtml(rawData) as string
 
   return <div className={className} dangerouslySetInnerHTML={{ __html: html }}></div>
