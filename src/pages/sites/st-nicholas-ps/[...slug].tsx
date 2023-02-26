@@ -1,6 +1,5 @@
 import type { NextPage, GetServerSidePropsContext } from "next"
 import PageNotFoundRedirectHelper from "../../../utils/sites/PageNotFoundRedirectHelper"
-import ContentPageContainer from "../../../components/site/ContentPageContainer"
 import ContentPageContextProvider from "../../../components/site/context/ContentPageContext"
 import MainContent from "../../../components/site/MainContent"
 import PrefetchPageData from "../../../utils/sites/PrefetchPageData"
@@ -18,10 +17,11 @@ export interface IPageProps {
 const Page: NextPage<IPageProps> = ({ domain, slug }) => {
   return (
     <ContentPageContextProvider initialParams={{ slug, domain }}>
-      <ContentPageContainer>
+      {/* Your Code */}
+      <div className='min-h-screen w-full flex-col'>
         <Navbar domain={domain} />
         <MainContent />
-      </ContentPageContainer>
+      </div>
     </ContentPageContextProvider>
   )
 }
