@@ -1,5 +1,5 @@
 import AddSiteForm from "./AddSiteForm"
-import Heading from "../common/Heading"
+import Heading from "components/common/Heading"
 
 const AddSite = () => {
   return (

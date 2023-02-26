@@ -2,8 +2,8 @@ import { useContext } from "react"
 import { CmsContext } from "./context/CmsContext"
 import { useSession, signOut } from "next-auth/react"
 import Image from "next/image"
-import LightModeIcon from "../icons/LightModeIcon"
-import DarkModeIcon from "../icons/DarkModeIcon"
+import LightModeIcon from "components/icons/LightModeIcon"
+import DarkModeIcon from "components/icons/DarkModeIcon"
 
 const Navbar = () => {
   const { data: session } = useSession()

@@ -1,10 +1,10 @@
 import Table from "./Table"
-import Heading from "../common/Heading"
-import { api } from "../../utils/api"
-import { generateRandomKey } from "../../utils/generateRandomKey"
+import Heading from "components/common/Heading"
+import { api } from "utils/api"
+import { generateRandomKey } from "utils/generateRandomKey"
 import LoadingSkeleton from "./LoadingSkeleton"
-import DeleteIcon from "../icons/DeleteIcon"
-import EditIcon from "../icons/EditIcon"
+import DeleteIcon from "components/icons/DeleteIcon"
+import EditIcon from "components/icons/EditIcon"
 import { toast } from "react-toastify"
 
 const SiteList = () => {

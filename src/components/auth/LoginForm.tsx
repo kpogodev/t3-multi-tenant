@@ -1,4 +1,4 @@
-import PlatformIcon from "../icons/PlatformIcon"
+import PlatformIcon from "components/icons/PlatformIcon"
 import SignInButtonGithub from "./SignInButtonGithub"
 
 export default function LoginForm() {

@@ -1,4 +1,4 @@
-import { type SVGIcon } from "../../types/icons";
+import { type SVGIcon } from "types/icons";
 
 export default function GithubIcon({ ...props }: SVGIcon) {
   return (

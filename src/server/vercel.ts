@@ -1,5 +1,5 @@
-import { type VercelAddDomainResponse } from "../types/vercel";
-import { env } from "../env/server.mjs";
+import type { VercelAddDomainResponse } from "types/vercel";
+import { env } from "env/server.mjs";
 
 export const addDomainToVercelProject = async (domain: string) => {
   try {

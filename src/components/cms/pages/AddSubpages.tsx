@@ -1,6 +1,6 @@
 import { useState, useContext } from "react"
-import { api } from "../../../utils/api"
-import Heading from "../../common/Heading"
+import { api } from "utils/api"
+import Heading from "components/common/Heading"
 import { CmsContext } from "../context/CmsContext"
 
 const AddSubpages = () => {

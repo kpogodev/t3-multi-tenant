@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react"
 import { useDebounce } from "use-debounce"
 import cn from "classnames"
-import { api } from "../../utils/api"
+import { api } from "utils/api"
 import { toast } from "react-toastify"
-import { slugifyString } from "../../utils/slugifyString"
+import { slugifyString } from "utils/slugifyString"
 
 const AddDomainForm = ({ isCustomDomain }: { isCustomDomain?: boolean }) => {
   const [domainAvailable, setDomainAvailable] = useState<boolean | undefined>()

@@ -1,6 +1,6 @@
-import { api } from "../../../utils/api"
-import SubpageCard from "./SubpageCard"
+import { api } from "utils/api"
 import { useContext } from "react"
+import SubpageCard from "./SubpageCard"
 import { CmsContext } from "../context/CmsContext"
 
 const SubpagesList = () => {

@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../../trpc"
+import { createTRPCRouter, protectedProcedure } from "server/api/trpc"
 import { Prisma } from "@prisma/client"
 import { randomUUID } from "crypto"
 import S3 from "aws-sdk/clients/s3"

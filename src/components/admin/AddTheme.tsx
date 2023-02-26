@@ -1,5 +1,5 @@
 import AddThemeForm from "./AddThemeForm"
-import Heading from "../common/Heading"
+import Heading from "components/common/Heading"
 
 const AddTheme = () => {
   return (

@@ -2,10 +2,10 @@ import { useState, useContext } from "react"
 import { EditorState, convertFromRaw, convertToRaw } from "draft-js"
 import { toast } from "react-toastify"
 import { CmsContext } from "../context/CmsContext"
-import { api } from "../../../utils/api"
-import RichTextEditor from "../../common/RichTextEditor"
+import { api } from "utils/api"
+import RichTextEditor from "components/common/RichTextEditor"
 import type { RawDraftContentState } from "react-draft-wysiwyg"
-import DisplayRichText from "../../common/DisplayRichText"
+import DisplayRichText from "components/common/DisplayRichText"
 
 const PageContentEditor = () => {
   const ctx = useContext(CmsContext)

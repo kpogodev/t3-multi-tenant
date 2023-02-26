@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { ContentPageContext } from "./context/ContentPageContext"
-import DisplayRichText from "../common/DisplayRichText"
+import DisplayRichText from "components/common/DisplayRichText"
 
 const MainContent = () => {
   const { pageData } = useContext(ContentPageContext)

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { api } from "../../utils/api"
+import { api } from "utils/api"
 const Navbar = ({ domain }: { domain: string }) => {
   const { data: navigation } = api.sites.navigation.getNavigation.useQuery(domain, { enabled: !!domain })
 

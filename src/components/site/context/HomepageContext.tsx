@@ -1,5 +1,5 @@
 import { createContext } from "react"
-import { api } from "../../../utils/api"
+import { api } from "utils/api"
 
 type UseHomepageStateManagerResult = ReturnType<typeof useHomepageStateManager>
 

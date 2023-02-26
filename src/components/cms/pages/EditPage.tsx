@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { CmsContext } from "../context/CmsContext"
 import AddSubpages from "./AddSubpages"
 import SubpagesList from "./SubpagesList"
-import Heading from "../../common/Heading"
+import Heading from "components/common/Heading"
 import PageContentEditor from "./PageContentEditor"
 
 const EditPage = () => {

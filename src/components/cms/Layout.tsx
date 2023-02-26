@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { CmsContext } from "../../components/cms/context/CmsContext"
+import { CmsContext } from "components/cms/context/CmsContext"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Navbar from "./Navbar"

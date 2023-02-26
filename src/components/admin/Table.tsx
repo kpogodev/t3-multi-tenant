@@ -1,4 +1,4 @@
-import { generateRandomKey } from "../../utils/generateRandomKey"
+import { generateRandomKey } from "utils/generateRandomKey"
 
 export default function table<T1, T2>({
   headers,

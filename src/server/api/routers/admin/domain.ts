@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { createTRPCRouter, protectedProcedure } from "../../trpc"
-import { addDomainToVercelProject } from "../../../vercel"
+import { createTRPCRouter, protectedProcedure } from "server/api/trpc"
+import { addDomainToVercelProject } from "server/vercel"
 
 export const domainRouter = createTRPCRouter({
   addDomain: protectedProcedure

@@ -1,4 +1,4 @@
-import { type SVGIcon } from "../../types/icons"
+import { type SVGIcon } from "types/icons"
 
 const WarningIcon = ({ ...props }: SVGIcon) => {
   return (

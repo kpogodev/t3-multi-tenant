@@ -1,7 +1,7 @@
 import superjson from "superjson"
 import { createProxySSGHelpers } from "@trpc/react-query/ssg"
-import { createInnerTRPCContext } from "../../server/api/trpc"
-import { appRouter } from "../../server/api/root"
+import { createInnerTRPCContext } from "server/api/trpc"
+import { appRouter } from "server/api/root"
 import type { GetServerSidePropsContext } from "next"
 
 

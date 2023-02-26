@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage, InferGetServerSidePropsType } from "next"
-import CmsContextProvider from "../../components/cms/context/CmsContext"
-import Layout from "../../components/cms/Layout"
-import { getServerAuthSession, type UserRole } from "../../server/auth"
+import CmsContextProvider from "components/cms/context/CmsContext"
+import Layout from "components/cms/Layout"
+import { getServerAuthSession, type UserRole } from "server/auth"
 
 interface getSSProps {
   userId: string

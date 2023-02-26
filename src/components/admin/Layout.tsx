@@ -1,8 +1,8 @@
 import { useContext } from "react"
-import { AdminContext } from "../../components/admin/context/AdminContext"
-import View from "../../components/admin/View"
-import Navbar from "../../components/admin/Navbar"
-import Sidebar from "../../components/admin/Sidebar"
+import { AdminContext } from "components/admin/context/AdminContext"
+import View from "components/admin/View"
+import Navbar from "components/admin/Navbar"
+import Sidebar from "components/admin/Sidebar"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 

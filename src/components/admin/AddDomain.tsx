@@ -1,6 +1,6 @@
-import WarningIcon from "../icons/WarningIcon"
+import WarningIcon from "components/icons/WarningIcon"
 import AddDomainForm from "./AddDomainForm"
-import Heading from "../common/Heading"
+import Heading from "components/common/Heading"
 
 const AddDomain = () => {
   return (
@@ -9,7 +9,7 @@ const AddDomain = () => {
       <AddDomainForm />
       <Heading text='Add Custom Domain' />
       <AddDomainForm isCustomDomain />
-      <div className='alert alert-warning shadow-lg max-w-[80ch] my-4'>
+      <div className='alert alert-warning my-4 max-w-[80ch] shadow-lg'>
         <div>
           <WarningIcon />
           <span>

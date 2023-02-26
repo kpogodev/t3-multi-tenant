@@ -1,4 +1,4 @@
-import { prisma } from "../../server/db"
+import { prisma } from "server/db"
 import type { GetServerSidePropsContext, GetServerSidePropsResult } from "next"
 
 const PageNotFoundRedirectHelper = async (

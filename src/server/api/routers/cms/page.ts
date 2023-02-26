@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../../trpc"
-import { slugifyString } from "../../../../utils/slugifyString"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "server/api/trpc"
+import { slugifyString } from "utils/slugifyString"
 
 export const pageRouter = createTRPCRouter({
   addPage: protectedProcedure

@@ -1,8 +1,8 @@
 import { useContext } from "react"
 import { AdminContext } from "./context/AdminContext"
 import cn from "classnames"
-import { generateRandomKey } from "../../utils/generateRandomKey"
-import { capitalizeString } from "../../utils/capitalizeString"
+import { generateRandomKey } from "utils/generateRandomKey"
+import { capitalizeString } from "utils/capitalizeString"
 
 const adminMenuStructure = [
   {

@@ -6,7 +6,7 @@ import {
 } from "next-auth";
 import GithubProvider from "next-auth/providers/github"
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { env } from "../env/server.mjs";
+import { env } from "env/server.mjs";
 import { prisma } from "./db";
 
 // const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL

@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import type { EditorState } from "draft-js"
-import { api } from "../../utils/api"
+import { api } from "utils/api"
 
 interface RichTextEditorProps {
   editorState: EditorState

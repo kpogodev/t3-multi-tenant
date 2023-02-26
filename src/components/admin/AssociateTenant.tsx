@@ -1,5 +1,5 @@
 import AssociateTenantForm from "./AssociateTenantForm"
-import Heading from "../common/Heading"
+import Heading from "components/common/Heading"
 
 const AssociateTenant = () => {
   return (

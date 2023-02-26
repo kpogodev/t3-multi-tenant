@@ -1,8 +1,8 @@
 import type { GetServerSideProps, NextPage } from "next"
-import { getServerAuthSession } from "../../server/auth"
-import AdminContextProvider from "../../components/admin/context/AdminContext"
+import { getServerAuthSession } from "server/auth"
+import AdminContextProvider from "components/admin/context/AdminContext"
+import Layout from "components/admin/Layout"
 import "react-toastify/dist/ReactToastify.css"
-import Layout from "../../components/admin/Layout"
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)

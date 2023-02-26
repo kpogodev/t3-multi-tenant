@@ -1,5 +1,5 @@
 import Link from "next/link"
-import PlatformIcon from "../icons/PlatformIcon"
+import PlatformIcon from "components/icons/PlatformIcon"
 import SidebarMenu from "./SidebarMenu"
 
 const Sidebar = () => {

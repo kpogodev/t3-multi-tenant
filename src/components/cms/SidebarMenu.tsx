@@ -1,8 +1,8 @@
 import { useContext } from "react"
 import { CmsContext } from "./context/CmsContext"
 import cn from "classnames"
-import { generateRandomKey } from "../../utils/generateRandomKey"
-import { capitalizeString } from "../../utils/capitalizeString"
+import { generateRandomKey } from "utils/generateRandomKey"
+import { capitalizeString } from "utils/capitalizeString"
 
 interface SidebarMenuProps {
   menu: SidebarMenuItem[]

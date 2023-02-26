@@ -1,5 +1,5 @@
 import { signIn } from "next-auth/react"
-import GithubIcon from "../icons/GithubIcon"
+import GithubIcon from "components/icons/GithubIcon"
 
 export default function SignInButtonGithub() {
   return (
