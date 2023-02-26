@@ -68,16 +68,15 @@ model VerificationToken {
 
 // Platform
 model Site {
-  id       String    @id @default(cuid())
+  id       String  @id @default(cuid())
   name     String
-  theme    Theme     @relation(fields: [themeId], references: [id])
+  theme    Theme   @relation(fields: [themeId], references: [id])
   themeId  String
-  domain   Domain    @relation(fields: [domainId], references: [id])
-  domainId String    @unique
-  user     User?     @relation(fields: [userId], references: [id])
-  userId   String?   @unique
+  domain   Domain  @relation(fields: [domainId], references: [id])
+  domainId String  @unique
+  user     User?   @relation(fields: [userId], references: [id])
+  userId   String? @unique
   pages    Page[]
-  homepage Homepage?
 
   @@index([themeId])
 }
@@ -89,13 +88,6 @@ model Domain {
   verified Boolean
   site     Site?
   isCustom Boolean?
-}
-
-model Theme {
-  id         String      @id @default(cuid())
-  name       String
-  sites      Site[]
-  components Component[]
 }
 
 //Site
@@ -128,12 +120,11 @@ model PageContent {
   @@index([pageId])
 }
 
-model Homepage {
-  id        String   @id @default(cuid())
-  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  siteId    String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Theme {
+  id         String      @id @default(cuid())
+  name       String
+  sites      Site[]
+  components Component[]
 }
 
 model Component {
@@ -142,15 +133,17 @@ model Component {
   theme     Theme   @relation(fields: [themeId], references: [id])
   themeId   String
   feature   Feature @relation(fields: [featureId], references: [id])
-  featureId String  @unique
+  featureId String
 
   @@index([themeId])
+  @@index([featureId])
 }
 
 // Features
 enum FeatureType {
   SLIDESHOW
   WELCOME
+  //will be more
 }
 
 model Feature {
@@ -158,16 +151,18 @@ model Feature {
   name      String
   type      FeatureType @unique
   component Component[]
-  slideshow Slideshow?
-  welcome   Welcome?
+  slideshow Slideshow[]
+  welcome   Welcome[]
 }
 
 model Slideshow {
-  id        String   @id @default(cuid())
+  id        String  @id @default(cuid())
   name      String
   slides    Slide[]
-  feature   Feature? @relation(fields: [featureId], references: [id])
-  featureId String?  @unique
+  feature   Feature @relation(fields: [featureId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  featureId String
+
+  @@index([featureId])
 }
 
 model Slide {
@@ -189,4 +184,3 @@ model Welcome {
   feature   Feature? @relation(fields: [featureId], references: [id])
   featureId String?  @unique
 }
-
