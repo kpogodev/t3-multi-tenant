@@ -6,6 +6,12 @@ export const themeRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
+        components: z.array(
+          z.object({
+            name: z.string(),
+            featureId: z.string(),
+          })
+        ),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -14,6 +20,26 @@ export const themeRouter = createTRPCRouter({
           name: input.name,
         },
       })
+
+      if(theme) {
+        for (const component of input.components) {
+          await ctx.prisma.component.create({
+            data: {
+              name: component.name,
+              feature: {
+                connect: {
+                  id: component.featureId,
+                },
+              },
+              theme: {
+                connect: {
+                  id: theme.id,
+                },
+              },
+            },
+          })
+        }
+      }
 
       return theme
     }),

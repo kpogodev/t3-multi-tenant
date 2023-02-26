@@ -122,7 +122,7 @@ model PageContent {
 
 model Theme {
   id         String      @id @default(cuid())
-  name       String
+  name       String      @unique
   sites      Site[]
   components Component[]
 }
