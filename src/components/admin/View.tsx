@@ -11,6 +11,7 @@ const AddSite = dynamic(() => import("./AddSite"))
 const SiteList = dynamic(() => import("./SiteList"))
 const AddTheme = dynamic(() => import("./AddTheme"))
 const ThemeList = dynamic(() => import("./ThemeList"))
+const AddFeature = dynamic(() => import("./AddFeature"))
 
 const View = () => {
   const ctx = useContext(AdminContext)
@@ -24,6 +25,7 @@ const View = () => {
     "site-list": <SiteList />,
     "add-theme": <AddTheme />,
     "theme-list": <ThemeList />,
+    "add-feature": <AddFeature />,
   }
 
   return <main className='flex w-full flex-col gap-10 p-10'>{view[ctx.currentView]}</main>

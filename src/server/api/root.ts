@@ -1,4 +1,5 @@
 import { domainRouter } from "./routers/admin/domain";
+import { platformRouter } from "./routers/admin/platform";
 import { siteRouter } from "./routers/admin/site";
 import { themeRouter } from "./routers/admin/theme";
 import { userRouter } from "./routers/admin/user";
@@ -19,6 +20,7 @@ export const appRouter = createTRPCRouter({
     site: siteRouter,
     theme: themeRouter,
     user: userRouter,
+    platform: platformRouter,
   }),
   cms: createTRPCRouter({
     page: pageRouter,
