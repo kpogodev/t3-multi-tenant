@@ -6,11 +6,8 @@ type UseHomepageStateManagerResult = ReturnType<typeof useHomepageStateManager>
 export const HomepageContext = createContext<UseHomepageStateManagerResult>({} as UseHomepageStateManagerResult)
 
 const useHomepageStateManager = ({ domain }: IProviderProps["initialParams"]) => {
-  const { data: navigation } = api.sites.navigation.getNavigation.useQuery(domain, {
-    enabled: !!domain,
-  })
 
-  return { navigation }
+  return { }
 }
 
 interface IProviderProps {

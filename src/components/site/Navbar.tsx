@@ -1,9 +1,7 @@
 import Link from "next/link"
-import { useContext } from "react"
-import { HomepageContext } from "./context/HomepageContext"
-
-const NavbarHome = () => {
-  const { navigation } = useContext(HomepageContext)
+import { api } from "../../utils/api"
+const Navbar = ({ domain }: { domain: string }) => {
+  const { data: navigation } = api.sites.navigation.getNavigation.useQuery(domain, { enabled: !!domain })
 
   return (
     <nav className='navbar bg-slate-200 shadow-md'>
@@ -19,7 +17,7 @@ const NavbarHome = () => {
               <li key={page.id}>
                 <Link href={`/${page.slug}`}>{page.name}</Link>
                 {page.children.length > 0 && (
-                  <ul className='bg-base-100 p-2 shadow-md'>
+                  <ul className='bg-base-100 p-2 shadow-md group-last-of-type:right-0'>
                     {page.children.map((child) => (
                       <li key={child.id}>
                         <Link href={`/${child.slug}`}>{child.name}</Link>
@@ -34,4 +32,4 @@ const NavbarHome = () => {
     </nav>
   )
 }
-export default NavbarHome
+export default Navbar
