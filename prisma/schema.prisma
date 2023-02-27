@@ -128,15 +128,31 @@ model Theme {
 }
 
 model Component {
-  id        String  @id @default(cuid())
-  name      String
-  theme     Theme   @relation(fields: [themeId], references: [id])
-  themeId   String
-  feature   Feature @relation(fields: [featureId], references: [id])
-  featureId String
+  id                 String              @id @default(cuid())
+  name               String
+  theme              Theme               @relation(fields: [themeId], references: [id])
+  themeId            String
+  feature            Feature             @relation(fields: [featureId], references: [id])
+  featureId          String
+  componentsRelation ComponentsRelation?
 
   @@index([themeId])
   @@index([featureId])
+}
+
+model ComponentsRelation {
+  id          String     @id @default(cuid())
+  component   Component @relation(fields: [componentId], references: [id])
+  componentId String    @unique
+  welcome     Welcome?   @relation(fields: [welcomeId], references: [id])
+  welcomeId   String?    @unique
+  slideshow   Slideshow? @relation(fields: [slideshowId], references: [id])
+  slideshowId String?    @unique
+
+  @@unique([componentId, welcomeId], name: "ComponentWelcome")
+  @@unique([componentId, slideshowId], name: "ComponentSlideshow")
+  @@index([welcomeId])
+  @@index([slideshowId])
 }
 
 // Features
@@ -151,18 +167,13 @@ model Feature {
   name      String
   type      FeatureType @unique
   component Component[]
-  slideshow Slideshow[]
-  welcome   Welcome[]
 }
 
 model Slideshow {
-  id        String  @id @default(cuid())
+  id        String              @id @default(cuid())
   name      String
   slides    Slide[]
-  feature   Feature @relation(fields: [featureId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  featureId String
-
-  @@index([featureId])
+  component ComponentsRelation?
 }
 
 model Slide {
@@ -176,13 +187,10 @@ model Slide {
 }
 
 model Welcome {
-  id        String   @id @default(cuid())
+  id        String              @id @default(cuid())
   header    String
   text      String
   linkText  String
   linkUrl   String
-  feature   Feature? @relation(fields: [featureId], references: [id])
-  featureId String?
-
-  @@index([featureId])
+  component ComponentsRelation?
 }
