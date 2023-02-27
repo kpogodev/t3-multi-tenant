@@ -182,5 +182,7 @@ model Welcome {
   linkText  String
   linkUrl   String
   feature   Feature? @relation(fields: [featureId], references: [id])
-  featureId String?  @unique
+  featureId String?
+
+  @@index([featureId])
 }
