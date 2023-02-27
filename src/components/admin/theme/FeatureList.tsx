@@ -9,7 +9,14 @@ const FeatureList = () => {
       <p className='text-lg'>Available Features:</p>
       <div className='flex flex-wrap gap-2'>
         {!!features ? (
-          features.map((feature) => <FeatureBadge key={feature.id} name={feature.name} id={feature.id} />)
+          features.map((feature) => (
+            <FeatureBadge
+              key={feature.id}
+              featureName={feature.name}
+              featureId={feature.id}
+              featureType={feature.type}
+            />
+          ))
         ) : (
           <div className='badge badge-lg animate-pulse'>Loading...</div>
         )}

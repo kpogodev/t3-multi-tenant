@@ -142,8 +142,8 @@ model Component {
 
 model ComponentsRelation {
   id          String     @id @default(cuid())
-  component   Component @relation(fields: [componentId], references: [id])
-  componentId String    @unique
+  component   Component  @relation(fields: [componentId], references: [id])
+  componentId String     @unique
   welcome     Welcome?   @relation(fields: [welcomeId], references: [id])
   welcomeId   String?    @unique
   slideshow   Slideshow? @relation(fields: [slideshowId], references: [id])
@@ -171,7 +171,7 @@ model Feature {
 
 model Slideshow {
   id        String              @id @default(cuid())
-  name      String
+  name      String?
   slides    Slide[]
   component ComponentsRelation?
 }
@@ -188,9 +188,9 @@ model Slide {
 
 model Welcome {
   id        String              @id @default(cuid())
-  header    String
-  text      String
-  linkText  String
-  linkUrl   String
+  header    String?
+  text      String?
+  linkText  String?
+  linkUrl   String?
   component ComponentsRelation?
 }

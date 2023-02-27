@@ -10,6 +10,7 @@ export const themeRouter = createTRPCRouter({
           z.object({
             name: z.string(),
             featureId: z.string(),
+            featureType: z.string(),
           })
         ),
       })
@@ -23,6 +24,10 @@ export const themeRouter = createTRPCRouter({
 
       if(theme) {
         for (const component of input.components) {
+          // Asuming that enum value will be a single word in uppercase and the model name will be the same but in lowercase
+          // TODO: Find a way to get the model name from the enum value and find solution for multi word enum values
+          const compotentsRelationModel = component.featureType.toLowerCase()
+
           await ctx.prisma.component.create({
             data: {
               name: component.name,
@@ -36,7 +41,13 @@ export const themeRouter = createTRPCRouter({
                   id: theme.id,
                 },
               },
-
+              componentsRelation: {
+                create: {
+                  [compotentsRelationModel]: {
+                    create: {}
+                  }
+                }
+              }
             },
           })
         }

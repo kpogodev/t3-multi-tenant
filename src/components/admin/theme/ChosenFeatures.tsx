@@ -9,9 +9,10 @@ interface ChosenFeaturesProps {
   id: string
   badge: string
   featureId: string
+  featureType: string
 }
 
-const ChosenFeatures = ({ id, badge, featureId }: ChosenFeaturesProps) => {
+const ChosenFeatures = ({ id, badge, featureId, featureType }: ChosenFeaturesProps) => {
   const [componentName, setComponentName] = useState<string>("")
   const [nameLocked, setNameLocked] = useState<boolean>(false)
   const ctx = useContext(ThemeFormContext)
@@ -21,7 +22,7 @@ const ChosenFeatures = ({ id, badge, featureId }: ChosenFeaturesProps) => {
       return toast.error("Component name cannot be empty")
     }
     if (!nameLocked) {
-      ctx.onComponentUpdate(componentName, featureId)
+      ctx.onComponentUpdate({ name: componentName, featureId, featureType })
     }
 
     setNameLocked((prev) => !prev)

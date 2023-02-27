@@ -11,11 +11,13 @@ interface IChosenFeature {
   id: string
   name: string
   featureId: string
+  featureType: string
 }
 
 interface IComponent {
   name: string
   featureId: string
+  featureType: string
 }
 
 const useThemeFormStateManager = () => {
@@ -40,12 +42,26 @@ const useThemeFormStateManager = () => {
   }, [])
 
   //Features Drag and Drop
-  const onFeatureDragStart = useCallback((e: React.DragEvent<HTMLDivElement>, featureId: string, name: string) => {
-    e.dataTransfer.setData("featureName", name)
-    e.dataTransfer.setData("featureId", featureId)
-    e.dataTransfer.setData("id", generateRandomKey())
-    e.dataTransfer.setDragImage(e.currentTarget, 0, 0)
-  }, [])
+  const onFeatureDragStart = useCallback(
+    ({
+      e,
+      featureId,
+      featureName,
+      featureType,
+    }: {
+      e: React.DragEvent<HTMLDivElement>
+      featureId: string
+      featureName: string
+      featureType: string
+    }) => {
+      e.dataTransfer.setData("featureName", featureName)
+      e.dataTransfer.setData("featureId", featureId)
+      e.dataTransfer.setData("featureType", featureType)
+      e.dataTransfer.setData("id", generateRandomKey())
+      e.dataTransfer.setDragImage(e.currentTarget, 0, 0)
+    },
+    []
+  )
 
   const onFeatureDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -53,6 +69,7 @@ const useThemeFormStateManager = () => {
       id: e.dataTransfer.getData("id"),
       name: e.dataTransfer.getData("featureName"),
       featureId: e.dataTransfer.getData("featureId"),
+      featureType: e.dataTransfer.getData("featureType"),
     }
 
     setChosenFeatures((prev) => {
@@ -63,13 +80,13 @@ const useThemeFormStateManager = () => {
   }, [])
 
   // Handle Component Name Change
-  const onComponentUpdate = (name: string, featureId: string) => {
+  const onComponentUpdate = ({ name, featureId, featureType }: IComponent) => {
     const isNew = !components.find((component) => component.featureId === featureId)
     if (isNew) {
-      setComponents((prev) => [...prev, { name, featureId }])
+      setComponents((prev) => [...prev, { name, featureId, featureType }])
     } else {
       setComponents((prev) =>
-        prev.map((component) => (component.featureId === featureId ? { ...component, name } : component))
+        prev.map((component) => (component.featureId === featureId ? { ...component, name, featureType } : component))
       )
     }
   }
