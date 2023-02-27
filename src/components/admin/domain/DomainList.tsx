@@ -1,11 +1,11 @@
 import { api } from "utils/api"
 import Heading from "components/common/Heading"
 import { generateRandomKey } from "utils/generateRandomKey"
-import Table from "./Table"
+import Table from "../Table"
 import DeleteIcon from "components/icons/DeleteIcon"
 import EditIcon from "components/icons/EditIcon"
 import { toast } from "react-toastify"
-import LoadingSkeleton from "./LoadingSkeleton"
+import LoadingSkeleton from "../LoadingSkeleton"
 
 const DomainList = () => {
   const { data: domains } = api.admin.domain.getDomains.useQuery()

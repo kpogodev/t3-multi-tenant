@@ -5,7 +5,7 @@ export const themeRouter = createTRPCRouter({
   addTheme: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
+        name: z.string().regex(/^[a-zA-Z0-9_-]+$/, {message: "Theme name can only contain letters, numbers, underscores and dashes"}),
         components: z.array(
           z.object({
             name: z.string(),

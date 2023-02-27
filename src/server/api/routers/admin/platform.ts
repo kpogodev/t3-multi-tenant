@@ -4,6 +4,11 @@ import { FeatureType } from "@prisma/client"
 import { TRPCClientError } from "@trpc/client"
 
 export const platformRouter = createTRPCRouter({
+  getFeatures: protectedProcedure.query(async ({ ctx }) => {
+    const features = await ctx.prisma.feature.findMany()
+
+    return features
+  }),
   addFeature: protectedProcedure
     .input(
       z.object({
