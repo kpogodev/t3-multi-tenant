@@ -25,6 +25,9 @@ export const serverSchema = z.object({
   S3_BUCKET_REGION: z.string(),
   S3_BUCKET_ACCESS_KEY_ID: z.string(),
   S3_BUCKET_SECRET: z.string(),
+  CLOUDINARY_CLOUD_NAME: z.string(),
+  CLOUDINARY_API_KEY: z.string(),
+  CLOUDINARY_API_SECRET: z.string(),
 })
 
 /**
@@ -47,6 +50,9 @@ export const serverEnv = {
   S3_BUCKET_REGION: process.env.S3_BUCKET_REGION,
   S3_BUCKET_ACCESS_KEY_ID: process.env.S3_BUCKET_ACCESS_KEY_ID,
   S3_BUCKET_SECRET: process.env.S3_BUCKET_SECRET,
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
 };
 
 /**

@@ -1,6 +1,8 @@
 import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "server/api/trpc"
 import { Prisma } from "@prisma/client"
+import cloudinary from "utils/cloudinary"
+import { TRPCClientError } from "@trpc/client"
 
 export const pageContentRouter = createTRPCRouter({
   getDraftByPageId: protectedProcedure.input(z.string()).query(async ({ input, ctx }) => {
@@ -10,11 +12,10 @@ export const pageContentRouter = createTRPCRouter({
       },
       select: {
         richTextDraft: true,
-      }
+      },
     })
 
     const draft = pageContent?.richTextDraft
-
     return draft
   }),
   getPublishedByPageId: protectedProcedure.input(z.string()).query(async ({ input, ctx }) => {
@@ -24,7 +25,7 @@ export const pageContentRouter = createTRPCRouter({
       },
       select: {
         richText: true,
-      }
+      },
     })
 
     const published = pageContent?.richText
@@ -67,7 +68,28 @@ export const pageContentRouter = createTRPCRouter({
           richTextDraft: Prisma.DbNull,
         },
       })
-
       return pageContent
     }),
+  uploadRichTextImage: protectedProcedure.input(z.object({ imgData: z.string() })).mutation(async ({ ctx, input }) => {
+    const siteName = await ctx.prisma.site.findUnique({
+      where: {
+        userId: ctx.session.user.id,
+      },
+      select: {
+        name: true,
+      },
+    })
+
+    if(!siteName) {
+      return new TRPCClientError("Site name not found")
+    }
+
+    const siteNameSlug = siteName.name.toLowerCase().replace(/ /g, "_")
+
+    const response = await cloudinary.uploader.upload(input.imgData, {
+      folder: `sites/${siteNameSlug}/images`,
+    })
+
+    return { link: response.secure_url}
+  }),
 })

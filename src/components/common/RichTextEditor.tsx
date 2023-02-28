@@ -14,8 +14,17 @@ const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Edi
 })
 
 const RichTextEditor = ({ editorState, onEditorStateChange }: RichTextEditorProps) => {
+  const { mutateAsync: uploadImage } = api.cms.pageContent.uploadRichTextImage.useMutation()
 
- // const uploadImageCallBack = async (file: File) => {}
+  const uploadImageCallBack = async (file: File) => {
+    const reader = new FileReader()
+    const data = await new Promise<string>((resolve) => {
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+    })
+
+    return { data: { link: (await uploadImage({ imgData: data })).link } }
+  }
 
   return (
     <Editor
@@ -43,7 +52,7 @@ const RichTextEditor = ({ editorState, onEditorStateChange }: RichTextEditorProp
         image: {
           urlEnabled: true,
           uploadEnabled: true,
-          //uploadCallback: uploadImageCallBack,
+          uploadCallback: uploadImageCallBack,
           previewImage: true,
           inputAccept: "image/gif,image/jpeg,image/jpg,image/png,image/svg",
           alt: { present: true, mandatory: false },
