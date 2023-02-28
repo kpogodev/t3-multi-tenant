@@ -6,6 +6,7 @@ type ViewType = { [key: string]: JSX.Element }
 
 const PagesView = dynamic(() => import("./pages/PagesView"))
 const EditPage = dynamic(() => import("./pages/EditPage"))
+const SlideshowView = dynamic(() => import("./slideshow/SlideshowView"))
 
 const View = () => {
   const ctx = useContext(CmsContext)
@@ -13,6 +14,7 @@ const View = () => {
   const view: ViewType = {
     default: <></>,
     pages: <PagesView />,
+    slideshow: <SlideshowView />,
     "edit-page": <EditPage />,
   }
 

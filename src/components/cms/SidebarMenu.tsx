@@ -10,13 +10,23 @@ interface SidebarMenuProps {
 
 interface SidebarMenuItem {
   category: string
-  views: string[]
+  views: string[] | SidebarMenuComponentItem[]
+}
+
+interface SidebarMenuComponentItem {
+  id?: string
+  name: string
+  type: string
 }
 
 const SidebarMenu = ({ menu }: SidebarMenuProps) => {
   const ctx = useContext(CmsContext)
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (e.currentTarget.dataset.id) {
+      ctx.changeView(e.currentTarget.value, e.currentTarget.dataset.id)
+      return
+    }
     ctx.changeView(e.currentTarget.value)
   }
 
@@ -29,8 +39,15 @@ const SidebarMenu = ({ menu }: SidebarMenuProps) => {
           </li>
           {item.views.map((view) => (
             <li key={generateRandomKey()}>
-              <button className={cn({ active: view === ctx.currentView })} onClick={handleClick} value={view}>
-                {capitalizeString(view.replaceAll("-", " "))}
+              <button
+                className={cn({ active: view === ctx.currentView })}
+                onClick={handleClick}
+                value={typeof view === "string" ? view : view.type}
+                data-id={typeof view === "string" ? "" : view.id}
+              >
+                {typeof view === "string"
+                  ? capitalizeString(view.replaceAll("-", " "))
+                  : capitalizeString(view.name.replace("-", " "))}
               </button>
             </li>
           ))}

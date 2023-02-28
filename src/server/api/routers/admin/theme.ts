@@ -30,7 +30,7 @@ export const themeRouter = createTRPCRouter({
 
           await ctx.prisma.component.create({
             data: {
-              name: component.name,
+              name: component.name.toLowerCase().replace(/ /g, "-"),
               feature: {
                 connect: {
                   id: component.featureId,

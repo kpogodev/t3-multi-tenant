@@ -23,8 +23,32 @@ export const componentsRouter = createTRPCRouter({
 
     })
 
+    if(!site) {
+      return
+    }
+
     const components = site?.theme.components
-    
-    return components
+
+    const componentsWithType = [];
+
+    for(const component of components) {
+      const type = await ctx.prisma.feature.findFirst({
+      where: {
+       component: {
+        some: {
+          id: component.id
+        }
+       }
+      },
+      select: {
+        type: true
+      }
+    })
+
+    const componentType = type?.type.toLowerCase().replace('_', '-')
+    componentsWithType.push({...component, type: componentType})
+    }
+
+    return componentsWithType
   }),
 })

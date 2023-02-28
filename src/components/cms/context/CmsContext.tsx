@@ -10,7 +10,9 @@ const useCmsStateManager = (userId: string) => {
   const [prevView, setPrevView] = useState<string>("default")
   const [currentView, setCurrentView] = useState<string>("default")
   const [currentPageId, setCurrentPageId] = useState<string>("")
+  const [currentComponentId, setCurrentComponentId] = useState<string>("")
   const [darkTheme, setDarkTheme] = useState<boolean>(false)
+
 
   const { data: site } = api.admin.site.getSiteByTenantId.useQuery(userId, { enabled: userId ? true : false })
   const { data: components } = api.cms.components.getComponents.useQuery(undefined, { enabled: userId ? true : false })
@@ -23,9 +25,16 @@ const useCmsStateManager = (userId: string) => {
     setDarkTheme((prev) => !prev)
   }, [])
 
-  const changeView = (view: string) => {
+  const changeView = (view: string, id?: string) => {
     setPrevView(currentView)
     setCurrentView(view)
+
+    if (typeof id === "string") {
+      setCurrentComponentId(id)
+    } else {
+      setCurrentComponentId("")
+    }
+    return
   }
 
   return {
@@ -33,6 +42,7 @@ const useCmsStateManager = (userId: string) => {
     currentView,
     darkTheme,
     currentPageId,
+    currentComponentId,
     prevView,
     components,
     changeView,

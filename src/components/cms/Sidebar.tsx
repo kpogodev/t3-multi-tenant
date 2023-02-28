@@ -6,7 +6,8 @@ import { CmsContext } from "./context/CmsContext"
 
 const Sidebar = () => {
   const ctx = useContext(CmsContext)
-  const siteComponets = ctx.components?.map((component) => component.name) ?? []
+  const siteComponets =
+    ctx.components?.map((component) => ({ id: component.id, name: component.name, type: component?.type ?? "" })) ?? []
 
   return (
     <aside className='flex w-full flex-col bg-base-200 py-5 px-4'>
