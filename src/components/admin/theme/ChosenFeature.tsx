@@ -4,6 +4,7 @@ import EditIcon from "components/icons/EditIcon"
 import { useState, useContext } from "react"
 import { toast } from "react-toastify"
 import { ThemeFormContext } from "../context/ThemeFormContext"
+import { generateRandomKey } from "utils/generateRandomKey"
 
 interface ChosenFeaturesProps {
   id: string
@@ -12,7 +13,7 @@ interface ChosenFeaturesProps {
   featureType: string
 }
 
-const ChosenFeatures = ({ id, badge, featureId, featureType }: ChosenFeaturesProps) => {
+const ChosenFeature = ({ id, badge, featureId, featureType }: ChosenFeaturesProps) => {
   const [componentName, setComponentName] = useState<string>("")
   const [nameLocked, setNameLocked] = useState<boolean>(false)
   const ctx = useContext(ThemeFormContext)
@@ -22,7 +23,7 @@ const ChosenFeatures = ({ id, badge, featureId, featureType }: ChosenFeaturesPro
       return toast.error("Component name cannot be empty")
     }
     if (!nameLocked) {
-      ctx.onComponentUpdate({ name: componentName, featureId, featureType })
+      ctx.onComponentUpdate({ name: componentName, featureId, featureType, tempId: id })
     }
 
     setNameLocked((prev) => !prev)
@@ -52,4 +53,4 @@ const ChosenFeatures = ({ id, badge, featureId, featureType }: ChosenFeaturesPro
     </div>
   )
 }
-export default ChosenFeatures
+export default ChosenFeature

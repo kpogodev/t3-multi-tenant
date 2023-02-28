@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { ThemeFormContext } from "../context/ThemeFormContext"
-import ComponentList from "./ComponentList"
+import ChosenFeatureList from "./ChosenFeatureList"
 import FeatureList from "./FeatureList"
 import ThemeNameInput from "./ThemeNameInput"
 import WarningBlock from "./WarningBlock"
@@ -12,7 +12,7 @@ const AddThemeForm = () => {
       <WarningBlock />
       <ThemeNameInput />
       <FeatureList />
-      <ComponentList />
+      <ChosenFeatureList />
       <button className='btn-primary btn mt-5' type='submit'>
         Add theme
       </button>

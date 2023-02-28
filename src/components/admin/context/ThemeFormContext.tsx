@@ -15,6 +15,7 @@ interface IChosenFeature {
 }
 
 interface IComponent {
+  tempId: string
   name: string
   featureId: string
   featureType: string
@@ -80,13 +81,13 @@ const useThemeFormStateManager = () => {
   }, [])
 
   // Handle Component Name Change
-  const onComponentUpdate = ({ name, featureId, featureType }: IComponent) => {
-    const isNew = !components.find((component) => component.featureId === featureId)
+  const onComponentUpdate = ({ name, featureId, featureType, tempId }: IComponent) => {
+    const isNew = !components.find((component) => component.tempId === tempId)
     if (isNew) {
-      setComponents((prev) => [...prev, { name, featureId, featureType }])
+      setComponents((prev) => [...prev, { name, featureId, featureType, tempId }])
     } else {
       setComponents((prev) =>
-        prev.map((component) => (component.featureId === featureId ? { ...component, name, featureType } : component))
+        prev.map((component) => (component.featureId === featureId ? { ...component, name } : component))
       )
     }
   }
@@ -96,7 +97,12 @@ const useThemeFormStateManager = () => {
     e.preventDefault()
     createTheme({
       name: themeName,
-      components,
+      components: components.map((component) => ({
+        // to ignore tempId
+        name: component.name,
+        featureId: component.featureId,
+        featureType: component.featureType,
+      })),
     })
   }
   // Helpers

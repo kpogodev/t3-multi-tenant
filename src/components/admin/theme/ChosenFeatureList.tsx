@@ -1,9 +1,9 @@
 import DragAndDropIcon from "components/icons/DragAndDropIcon"
 import { useContext } from "react"
 import { ThemeFormContext } from "../context/ThemeFormContext"
-import ChosenFeatures from "./ChosenFeatures"
+import ChosenFeature from "./ChosenFeature"
 
-const ComponentList = () => {
+const ChosenFeatureList = () => {
   const ctx = useContext(ThemeFormContext)
   return (
     <div className='flex w-full max-w-xl flex-col gap-2'>
@@ -21,7 +21,7 @@ const ComponentList = () => {
         onDragOver={(e) => e.preventDefault()}
       >
         {ctx.chosenFeatures.map((feature) => (
-          <ChosenFeatures
+          <ChosenFeature
             key={feature.id}
             id={feature.id}
             badge={feature.name}
@@ -34,4 +34,4 @@ const ComponentList = () => {
     </div>
   )
 }
-export default ComponentList
+export default ChosenFeatureList

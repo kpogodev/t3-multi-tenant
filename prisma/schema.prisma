@@ -130,9 +130,9 @@ model Theme {
 model Component {
   id                 String              @id @default(cuid())
   name               String
-  theme              Theme               @relation(fields: [themeId], references: [id])
+  theme              Theme               @relation(fields: [themeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   themeId            String
-  feature            Feature             @relation(fields: [featureId], references: [id])
+  feature            Feature             @relation(fields: [featureId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   featureId          String
   componentsRelation ComponentsRelation?
 
@@ -142,11 +142,11 @@ model Component {
 
 model ComponentsRelation {
   id          String     @id @default(cuid())
-  component   Component  @relation(fields: [componentId], references: [id])
+  component   Component  @relation(fields: [componentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   componentId String     @unique
-  welcome     Welcome?   @relation(fields: [welcomeId], references: [id])
+  welcome     Welcome?   @relation(fields: [welcomeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   welcomeId   String?    @unique
-  slideshow   Slideshow? @relation(fields: [slideshowId], references: [id])
+  slideshow   Slideshow? @relation(fields: [slideshowId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   slideshowId String?    @unique
 
   @@unique([componentId, welcomeId], name: "ComponentWelcome")
