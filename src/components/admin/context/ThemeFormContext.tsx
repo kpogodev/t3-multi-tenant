@@ -32,7 +32,6 @@ const useThemeFormStateManager = () => {
       resetStates()
     },
     onError: (err) => {
-      console.log(err)
       toast.error(err.message)
     },
   })

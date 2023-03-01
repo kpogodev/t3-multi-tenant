@@ -21,7 +21,7 @@ const config = {
   //   defaultLocale: "en",
   // },
   images: {
-    domains: ["avatars.githubusercontent.com", "t3-multi-tenant.s3.eu-west-2.amazonaws.com"],
+    domains: ["avatars.githubusercontent.com", "res.cloudinary.com"],
   },
   typescript: {
     ignoreBuildErrors: true,
