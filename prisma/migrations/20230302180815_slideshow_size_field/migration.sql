@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Slideshow` ADD COLUMN `size` INTEGER NOT NULL DEFAULT 0;

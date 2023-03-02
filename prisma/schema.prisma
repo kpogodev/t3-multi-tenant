@@ -173,6 +173,7 @@ model Slideshow {
   id        String              @id @default(cuid())
   interval  Int?                @default(5000)
   slides    Slide[]
+  size      Int                 @default(0)
   component ComponentsRelation?
 }
 
