@@ -8,7 +8,7 @@ import SlidesList from "./SlidesList"
 const SlideshowView = () => {
   const ctx = useContext(CmsContext)
 
-  const { data: slideshow } = api.cms.components.getSlideshow.useQuery(
+  const { data: slideshow } = api.cms.components.slideshow.getSlideshow.useQuery(
     { componentId: ctx.currentComponentId },
     { enabled: !!ctx.currentComponentId }
   )

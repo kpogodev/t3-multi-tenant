@@ -16,7 +16,7 @@ interface ImageUploaderProps {
 const ImageUploader = ({ wrapperClassName, slideshowId }: ImageUploaderProps) => {
   const [isUploading, setIsUploading] = useState<boolean>(false)
 
-  const { mutate: uploadImages } = api.cms.components.uploadSlideshowImages.useMutation({
+  const { mutate: uploadImages } = api.cms.components.slideshow.uploadSlideshowImages.useMutation({
     onSuccess: () => {
       toast.success("Images uploaded successfully")
       setIsUploading(false)
