@@ -27,6 +27,7 @@
     "draft-convert": "^2.1.13",
     "draft.js": "^0.2.0",
     "draftjs-to-html": "^0.9.1",
+    "framer-motion": "^10.0.1",
     "next": "13.1.6",
     "next-auth": "^4.19.0",
     "react": "18.2.0",

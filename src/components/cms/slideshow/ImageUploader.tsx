@@ -28,13 +28,15 @@ const ImageUploader = ({ wrapperClassName, slideshowId }: ImageUploaderProps) =>
     },
   })
 
-  const { files, handleChange, handleSubmit, resetFiles } = useFileUploader({
+  const { files, currentLoad, handleChange, handleSubmit, resetFiles } = useFileUploader({
     onSubmit: (files) => {
       const images = files as string[]
       uploadImages({ slideshowId, images })
       setIsUploading(true)
     },
   })
+
+  console.log(currentLoad)
 
   return (
     <div className={cn(wrapperClassName ? wrapperClassName : "", "relative rounded-md border-2 border-dashed")}>
@@ -61,6 +63,23 @@ const ImageUploader = ({ wrapperClassName, slideshowId }: ImageUploaderProps) =>
           </button>
         )}
       </form>
+      <label className='relative mt-4 flex w-full flex-col gap-2'>
+        <progress
+          className={cn(
+            currentLoad.proportion < 0.5
+              ? "progress-success"
+              : currentLoad.proportion >= 0.5 && currentLoad.proportion < 0.8
+              ? "progress-warning"
+              : "progress-error",
+            "progress w-full transition-all"
+          )}
+          value={currentLoad.load}
+          max='10000'
+        ></progress>
+        <span className='mx-auto text-right text-sm font-semibold leading-none'>
+          {currentLoad.load.toFixed(2)} kb / 10,000 kb
+        </span>
+      </label>
     </div>
   )
 }

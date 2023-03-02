@@ -1,27 +1,21 @@
 import Image from "next/image"
 import { Swiper, SwiperSlide, type SwiperProps } from "swiper/react"
 import { Autoplay, EffectFade, Pagination } from "swiper"
-import { api } from "utils/api"
-import { useContext } from "react"
-import { CmsContext } from "../context/CmsContext"
 import cn from "classnames"
 import "swiper/css"
 import "swiper/css/effect-fade"
 import "swiper/css/pagination"
 import "swiper/css/autoplay"
+import type { inferRouterOutputs } from "@trpc/server"
+import type { AppRouter } from "server/api/root"
 
+type Slideshow = inferRouterOutputs<AppRouter>["cms"]["components"]["getSlideshow"]
 interface SlideshowProps {
   wrapperClassName?: string
+  slideshow?: Slideshow
 }
 
-const Slideshow = ({ wrapperClassName }: SlideshowProps) => {
-  const ctx = useContext(CmsContext)
-
-  const { data: slideshow } = api.cms.components.getSlideshow.useQuery(
-    { componentId: ctx.currentComponentId },
-    { enabled: !!ctx.currentComponentId }
-  )
-
+const Slideshow = ({ slideshow, wrapperClassName }: SlideshowProps) => {
   if (!slideshow) return <>Loading...</>
 
   const slides = slideshow.slides
@@ -39,14 +33,13 @@ const Slideshow = ({ wrapperClassName }: SlideshowProps) => {
 
   return (
     <div className={cn(wrapperClassName ? wrapperClassName : "", "relative")}>
-      <Swiper {...swiperProps} className='h-full w-full'>
+      <Swiper {...swiperProps} className='relative h-full w-full'>
         {slides.map((slide) => (
-          <SwiperSlide key={slide.id}>
+          <SwiperSlide key={slide.id} className="relative">
             {slide.image ? (
               <Image
                 src={slide.image?.secure_url}
-                width={slide.image.width}
-                height={slide.image.height}
+                fill
                 className='object-cover'
                 alt=''
               />
