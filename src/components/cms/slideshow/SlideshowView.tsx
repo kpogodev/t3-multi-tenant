@@ -10,15 +10,18 @@ const SlideshowView = () => {
 
   const { data: slideshow } = api.cms.components.slideshow.getSlideshow.useQuery(
     { componentId: ctx.currentComponentId },
-    { enabled: !!ctx.currentComponentId }
+    { enabled: !!ctx.currentComponentId, cacheTime: 0 }
   )
+
+  if (!slideshow) return <></>
+
   return (
     <div className='grid w-full grid-cols-3 gap-10'>
       <div className='col-span-2 flex flex-col gap-5'>
-        <Slideshow slideshow={slideshow} wrapperClassName='h-[50vmin] bg-black' />
-        {slideshow && <ImageUploader slideshowId={slideshow.id} wrapperClassName='w-full min-h-[200px]' />}
+        <Slideshow slideshow={slideshow} wrapperClassName='h-[60vmin] bg-black' />
+        <ImageUploader slideshowId={slideshow.id} wrapperClassName='w-full min-h-[200px]' />
       </div>
-      {slideshow && <SlidesList slideshow={slideshow} />}
+      <SlidesList slideshow={slideshow} />
     </div>
   )
 }

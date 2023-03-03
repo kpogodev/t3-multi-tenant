@@ -180,7 +180,7 @@ model Slideshow {
 model Slide {
   id          String         @id @default(cuid())
   image       ExternalImage?
-  order       Int?
+  order       Int
   slideshow   Slideshow      @relation(fields: [slideshowId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   slideshowId String
 
@@ -190,15 +190,15 @@ model Slide {
 model ExternalImage {
   id            String    @id @default(cuid())
   slide         Slide?    @relation(fields: [slideId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  slideId       String?   @unique
+  slideId       String    @unique
   asset_id      String?
-  public_id     String?
+  public_id     String
   width         Int
   height        Int
   format        String?
   resource_type String?
   created_at    DateTime?
-  bytes         Int?
+  bytes         Int
   type          String?
   placeholder   Boolean?
   url           String?

@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateColumns: {
-        "w-sidebar": "320px 1fr",
+        "w-sidebar": "260px 1fr",
       },
       keyframes: {
         gradientAnim: {

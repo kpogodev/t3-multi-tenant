@@ -9,7 +9,7 @@ import "swiper/css/autoplay"
 import type { inferRouterOutputs } from "@trpc/server"
 import type { AppRouter } from "server/api/root"
 
-type Slideshow = inferRouterOutputs<AppRouter>["cms"]["components"]["getSlideshow"]
+type Slideshow = inferRouterOutputs<AppRouter>["cms"]["components"]["slideshow"]["getSlideshow"]
 interface SlideshowProps {
   wrapperClassName?: string
   slideshow?: Slideshow
@@ -35,14 +35,9 @@ const Slideshow = ({ slideshow, wrapperClassName }: SlideshowProps) => {
     <div className={cn(wrapperClassName ? wrapperClassName : "", "relative")}>
       <Swiper {...swiperProps} className='relative h-full w-full'>
         {slides.map((slide) => (
-          <SwiperSlide key={slide.id} className="relative">
+          <SwiperSlide key={slide.id} className='relative'>
             {slide.image ? (
-              <Image
-                src={slide.image?.secure_url}
-                fill
-                className='object-cover'
-                alt=''
-              />
+              <Image src={slide.image?.secure_url} fill className='object-cover' alt='' />
             ) : (
               <p className='text-2xl text-white'>No image uploaded</p>
             )}

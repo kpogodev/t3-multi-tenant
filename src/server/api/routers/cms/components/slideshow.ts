@@ -3,7 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "server/api/trpc"
 import cloudinary from "utils/cloudinary"
 
 export const sldieshowRouter = createTRPCRouter({
-    getSlideshow: protectedProcedure
+  getSlideshow: protectedProcedure
     .input(
       z.object({
         componentId: z.string(),
@@ -28,8 +28,11 @@ export const sldieshowRouter = createTRPCRouter({
                   width: true,
                   height: true,
                 },
-              }
-            }
+              },
+            },
+            orderBy: {
+              order: "asc",
+            },
           },
         },
       })
@@ -40,22 +43,24 @@ export const sldieshowRouter = createTRPCRouter({
 
       return slideshow
     }),
-    uploadSlideshowImages: protectedProcedure.input(z.object({
-      slideshowId: z.string(),
-      images: z.array(z.string())
-    })).mutation(async ({ ctx, input }) => {
-      const siteName = await ctx.prisma.site.findUnique({
+  uploadSlideshowImages: protectedProcedure
+    .input(
+      z.object({
+        slideshowId: z.string(),
+        images: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const siteInfo = await ctx.prisma.site.findUnique({
         where: {
           userId: ctx.session.user.id,
         },
         select: {
           name: true,
-        }
+        },
       })
 
-      if(!siteName) throw new Error("Site name not found")
-
-      const siteNameSlug = siteName.name.toLowerCase().replace(/ /g, "_")
+      if (!siteInfo) throw new Error("Site name not found")
 
       const slideshow = await ctx.prisma.slideshow.findFirst({
         where: {
@@ -67,24 +72,30 @@ export const sldieshowRouter = createTRPCRouter({
               component: {
                 select: {
                   name: true,
-                }
-              }
-            }
-          }
-        }
+                },
+              },
+            },
+          },
+          slides: true,
+        },
       })
 
-      if(!slideshow) throw new Error("Slideshow not found")
+      if (!slideshow) throw new Error("Slideshow not found")
+      const slideshowSize = slideshow.size
 
+      // 100MB limit
+      if (slideshowSize >= 104857600) throw new Error("Slideshow size limit reached")
+
+      const siteNameSlug = siteInfo.name.toLowerCase().replace(/ /g, "_")
       const slideshowName = slideshow?.component?.component.name.toLowerCase().replace(/ /g, "_") ?? `${slideshow.id}`
 
       const imagesUploadPromises = input.images.map(async (image) => {
-        return await cloudinary.uploader.upload(image, {folder: `sites/${siteNameSlug}/slideshows/${slideshowName}`,})
+        return await cloudinary.uploader.upload(image, { folder: `sites/${siteNameSlug}/slideshows/${slideshowName}` })
       })
 
       const imagesUploadResponses = await Promise.all(imagesUploadPromises)
 
-      if(imagesUploadResponses.length === 0) throw new Error("No images uploaded")
+      if (imagesUploadResponses.length === 0) throw new Error("No images uploaded")
 
       for (const [index, image] of imagesUploadResponses.entries()) {
         await ctx.prisma.slide.create({
@@ -92,9 +103,9 @@ export const sldieshowRouter = createTRPCRouter({
             slideshow: {
               connect: {
                 id: input.slideshowId,
-              }
+              },
             },
-            order: index,
+            order: +slideshow?.slides?.length + index,
             image: {
               create: {
                 public_id: image.public_id,
@@ -111,13 +122,89 @@ export const sldieshowRouter = createTRPCRouter({
                 secure_url: image.secure_url,
                 folder: image?.folder as string,
                 access_mode: image.access_mode,
-              }
-            }
-          }
+              },
+            },
+          },
         })
       }
 
+      await ctx.prisma.slideshow.update({
+        where: {
+          id: input.slideshowId,
+        },
+        data: {
+          size: slideshowSize + imagesUploadResponses.reduce((acc, curr) => acc + curr.bytes, 0),
+        },
+      })
 
       return slideshow
-    })
+    }),
+  updateSlidesOrder: protectedProcedure
+    .input(
+      z.array(
+        z.object({
+          slideId: z.string(),
+          order: z.number(),
+        })
+      )
+    )
+    .mutation(async ({ ctx, input }) => {
+      for (const slide of input) {
+        await ctx.prisma.slide.update({
+          where: {
+            id: slide.slideId,
+          },
+          data: {
+            order: slide.order,
+          },
+        })
+      }
+
+      return true
+    }),
+  deleteSlide: protectedProcedure
+    .input(
+      z.object({
+        slideId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const slide = await ctx.prisma.slide.findFirst({
+        where: {
+          id: input.slideId,
+        },
+        include: {
+          image: true,
+          slideshow: true,
+        },
+      })
+
+      if (!slide) throw new Error("Slide not found")
+
+      await ctx.prisma.slide.delete({
+        where: {
+          id: input.slideId,
+        },
+      })
+
+      if (!slide.image) throw new Error("Image not found")
+
+      await ctx.prisma.slideshow.update({
+        where: {
+          id: slide.slideshow.id,
+        },
+        data: {
+          size: slide.slideshow.size - slide.image.bytes,
+        },
+      })
+
+      await cloudinary.uploader.destroy(slide.image.public_id, {
+        invalidate: true,
+      }).catch((err) => {
+        if(err) throw new Error('Cloudinary error')
+      })
+      
+
+      return true
+    }),
 })

@@ -12,7 +12,7 @@ const Sidebar = () => {
   return (
     <aside className='flex w-full flex-col bg-base-200 py-5 px-4'>
       <Link href='/admin' className='mb-6 flex items-center gap-3 text-xl font-bold'>
-        <PlatformIcon className='block w-16' /> Web Platform - CMS
+        <PlatformIcon className='block w-16' />CMS
       </Link>
       <SidebarMenu
         menu={[

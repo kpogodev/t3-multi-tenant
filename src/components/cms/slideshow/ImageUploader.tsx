@@ -16,10 +16,13 @@ interface ImageUploaderProps {
 const ImageUploader = ({ wrapperClassName, slideshowId }: ImageUploaderProps) => {
   const [isUploading, setIsUploading] = useState<boolean>(false)
 
+  const clinet = api.useContext()
+
   const { mutate: uploadImages } = api.cms.components.slideshow.uploadSlideshowImages.useMutation({
     onSuccess: () => {
       toast.success("Images uploaded successfully")
       setIsUploading(false)
+      void clinet.cms.components.slideshow.getSlideshow.invalidate()
       resetFiles()
     },
     onError: () => {
@@ -29,14 +32,15 @@ const ImageUploader = ({ wrapperClassName, slideshowId }: ImageUploaderProps) =>
   })
 
   const { files, currentLoad, handleChange, handleSubmit, resetFiles } = useFileUploader({
+    limit: 10240,
     onSubmit: (files) => {
+      if (currentLoad.proportion > 1) return toast.error("You can't upload more than 10mb at once")
+
       const images = files as string[]
       uploadImages({ slideshowId, images })
       setIsUploading(true)
     },
   })
-
-  console.log(currentLoad)
 
   return (
     <div className={cn(wrapperClassName ? wrapperClassName : "", "relative rounded-md border-2 border-dashed")}>
@@ -77,7 +81,7 @@ const ImageUploader = ({ wrapperClassName, slideshowId }: ImageUploaderProps) =>
           max='10000'
         ></progress>
         <span className='mx-auto text-right text-sm font-semibold leading-none'>
-          {currentLoad.load.toFixed(2)} kb / 10,000 kb
+          {currentLoad.load.toFixed(2)} kb / 10240 kb
         </span>
       </label>
     </div>

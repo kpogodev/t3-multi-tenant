@@ -7,7 +7,7 @@ interface CurrenLoad {
   proportion: number
 }
 
-const useFileUplaoder = ({onSubmit} : {onSubmit: (files: FileReaderResult[]) => void}) => {
+const useFileUplaoder = ({limit, onSubmit} : {limit: number, onSubmit: (files: FileReaderResult[]) => void}) => {
   const [files, setFiles] = useState<FileReaderResult[]>([])
   const [currentLoad, setCurrentLoad] = useState<CurrenLoad>({
     load: 0,
@@ -20,10 +20,10 @@ const useFileUplaoder = ({onSubmit} : {onSubmit: (files: FileReaderResult[]) => 
     if (files) {
       [...files].forEach((file) => {
         setCurrentLoad((prevState) => {
-          const load = prevState.load + (file.size / 1000)
+          const load = prevState.load + (file.size / 1024)
           return {
             load,
-            proportion: load / 10000,
+            proportion: load / limit,
           }
         })
         const reader = new FileReader()
@@ -33,7 +33,7 @@ const useFileUplaoder = ({onSubmit} : {onSubmit: (files: FileReaderResult[]) => 
         }
       })
     }
-  }, [])
+  }, [limit])
 
   const resetFiles = useCallback(() => {
     setFiles([])
