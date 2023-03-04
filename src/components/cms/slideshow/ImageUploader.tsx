@@ -1,22 +1,39 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
+import { CmsContext } from "../context/CmsContext"
+import { api } from "utils/api"
+import { toast } from "react-toastify"
 import cn from "classnames"
 import UploadIcon from "components/icons/UploadIcon"
 import useFileUploader from "hooks/useFileUploader"
 import DropAreaDefault from "./DropAreaDefault"
 import DropImagesPreview from "./DropImagesPreview"
-import { api } from "utils/api"
-import { toast } from "react-toastify"
 import UploadProgess from "./UploadProgess"
+import { AnimatePresence } from "framer-motion"
 
 interface ImageUploaderProps {
-  slideshowId: string
   wrapperClassName?: string
 }
 
-const ImageUploader = ({ wrapperClassName, slideshowId }: ImageUploaderProps) => {
+const ImageUploader = ({ wrapperClassName }: ImageUploaderProps) => {
   const [isUploading, setIsUploading] = useState<boolean>(false)
-
   const clinet = api.useContext()
+  const ctx = useContext(CmsContext)
+
+  const { files, currentLoad, handleChange, handleSubmit, resetFiles } = useFileUploader({
+    limit: 10 * 1024 * 1024, // in bytes
+    onSubmit: (files) => {
+      if (!slideshow) return
+      if (currentLoad.proportion > 1) return toast.error("You can't upload more than 10mb at once")
+      const images = files as string[]
+      uploadImages({ slideshowId: slideshow.id, images })
+      setIsUploading(true)
+    },
+  })
+
+  const { data: slideshow } = api.cms.components.slideshow.getSlideshow.useQuery(
+    { componentId: ctx.currentComponentId },
+    { enabled: !!ctx.currentComponentId, cacheTime: 0 }
+  )
 
   const { mutate: uploadImages } = api.cms.components.slideshow.uploadSlideshowImages.useMutation({
     onSuccess: () => {
@@ -25,26 +42,19 @@ const ImageUploader = ({ wrapperClassName, slideshowId }: ImageUploaderProps) =>
       void clinet.cms.components.slideshow.getSlideshow.invalidate()
       resetFiles()
     },
+
     onError: () => {
       toast.error("Failed to upload images")
       setIsUploading(false)
     },
   })
 
-  const { files, currentLoad, handleChange, handleSubmit, resetFiles } = useFileUploader({
-    limit: 10240,
-    onSubmit: (files) => {
-      if (currentLoad.proportion > 1) return toast.error("You can't upload more than 10mb at once")
-
-      const images = files as string[]
-      uploadImages({ slideshowId, images })
-      setIsUploading(true)
-    },
-  })
-
   return (
-    <div className={cn(wrapperClassName ? wrapperClassName : "", "relative rounded-md border-2 border-dashed")}>
-      <form className='relative h-full w-full p-3 transition-colors hover:bg-base-200' onSubmit={handleSubmit}>
+    <div className={cn(wrapperClassName ? wrapperClassName : "", "relative flex flex-col gap-5")}>
+      <form
+        className='relative min-h-[150px] w-full rounded-md border-2 border-dashed p-3 transition-colors hover:bg-base-200'
+        onSubmit={handleSubmit}
+      >
         <label className='flex h-full flex-col items-center'>
           <input
             type='file'
@@ -53,9 +63,11 @@ const ImageUploader = ({ wrapperClassName, slideshowId }: ImageUploaderProps) =>
             accept='image/png, image/jpeg, image/jpg'
             multiple
           />
-          {files.length > 0 && <DropImagesPreview filesData={files as string[]} />}
-          {files.length === 0 && <DropAreaDefault />}
-          {isUploading && <UploadProgess />}
+          <AnimatePresence mode='wait'>
+            {files.length > 0 && <DropImagesPreview filesData={files as string[]} />}
+            {files.length === 0 && <DropAreaDefault />}
+            {isUploading && <UploadProgess />}
+          </AnimatePresence>
         </label>
         {files.length > 0 && !isUploading && (
           <button
@@ -67,7 +79,7 @@ const ImageUploader = ({ wrapperClassName, slideshowId }: ImageUploaderProps) =>
           </button>
         )}
       </form>
-      <label className='relative mt-4 flex w-full flex-col gap-2'>
+      <div className='relative flex w-full flex-col gap-2'>
         <progress
           className={cn(
             currentLoad.proportion < 0.5
@@ -77,13 +89,13 @@ const ImageUploader = ({ wrapperClassName, slideshowId }: ImageUploaderProps) =>
               : "progress-error",
             "progress w-full transition-all"
           )}
-          value={currentLoad.load}
-          max='10000'
+          value={currentLoad.load / 1024}
+          max={10486}
         ></progress>
-        <span className='mx-auto text-right text-sm font-semibold leading-none'>
-          {currentLoad.load.toFixed(2)} kb / 10240 kb
-        </span>
-      </label>
+        <p className='mx-auto text-right text-sm font-semibold leading-none'>
+          {(currentLoad.load / 1024).toFixed(2)} KB / 10486 KB
+        </p>
+      </div>
     </div>
   )
 }

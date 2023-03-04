@@ -23,7 +23,7 @@ const RichTextEditor = ({ editorState, onEditorStateChange }: RichTextEditorProp
       reader.onload = () => resolve(reader.result as string)
     })
 
-    return { data: { link: (await uploadImage({ imgData: data })).link } }
+    return { data: { link: (await uploadImage({ imgData: data })) } }
   }
 
   return (
