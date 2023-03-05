@@ -1,5 +1,6 @@
 import PlatformIcon from "components/icons/PlatformIcon"
 import SignInButtonGithub from "./SignInButtonGithub"
+import SignInButtonGoogle from "./SignInButtonGoogle"
 
 export default function LoginForm() {
   return (
@@ -10,6 +11,7 @@ export default function LoginForm() {
       </div>
       <div className='flex flex-col items-center gap-4'>
         <SignInButtonGithub />
+        <SignInButtonGoogle />
       </div>
     </div>
   )
