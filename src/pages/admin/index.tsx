@@ -19,6 +19,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
+  const isDeveloper = session.user?.role === "DEV" || session.user?.role === "ADMIN"
+  console.log(isDeveloper, session.user?.role)
+  if (!isDeveloper) {
+    return {
+      redirect: {
+        destination: "/auth/not-authorized",
+        permanent: false,
+      },
+    }
+  }
+
   return {
     props: {},
   }
