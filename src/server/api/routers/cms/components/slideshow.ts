@@ -43,6 +43,24 @@ export const sldieshowRouter = createTRPCRouter({
 
       return slideshow
     }),
+  updateSlideshowInterval: protectedProcedure
+    .input(z.object({ slideshowId: z.string(), interval: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const slideshow = await ctx.prisma.slideshow.update({
+        where: {
+          id: input.slideshowId,
+        },
+        data: {
+          interval: input.interval,
+        },
+      })
+
+      if (!slideshow) {
+        throw new Error("Slideshow not found")
+      }
+
+      return slideshow
+    }),
   uploadSlideshowImages: protectedProcedure
     .input(
       z.object({
@@ -90,7 +108,10 @@ export const sldieshowRouter = createTRPCRouter({
       const slideshowName = slideshow?.component?.component.name.toLowerCase().replace(/ /g, "_") ?? `${slideshow.id}`
 
       const imagesUploadPromises = input.images.map(async (image) => {
-        return await cloudinary.uploader.upload(image, { folder: `sites/${siteNameSlug}/slideshows/${slideshowName}` })
+        return await cloudinary.uploader.upload(image, {
+          folder: `sites/${siteNameSlug}/slideshows/${slideshowName}`,
+          transformation: { width: 1920, height: 1080, crop: "fill" },
+        })
       })
 
       const imagesUploadResponses = await Promise.all(imagesUploadPromises)
@@ -198,12 +219,13 @@ export const sldieshowRouter = createTRPCRouter({
         },
       })
 
-      await cloudinary.uploader.destroy(slide.image.public_id, {
-        invalidate: true,
-      }).catch((err) => {
-        if(err) throw new Error('Cloudinary error')
-      })
-      
+      await cloudinary.uploader
+        .destroy(slide.image.public_id, {
+          invalidate: true,
+        })
+        .catch((err) => {
+          if (err) throw new Error("Cloudinary error")
+        })
 
       return true
     }),

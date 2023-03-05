@@ -17,17 +17,17 @@ const SlideshowView = () => {
   return (
     <motion.div
       key={ctx.currentComponentId}
-      className='grid-col-1 grid w-full gap-5 xl:grid-cols-3 xl:gap-10'
+      className='grid w-full grid-cols-3 gap-5 xl:gap-10'
       variants={animVariants}
       initial='initial'
       animate='animate'
       exit='exit'
     >
-      <div className='flex w-full max-w-full flex-col gap-5 xl:col-span-2'>
-        <Slideshow wrapperClassName='w-full max-w-full h-[32vw] min-h-[300px] bg-black' />
+      <div className='col-span-3 flex w-full max-w-full flex-col gap-5 xl:col-span-2'>
+        <Slideshow wrapperClassName='w-full max-w-full h-[32vw] min-h-[400px] bg-black' />
         <ImageUploader wrapperClassName='w-full' />
       </div>
-      <SlidesList wrapperClassName='col-span-1 flex flex-col justify-end min-h-[400px] gap-4 rounded-md bg-base-200 p-5 shadow-md' />
+      <SlidesList wrapperClassName='col-span-3 xl:col-span-1 flex flex-col justify-end min-h-[400px] gap-4 rounded-md bg-base-200 p-5 shadow-md' />
     </motion.div>
   )
 }

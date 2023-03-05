@@ -31,7 +31,7 @@ const SlidesList = ({ wrapperClassName }: SlidesListProps) => {
 
   const { data: slideshow } = api.cms.components.slideshow.getSlideshow.useQuery(
     { componentId: ctx.currentComponentId },
-    { enabled: !!ctx.currentComponentId, cacheTime: 0, onSuccess: (data) => setList(data.slides) }
+    { enabled: !!ctx.currentComponentId, onSuccess: (data) => setList(data.slides) }
   )
 
   const { mutate: deleteSlide, isLoading: isDeleting } = api.cms.components.slideshow.deleteSlide.useMutation({

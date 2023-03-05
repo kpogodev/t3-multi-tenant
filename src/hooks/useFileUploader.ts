@@ -1,4 +1,4 @@
-import { useState, useCallback, type ChangeEvent } from "react"
+import { useState, useCallback, type ChangeEvent, FormEvent } from "react"
 
 type FileReaderResult = string | ArrayBuffer | null
 
@@ -47,7 +47,7 @@ const useFileUplaoder = ({ limit, onSubmit }: { limit: number; onSubmit: (files:
     })
   }, [])
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     onSubmit(files)
   }

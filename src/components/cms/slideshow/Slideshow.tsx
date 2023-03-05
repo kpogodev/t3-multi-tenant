@@ -12,6 +12,7 @@ import "swiper/css/autoplay"
 import type { inferRouterOutputs } from "@trpc/server"
 import type { AppRouter } from "server/api/root"
 import LoadingSkeleton from "components/common/LoadingSkeleton"
+import IntervalForm from "./IntervalForm"
 
 type Slideshow = inferRouterOutputs<AppRouter>["cms"]["components"]["slideshow"]["getSlideshow"]
 interface SlideshowProps {
@@ -26,7 +27,6 @@ const Slideshow = ({ wrapperClassName }: SlideshowProps) => {
     { componentId: ctx.currentComponentId },
     {
       enabled: !!ctx.currentComponentId,
-      cacheTime: 0,
     }
   )
 
@@ -45,6 +45,8 @@ const Slideshow = ({ wrapperClassName }: SlideshowProps) => {
     fadeEffect: {
       crossFade: true,
     },
+    resizeObserver: true,
+    updateOnWindowResize: true,
     onInit: (swiper) => (swiperRef.current = swiper),
   }
 
@@ -52,8 +54,8 @@ const Slideshow = ({ wrapperClassName }: SlideshowProps) => {
   const swiperKey = slideshow.slides.reduce((acc, curr) => acc + curr.id, "")
 
   return (
-    <div className={cn(wrapperClassName ? wrapperClassName : "", "relative")}>
-      <Swiper key={swiperKey} {...swiperProps} className='h-full w-full absolute inset-0'>
+    <div className={cn(wrapperClassName ? wrapperClassName : "", "relative shadow-md")}>
+      <Swiper key={swiperKey} {...swiperProps} className='absolute inset-0 h-full w-full'>
         {slideshow.slides.map((slide) => (
           <SwiperSlide key={slide.id} className='relative'>
             {slide.image ? (
@@ -64,6 +66,7 @@ const Slideshow = ({ wrapperClassName }: SlideshowProps) => {
           </SwiperSlide>
         ))}
       </Swiper>
+      <IntervalForm />
     </div>
   )
 }

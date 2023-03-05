@@ -19,6 +19,11 @@ const ImageUploader = ({ wrapperClassName }: ImageUploaderProps) => {
   const clinet = api.useContext()
   const ctx = useContext(CmsContext)
 
+  const { data: slideshow } = api.cms.components.slideshow.getSlideshow.useQuery(
+    { componentId: ctx.currentComponentId },
+    { enabled: !!ctx.currentComponentId }
+  )
+
   const { files, currentLoad, handleChange, handleSubmit, resetFiles } = useFileUploader({
     limit: 10 * 1024 * 1024, // in bytes
     onSubmit: (files) => {
@@ -29,11 +34,6 @@ const ImageUploader = ({ wrapperClassName }: ImageUploaderProps) => {
       setIsUploading(true)
     },
   })
-
-  const { data: slideshow } = api.cms.components.slideshow.getSlideshow.useQuery(
-    { componentId: ctx.currentComponentId },
-    { enabled: !!ctx.currentComponentId, cacheTime: 0 }
-  )
 
   const { mutate: uploadImages } = api.cms.components.slideshow.uploadSlideshowImages.useMutation({
     onSuccess: () => {
