@@ -5,11 +5,11 @@ import { getServerAuthSession } from "server/auth"
 const NotAuthorized: NextPage = () => {
   return (
     <div className='flex min-h-screen flex-col items-center justify-center gap-2 bg-[#fafafa]' data-theme='fantasy'>
-      <p className='text-center text-2xl font-bold'>
-        Currently you are not authorized to access admin dashboard. Please try again when administrator grants you an
-        access.
+      <p className='max-w-[60ch] text-center text-2xl font-bold'>
+        Currently you are not authorized to access admin dashboard which is can be accessed only with developer account.
+        Please try again when administrator grants you an access.
       </p>
-      <Link className='link-primary' href='/'>
+      <Link className='link-primary link' href='/'>
         Go back to home page
       </Link>
     </div>

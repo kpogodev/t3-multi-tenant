@@ -14,12 +14,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
 
   if (session) {
-    const refPath = context.req.cookies.refPath?.length ? context.req.cookies.refPath : "/"
-    context.res.setHeader("Set-Cookie", `refPath=; Path=/; HttpOnly`)
-
     return {
       redirect: {
-        destination: refPath,
+        destination: session.user.role === ("ADMIN" || "DEV") ? "/admin" : "/cms",
         permanent: false,
       },
     }

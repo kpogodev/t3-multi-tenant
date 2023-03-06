@@ -2,6 +2,7 @@ import type { GetServerSideProps, NextPage, InferGetServerSidePropsType } from "
 import CmsContextProvider from "components/cms/context/CmsContext"
 import Layout from "components/cms/Layout"
 import { getServerAuthSession, type UserRole } from "server/auth"
+import { prisma } from "server/db"
 
 interface getSSProps {
   userId: string
@@ -11,13 +12,25 @@ interface getSSProps {
 export const getServerSideProps: GetServerSideProps<getSSProps> = async (context) => {
   const session = await getServerAuthSession(context)
 
-  const refPath = context.req.url ?? "/"
-  context.res.setHeader("Set-Cookie", `refPath=${refPath}; HttpOnly`)
-
   if (!session) {
     return {
       redirect: {
         destination: "/auth/sign-in",
+        permanent: false,
+      },
+    }
+  }
+
+  const site = await prisma.site.findFirst({
+    where: {
+      userId: session.user.id,
+    },
+  })
+
+  if (!site || typeof site === "undefined") {
+    return {
+      redirect: {
+        destination: "/cms/no-site",
         permanent: false,
       },
     }

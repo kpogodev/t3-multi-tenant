@@ -7,9 +7,6 @@ import "react-toastify/dist/ReactToastify.css"
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
 
-  const refPath = context.req.url ?? "/"
-  context.res.setHeader("Set-Cookie", `refPath=${refPath}; HttpOnly`)
-
   if (!session) {
     return {
       redirect: {
@@ -20,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const isDeveloper = session.user?.role === "DEV" || session.user?.role === "ADMIN"
-  console.log(isDeveloper, session.user?.role)
+
   if (!isDeveloper) {
     return {
       redirect: {
