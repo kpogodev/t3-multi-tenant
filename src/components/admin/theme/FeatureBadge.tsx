@@ -1,20 +1,17 @@
 import { useContext } from "react"
 import { ThemeFormContext } from "../context/ThemeFormContext"
+import { capitalizeString } from "utils/capitalizeString"
+import type { FeatureType } from "@prisma/client"
 
-interface IFeatureBadge {
-  featureName: string
-  featureId: string
-  featureType: string
-}
-const FeatureBadge = ({ featureName, featureId, featureType }: IFeatureBadge) => {
+const FeatureBadge = ({ type }: { type: FeatureType }) => {
   const ctx = useContext(ThemeFormContext)
   return (
     <div
       className='badge-secondary badge badge-lg cursor-grab'
       draggable
-      onDragStart={(e) => ctx.onFeatureDragStart({e, featureId, featureName, featureType})}
+      onDragStart={(e) => ctx.onFeatureDragStart({ e, type })}
     >
-      {featureName}
+      {capitalizeString(type.toLocaleLowerCase().replace("_", " "))}
     </div>
   )
 }

@@ -2,6 +2,7 @@ import { createContext, useState, useCallback } from "react"
 import { generateRandomKey } from "utils/generateRandomKey"
 import { api } from "utils/api"
 import { toast } from "react-toastify"
+import type { FeatureType } from "@prisma/client"
 
 type UseThemeFormStateManagerResult = ReturnType<typeof useThemeFormStateManager>
 
@@ -10,21 +11,12 @@ export const ThemeFormContext = createContext<UseThemeFormStateManagerResult>({}
 interface IChosenFeature {
   id: string
   name: string
-  featureId: string
-  featureType: string
-}
-
-interface IComponent {
-  tempId: string
-  name: string
-  featureId: string
-  featureType: string
+  type: FeatureType
 }
 
 const useThemeFormStateManager = () => {
   const [themeName, setThemeName] = useState<string>("")
   const [chosenFeatures, setChosenFeatures] = useState<IChosenFeature[]>([])
-  const [components, setComponents] = useState<IComponent[]>([])
 
   const { mutate: createTheme } = api.admin.theme.addTheme.useMutation({
     onSuccess: () => {
@@ -42,93 +34,75 @@ const useThemeFormStateManager = () => {
   }, [])
 
   //Features Drag and Drop
-  const onFeatureDragStart = useCallback(
-    ({
-      e,
-      featureId,
-      featureName,
-      featureType,
-    }: {
-      e: React.DragEvent<HTMLDivElement>
-      featureId: string
-      featureName: string
-      featureType: string
-    }) => {
-      e.dataTransfer.setData("featureName", featureName)
-      e.dataTransfer.setData("featureId", featureId)
-      e.dataTransfer.setData("featureType", featureType)
-      e.dataTransfer.setData("id", generateRandomKey())
-      e.dataTransfer.setDragImage(e.currentTarget, 0, 0)
-    },
-    []
-  )
+  const onFeatureDragStart = useCallback(({ e, type }: { e: React.DragEvent<HTMLDivElement>; type: FeatureType }) => {
+    e.dataTransfer.setData("type", type)
+    e.dataTransfer.setData("id", generateRandomKey())
+    e.dataTransfer.setDragImage(e.currentTarget, 0, 0)
+  }, [])
 
   const onFeatureDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
-    const newComponent = {
-      id: e.dataTransfer.getData("id"),
-      name: e.dataTransfer.getData("featureName"),
-      featureId: e.dataTransfer.getData("featureId"),
-      featureType: e.dataTransfer.getData("featureType"),
+    const newFeature = {
+      id: generateRandomKey(),
+      type: e.dataTransfer.getData("type") as FeatureType,
+      name: "",
     }
 
     setChosenFeatures((prev) => {
       const prevStateCopy = [...prev]
-      prevStateCopy.unshift(newComponent)
+      prevStateCopy.unshift(newFeature)
       return prevStateCopy
     })
   }, [])
 
-  // Handle Component Name Change
-  const onComponentUpdate = ({ name, featureId, featureType, tempId }: IComponent) => {
-    const isNew = !components.find((component) => component.tempId === tempId)
-    if (isNew) {
-      setComponents((prev) => [...prev, { name, featureId, featureType, tempId }])
-    } else {
-      setComponents((prev) =>
-        prev.map((component) => (component.featureId === featureId ? { ...component, name } : component))
-      )
-    }
+  // Handle Feature Name Change
+  const onFeatureUpdate = ({ id, name, type }: IChosenFeature) => {
+    setChosenFeatures((prev) => {
+      const prevStateCopy = [...prev]
+      const featureIndex = prevStateCopy.findIndex((feature) => feature.id === id)
+      prevStateCopy[featureIndex] = { id, name, type }
+      return prevStateCopy
+    })
   }
 
   // Handle Submit
   const onThemeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    const hasUnnamedFeatures = chosenFeatures.some((feature) => !feature.name || feature.name.trim() === "")
+
+    if (hasUnnamedFeatures) {
+      toast.error("All features must have a name")
+      return
+    }
+
     createTheme({
       name: themeName,
-      components: components.map((component) => ({
-        // to ignore tempId
-        name: component.name,
-        featureId: component.featureId,
-        featureType: component.featureType,
-      })),
+      features: chosenFeatures.map(({ id, ...rest }) => rest),
     })
   }
+
   // Helpers
-  const deleteChosenFeature = useCallback((id: string, featureId: string) => {
-    setComponents((prev) => prev.filter((component) => component.featureId !== featureId))
-    setChosenFeatures((prev) => prev.filter((component) => component.id !== id))
+  const deleteChosenFeature = useCallback((id: string) => {
+    setChosenFeatures((prev) => prev.filter((feature) => feature.id !== id))
   }, [])
 
   const clearChosenFeatures = useCallback(() => {
-    setComponents([])
     setChosenFeatures([])
   }, [])
 
   const resetStates = useCallback(() => {
     setThemeName("")
-    setComponents([])
     setChosenFeatures([])
   }, [])
 
   return {
-    components,
     themeName,
     chosenFeatures,
     onThemeNameChange,
     onFeatureDragStart,
     onFeatureDrop,
-    onComponentUpdate,
+    onFeatureUpdate,
     clearChosenFeatures,
     deleteChosenFeature,
     resetStates,

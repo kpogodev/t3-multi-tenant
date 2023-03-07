@@ -1,22 +1,15 @@
-import { api } from "utils/api"
 import FeatureBadge from "./FeatureBadge"
+import type { FeatureType } from "@prisma/client"
 
 const FeatureList = () => {
-  const { data: features } = api.admin.platform.getFeatures.useQuery()
+  const features: FeatureType[] = ["WELCOME_BLOCK", "SLIDESHOW"]
 
   return (
     <div className='flex w-full max-w-xl flex-col gap-4'>
       <p className='text-lg'>Available Features:</p>
       <div className='flex flex-wrap gap-2'>
         {!!features ? (
-          features.map((feature) => (
-            <FeatureBadge
-              key={feature.id}
-              featureName={feature.name}
-              featureId={feature.id}
-              featureType={feature.type}
-            />
-          ))
+          features.map((feature, index) => <FeatureBadge key={index} type={feature} />)
         ) : (
           <div className='badge badge-lg animate-pulse'>Loading...</div>
         )}

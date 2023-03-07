@@ -24,9 +24,7 @@ const ChosenFeatureList = () => {
           <ChosenFeature
             key={feature.id}
             id={feature.id}
-            badge={feature.name}
-            featureId={feature.featureId}
-            featureType={feature.featureType}
+            type={feature.type}
           />
         ))}
         <DragAndDropIcon className='absolute top-1/2 left-1/2 -z-10 h-40 w-40 -translate-x-1/2 -translate-y-1/2 opacity-10' />
