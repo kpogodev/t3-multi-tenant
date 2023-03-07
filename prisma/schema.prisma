@@ -68,15 +68,16 @@ model VerificationToken {
 
 // Platform
 model Site {
-  id       String  @id @default(cuid())
-  name     String
-  theme    Theme   @relation(fields: [themeId], references: [id])
-  themeId  String
-  domain   Domain  @relation(fields: [domainId], references: [id])
-  domainId String  @unique
-  user     User?   @relation(fields: [userId], references: [id])
-  userId   String? @unique
-  pages    Page[]
+  id         String      @id @default(cuid())
+  name       String
+  theme      Theme       @relation(fields: [themeId], references: [id])
+  themeId    String
+  domain     Domain      @relation(fields: [domainId], references: [id])
+  domainId   String      @unique
+  user       User?       @relation(fields: [userId], references: [id])
+  userId     String?     @unique
+  components Component[]
+  pages      Page[]
 
   @@index([themeId])
 }
@@ -121,52 +122,56 @@ model PageContent {
 }
 
 model Theme {
-  id         String      @id @default(cuid())
-  name       String      @unique
-  sites      Site[]
-  components Component[]
+  id       String    @id @default(cuid())
+  name     String    @unique
+  sites    Site[]
+  features Feature[]
 }
 
+// Features
+enum FeatureType {
+  CARD
+  CONTACT_FORM
+  IMAGE_BLOCK
+  MAP
+  SLIDESHOW
+  TEXT_BLOCK
+  WELCOME_BLOCK
+  VIDEO
+}
+
+model Feature {
+  id      String      @id @default(cuid())
+  name    String
+  type    FeatureType
+  theme   Theme       @relation(fields: [themeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  themeId String
+
+  @@index([themeId])
+}
+
+//Components
 model Component {
   id                 String              @id @default(cuid())
   name               String
-  theme              Theme               @relation(fields: [themeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  themeId            String
-  feature            Feature             @relation(fields: [featureId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  featureId          String
+  site               Site                @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  siteId             String              @unique
   componentsRelation ComponentsRelation?
-
-  @@index([themeId])
-  @@index([featureId])
 }
 
 model ComponentsRelation {
-  id          String     @id @default(cuid())
-  component   Component  @relation(fields: [componentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  componentId String     @unique
-  welcome     Welcome?   @relation(fields: [welcomeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  welcomeId   String?    @unique
-  slideshow   Slideshow? @relation(fields: [slideshowId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  slideshowId String?    @unique
+  id          String        @id @default(cuid())
+  component   Component     @relation(fields: [componentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  componentId String        @unique
+  welcome     WelcomeBlock? @relation(fields: [welcomeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  welcomeId   String?       @unique
+  slideshow   Slideshow?    @relation(fields: [slideshowId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  slideshowId String?       @unique
 
   @@unique([componentId, welcomeId], name: "ComponentWelcome")
   @@unique([componentId, slideshowId], name: "ComponentSlideshow")
   @@index([welcomeId])
   @@index([slideshowId])
-}
-
-// Features
-enum FeatureType {
-  SLIDESHOW
-  WELCOME
-  //will be more
-}
-
-model Feature {
-  id        String      @id @default(cuid())
-  name      String
-  type      FeatureType @unique
-  component Component[]
 }
 
 model Slideshow {
@@ -188,32 +193,35 @@ model Slide {
 }
 
 model ExternalImage {
-  id            String    @id @default(cuid())
-  slide         Slide?    @relation(fields: [slideId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  slideId       String    @unique
-  asset_id      String?
-  public_id     String
-  width         Int
-  height        Int
-  format        String?
-  resource_type String?
-  created_at    DateTime?
-  bytes         Int
-  type          String?
-  placeholder   Boolean?
-  url           String?
-  secure_url    String
-  folder        String?
-  access_mode   String?
+  id             String        @id @default(cuid())
+  asset_id       String?
+  public_id      String
+  width          Int
+  height         Int
+  format         String?
+  resource_type  String?
+  created_at     DateTime?
+  bytes          Int
+  type           String?
+  placeholder    Boolean?
+  url            String?
+  secure_url     String
+  folder         String?
+  access_mode    String?
+  slide          Slide?        @relation(fields: [slideId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  slideId        String        @unique
+  welcomeBlock   WelcomeBlock? @relation(fields: [welcomeBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  welcomeBlockId String?       @unique
 
   @@index([slideId])
 }
 
-model Welcome {
+model WelcomeBlock {
   id        String              @id @default(cuid())
   header    String?
   text      String?
   linkText  String?
   linkUrl   String?
+  image     ExternalImage?
   component ComponentsRelation?
 }

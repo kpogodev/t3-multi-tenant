@@ -22,7 +22,6 @@ const useFileUplaoder = ({ limit, onSubmit }: { limit: number; onSubmit: (files:
         [...files].forEach((file) => {
           setCurrentLoad((prevState) => {
             const load = prevState.load + file.size
-            console.log(load/limit)
             return {
               load,
               proportion: load / limit,
