@@ -17,10 +17,6 @@ const adminMenuStructure = [
     category: "Themes",
     views: ["add-theme", "theme-list"],
   },
-  {
-    category: "Platform",
-    views: ["add-feature"],
-  }
 ] as const
 
 const SidebarMenu = () => {
