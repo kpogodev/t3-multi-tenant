@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "server/api/trpc"
+import { toCamelCase } from "utils/toCamelCase"
 
 export const siteRouter = createTRPCRouter({
   addSite: protectedProcedure
@@ -26,10 +27,45 @@ export const siteRouter = createTRPCRouter({
           },
         },
         include: {
-          theme: true,
-          domain: true,
+          theme: {
+            select: {
+              id: true,
+            },
+          },
         },
       })
+
+      if (!site) throw new Error("Site not created")
+
+      const themeFeautes = await ctx.prisma.feature.findMany({
+        where: {
+          themeId: site.theme.id,
+        },
+      })
+
+      if (themeFeautes.length > 0) {
+        for (const feature of themeFeautes) {
+          const compotentsRelationModel = toCamelCase(feature.type).trim()
+
+          await ctx.prisma.component.create({
+            data: {
+              site: {
+                connect: {
+                  id: site.id,
+                },
+              },
+              name: feature.name,
+              componentsRelation: {
+                create: {
+                  [compotentsRelationModel]: {
+                    create: {}
+                  }
+                }
+              }
+            },
+          })
+        }
+      }
 
       return site
     }),

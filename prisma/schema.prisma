@@ -155,22 +155,24 @@ model Component {
   id                 String              @id @default(cuid())
   name               String
   site               Site                @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  siteId             String              @unique
-  componentsRelation ComponentsRelation?
+  siteId             String
+  componentsRelation ComponentsRelation[]
+
+  @@index([siteId])
 }
 
 model ComponentsRelation {
-  id          String        @id @default(cuid())
-  component   Component     @relation(fields: [componentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  componentId String        @unique
-  welcome     WelcomeBlock? @relation(fields: [welcomeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  welcomeId   String?       @unique
-  slideshow   Slideshow?    @relation(fields: [slideshowId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  slideshowId String?       @unique
+  id             String        @id @default(cuid())
+  component      Component     @relation(fields: [componentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  componentId    String
+  welcomeBlock   WelcomeBlock? @relation(fields: [welcomeBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  welcomeBlockId String?
+  slideshow      Slideshow?    @relation(fields: [slideshowId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  slideshowId    String?
 
-  @@unique([componentId, welcomeId], name: "ComponentWelcome")
+  @@unique([componentId, welcomeBlockId], name: "ComponentWelcomeBlock")
   @@unique([componentId, slideshowId], name: "ComponentSlideshow")
-  @@index([welcomeId])
+  @@index([welcomeBlockId])
   @@index([slideshowId])
 }
 
@@ -179,7 +181,7 @@ model Slideshow {
   interval  Int?                @default(5000)
   slides    Slide[]
   size      Int                 @default(0)
-  component ComponentsRelation?
+  component ComponentsRelation[]
 }
 
 model Slide {
@@ -223,5 +225,5 @@ model WelcomeBlock {
   linkText  String?
   linkUrl   String?
   image     ExternalImage?
-  component ComponentsRelation?
+  component ComponentsRelation[]
 }
