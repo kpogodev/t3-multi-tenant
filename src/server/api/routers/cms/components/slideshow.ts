@@ -104,8 +104,6 @@ export const sldieshowRouter = createTRPCRouter({
       // 100MB limit
       if (slideshowSize >= 104857600) throw new Error("Slideshow size limit reached")
 
-      console.log("slideshow", slideshow.component)
-
       const siteNameSlug = siteInfo.name.toLowerCase().replace(/ /g, "_")
       const slideshowName = slideshow?.component?.component?.name.toLowerCase().replace(/ /g, "_") ?? `${slideshow.id}`
 

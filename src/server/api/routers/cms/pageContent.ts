@@ -90,8 +90,6 @@ export const pageContentRouter = createTRPCRouter({
       folder: `sites/${siteNameSlug}/images`,
     })
 
-    console.log(response)
-
     return { link: response.secure_url}
   }),
 })

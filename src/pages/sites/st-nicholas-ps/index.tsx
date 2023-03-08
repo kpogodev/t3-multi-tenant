@@ -3,6 +3,7 @@ import HomepageContextProvider from "components/site/context/HomepageContext"
 import Navbar from "components/site/Navbar"
 import PrefetchHomeData from "utils/sites/PrefetchHomeData"
 
+
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   return PrefetchHomeData(context)
 }
