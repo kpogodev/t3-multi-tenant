@@ -16,6 +16,7 @@ const View = () => {
     default: <></>,
     pages: <PagesView />,
     slideshow: <SlideshowView />,
+    "welcome-block": <></>,
     "edit-page": <EditPage />,
   }
 

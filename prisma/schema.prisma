@@ -146,6 +146,7 @@ model Feature {
   type    FeatureType
   theme   Theme       @relation(fields: [themeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   themeId String
+  components Component[]
 
   @@index([themeId])
 }
@@ -156,19 +157,22 @@ model Component {
   name               String
   site               Site                @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   siteId             String
-  componentsRelation ComponentsRelation[]
+  feature            Feature             @relation(fields: [featureId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  featureId          String
+  componentsRelation ComponentsRelation?
 
   @@index([siteId])
+  @@index([featureId])
 }
 
 model ComponentsRelation {
   id             String        @id @default(cuid())
   component      Component     @relation(fields: [componentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  componentId    String
+  componentId    String        @unique
   welcomeBlock   WelcomeBlock? @relation(fields: [welcomeBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  welcomeBlockId String?
+  welcomeBlockId String?     @unique
   slideshow      Slideshow?    @relation(fields: [slideshowId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  slideshowId    String?
+  slideshowId    String?   @unique
 
   @@unique([componentId, welcomeBlockId], name: "ComponentWelcomeBlock")
   @@unique([componentId, slideshowId], name: "ComponentSlideshow")
@@ -181,7 +185,7 @@ model Slideshow {
   interval  Int?                @default(5000)
   slides    Slide[]
   size      Int                 @default(0)
-  component ComponentsRelation[]
+  component ComponentsRelation?
 }
 
 model Slide {
@@ -225,5 +229,5 @@ model WelcomeBlock {
   linkText  String?
   linkUrl   String?
   image     ExternalImage?
-  component ComponentsRelation[]
+  component ComponentsRelation?
 }

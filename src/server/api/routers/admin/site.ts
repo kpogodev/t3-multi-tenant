@@ -54,6 +54,11 @@ export const siteRouter = createTRPCRouter({
                   id: site.id,
                 },
               },
+              feature: {
+                connect: {
+                  id: feature.id,
+                },
+              },
               name: feature.name,
               componentsRelation: {
                 create: {

@@ -42,7 +42,7 @@ const SidebarMenu = ({ menu }: SidebarMenuProps) => {
               <button
                 className={cn({ active: view === ctx.currentView })}
                 onClick={handleClick}
-                value={typeof view === "string" ? view : view.type}
+                value={typeof view === "string" ? view : view.type.toLowerCase().replace("_", "-")}
                 data-id={typeof view === "string" ? "" : view.id}
               >
                 {typeof view === "string"
