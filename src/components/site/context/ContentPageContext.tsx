@@ -13,11 +13,12 @@ const useContentPageStateManager = ({ slug, domain }: IProviderProps["initialPar
     { enabled: !!domain || !!slug }
   )
 
-  const { data: slideshows } = api.sites.slideshow.getSlideshows.useQuery(domain, {
-    enabled: !!domain,
-  })
-
-  const slideshowContenentPage = typeof slideshows !== "undefined" ? slideshows[0] : null
+  const { data: slideshowContenentPage } = api.sites.slideshow.getSlideshowByName.useQuery(
+    { domain, name: "Content Slideshow" },
+    {
+      enabled: !!domain,
+    }
+  )
 
   return {
     slideshowContenentPage,

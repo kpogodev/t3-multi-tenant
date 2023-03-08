@@ -19,7 +19,7 @@ const PrefetchPageData = async (context: GetServerSidePropsContext) => {
     if (domain && slug) {
       await ssg.sites.content.getPageContent.prefetch({ domain, pageSlug: slug })
       await ssg.sites.navigation.getNavigation.prefetch(domain)
-      await ssg.sites.slideshow.getSlideshows.prefetch(domain)
+      await ssg.sites.slideshow.getSlideshowByName.prefetch({ domain, name: 'Content Slideshow' })
     }
 
     return {
