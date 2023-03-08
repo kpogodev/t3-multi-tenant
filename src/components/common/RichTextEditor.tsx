@@ -23,14 +23,18 @@ const RichTextEditor = ({ editorState, onEditorStateChange }: RichTextEditorProp
       reader.onload = () => resolve(reader.result as string)
     })
 
-    return { data: { link: (await uploadImage({ imgData: data })) } }
+    const imgLink = await uploadImage({ imgData: data })
+
+    if(imgLink instanceof Error) return
+
+    return { data: { link: imgLink.link } }
   }
 
   return (
     <Editor
       editorState={editorState}
       toolbarClassName='flex sticky top-0 z-50 !justify-center mx-auto'
-      editorClassName='bg-base-100 shadow-md rounded-md p-4 mt-4 !h-[500px]'
+      editorClassName='bg-base-100 shadow-md rounded-md p-4 mt-4 !h-[500px] prose max-w-full'
       onEditorStateChange={onEditorStateChange}
       toolbar={{
         options: [
