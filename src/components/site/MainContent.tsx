@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { ContentPageContext } from "./context/ContentPageContext"
+import { ContentPageContext } from "themes/st-nicholas-ps/context/ContentPageContext"
 import DisplayRichText from "components/common/DisplayRichText"
 
 const MainContent = () => {

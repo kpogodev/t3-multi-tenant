@@ -1,10 +1,10 @@
-import Image from "next/image"
-import { useContext, useRef } from "react"
-import { ContentPageContext } from "../context/ContentPageContext"
+import { HomepageContext } from "../context/HomepageContext"
 import LoadingSkeleton from "components/common/LoadingSkeleton"
+import { useContext, useRef } from "react"
+import Image from "next/image"
+import cn from "classnames"
 import { Swiper, SwiperSlide, type SwiperProps, type SwiperRef } from "swiper/react"
 import { Autoplay, EffectFade, Pagination } from "swiper"
-import cn from "classnames"
 import "swiper/css"
 import "swiper/css/effect-fade"
 import "swiper/css/pagination"
@@ -14,8 +14,8 @@ interface SlideshowProps {
   wrapperClassName?: string
 }
 
-const SlideshowContentPage = ({ wrapperClassName }: SlideshowProps) => {
-  const { slideshowContenentPage: slideshow } = useContext(ContentPageContext)
+const SlideshowHomeMain = ({ wrapperClassName }: SlideshowProps) => {
+  const { mainSlideshow: slideshow } = useContext(HomepageContext)
   const swiperRef = useRef<SwiperRef["swiper"]>()
 
   if (!slideshow || typeof slideshow === "undefined")
@@ -59,4 +59,4 @@ const SlideshowContentPage = ({ wrapperClassName }: SlideshowProps) => {
     </div>
   )
 }
-export default SlideshowContentPage
+export default SlideshowHomeMain

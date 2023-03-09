@@ -5,9 +5,9 @@ import { AnimatePresence } from "framer-motion"
 
 type ViewType = { [key: string]: JSX.Element }
 
-const PagesView = dynamic(() => import("./pages/PagesView"))
 const EditPage = dynamic(() => import("./pages/EditPage"))
 const SlideshowView = dynamic(() => import("./slideshow/SlideshowView"))
+const PagesView = dynamic(() => import("./pages/PagesView"))
 
 const View = () => {
   const ctx = useContext(CmsContext)
