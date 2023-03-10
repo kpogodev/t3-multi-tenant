@@ -11,6 +11,7 @@ import { homepageRouter } from "./routers/sites/homepage";
 import { navigationRouter } from "./routers/sites/navigation";
 import { createTRPCRouter } from "./trpc";
 import { slideshowRouter } from "./routers/sites/slideshow";
+import { welcomeBlockRouter } from "./routers/cms/components/welcomeBlock";
 /**
  * This is the primary router for your server.
  *
@@ -29,6 +30,7 @@ export const appRouter = createTRPCRouter({
     components: createTRPCRouter({
       general: generalRouter,
       slideshow: sldieshowRouter,
+      welcomeBlock: welcomeBlockRouter,
     }),
   }),
   sites: createTRPCRouter({

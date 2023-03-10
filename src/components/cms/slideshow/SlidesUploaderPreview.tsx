@@ -2,7 +2,7 @@ import Image from "next/image"
 import { generateRandomKey } from "utils/generateRandomKey"
 import { AnimatePresence, motion } from "framer-motion"
 
-interface DropImagesPreviewProps {
+interface SlidesUploaderPreviewProps {
   filesData: string[]
 }
 
@@ -12,7 +12,7 @@ const animVariants = {
   exit: { opacity: 0 },
 }
 
-const DropImagesPreview = ({ filesData }: DropImagesPreviewProps) => {
+const SlidesUploaderPreview = ({ filesData }: SlidesUploaderPreviewProps) => {
   return (
     <motion.div
       key='drop-images-preview'
@@ -48,4 +48,4 @@ const DropImagesPreview = ({ filesData }: DropImagesPreviewProps) => {
     </motion.div>
   )
 }
-export default DropImagesPreview
+export default SlidesUploaderPreview

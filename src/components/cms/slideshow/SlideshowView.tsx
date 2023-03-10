@@ -1,5 +1,5 @@
 import Slideshow from "components/cms/slideshow/Slideshow"
-import ImageUploader from "./ImageUploader"
+import SlidesUploader from "./SlidesUploader"
 import SlidesList from "./SlidesList"
 import { motion } from "framer-motion"
 import { useContext } from "react"
@@ -25,7 +25,7 @@ const SlideshowView = () => {
     >
       <div className='col-span-3 flex w-full max-w-full flex-col gap-5 xl:col-span-2'>
         <Slideshow wrapperClassName='w-full max-w-full h-[32vw] min-h-[400px] bg-black' />
-        <ImageUploader wrapperClassName='w-full' />
+        <SlidesUploader wrapperClassName='w-full' />
       </div>
       <SlidesList wrapperClassName='col-span-3 xl:col-span-1 flex flex-col justify-end min-h-[400px] gap-4 rounded-md bg-base-200 p-5 shadow-md' />
     </motion.div>

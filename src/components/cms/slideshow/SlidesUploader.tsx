@@ -5,9 +5,9 @@ import { toast } from "react-toastify"
 import cn from "classnames"
 import UploadIcon from "components/icons/UploadIcon"
 import useFileUploader from "hooks/useFileUploader"
-import DropAreaDefault from "./DropAreaDefault"
-import DropImagesPreview from "./DropImagesPreview"
-import UploadProgess from "./UploadProgess"
+import SlidesUploaderDefault from "./SlidesUploaderDefault"
+import SlidesUploaderPreview from "./SlidesUploaderPreview"
+import UploadProgess from "../../common/UploadProgess"
 import { AnimatePresence } from "framer-motion"
 
 interface ImageUploaderProps {
@@ -25,6 +25,7 @@ const ImageUploader = ({ wrapperClassName }: ImageUploaderProps) => {
   )
 
   const { files, currentLoad, handleChange, handleSubmit, resetFiles } = useFileUploader({
+    multiple: true,
     limit: 10 * 1024 * 1024, // in bytes
     onSubmit: (files) => {
       if (!slideshow) return
@@ -64,8 +65,8 @@ const ImageUploader = ({ wrapperClassName }: ImageUploaderProps) => {
             multiple
           />
           <AnimatePresence mode='wait'>
-            {files.length > 0 && <DropImagesPreview filesData={files as string[]} />}
-            {files.length === 0 && <DropAreaDefault />}
+            {files.length > 0 && <SlidesUploaderPreview filesData={files as string[]} />}
+            {files.length === 0 && <SlidesUploaderDefault />}
             {isUploading && <UploadProgess />}
           </AnimatePresence>
         </label>

@@ -1,41 +1,48 @@
-import { useState, useCallback, type ChangeEvent, FormEvent } from "react"
+import { useState, useCallback, type ChangeEvent, type FormEvent } from "react"
 
 type FileReaderResult = string | ArrayBuffer | null
 
-interface CurrenLoad {
+type CurrenLoad = {
   load: number
   proportion: number
 }
 
-const useFileUplaoder = ({ limit, onSubmit }: { limit: number; onSubmit: (files: FileReaderResult[]) => void }) => {
+interface IUseFileUploader {
+  onSubmit: (files: FileReaderResult[]) => void
+  limit: number
+  multiple?: boolean
+}
+
+const useFileUplaoder = ({ limit, onSubmit, multiple = false }: IUseFileUploader) => {
   const [files, setFiles] = useState<FileReaderResult[] | []>([])
   const [currentLoad, setCurrentLoad] = useState<CurrenLoad>({
     load: 0,
     proportion: 0,
   })
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.currentTarget.files
-
-      if (files) {
-        [...files].forEach((file) => {
-          setCurrentLoad((prevState) => {
-            const load = prevState.load + file.size
-            return {
-              load,
-              proportion: load / limit,
-            }
-          })
-          const reader = new FileReader()
-          reader.readAsDataURL(file)
-          reader.onload = () => {
-            setFiles((prevState) => [...prevState, reader.result])
-          }
-        })
+  const processFile = useCallback((file: File) => {
+    setCurrentLoad((prevState) => {
+      const load = prevState.load + file.size
+      return {
+        load,
+        proportion: load / limit,
       }
+    })
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      setFiles((prevState) => [...prevState, reader.result])
+    }
+  }, [limit])
+
+
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const files = e.currentTarget.files
+      if(!files || typeof files[0] === 'undefined') return
+      return multiple ? [...files].forEach((file) => processFile(file)) : processFile(files[0])
     },
-    [limit]
+    [multiple, processFile]
   )
 
   const resetFiles = useCallback(() => {

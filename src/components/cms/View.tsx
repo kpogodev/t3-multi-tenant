@@ -2,12 +2,13 @@ import { useContext } from "react"
 import { CmsContext } from "./context/CmsContext"
 import dynamic from "next/dynamic"
 import { AnimatePresence } from "framer-motion"
-
-type ViewType = { [key: string]: JSX.Element }
+import WelcomeBlockView from "./welcome-block/WelcomeBlockView"
 
 const EditPage = dynamic(() => import("./pages/EditPage"))
 const SlideshowView = dynamic(() => import("./slideshow/SlideshowView"))
 const PagesView = dynamic(() => import("./pages/PagesView"))
+
+type ViewType = { [key: string]: JSX.Element }
 
 const View = () => {
   const ctx = useContext(CmsContext)
@@ -15,9 +16,9 @@ const View = () => {
   const view: ViewType = {
     default: <></>,
     pages: <PagesView />,
-    slideshow: <SlideshowView />,
-    "welcome-block": <></>,
     "edit-page": <EditPage />,
+    slideshow: <SlideshowView />,
+    "welcome-block": <WelcomeBlockView />,
   }
 
   return (
