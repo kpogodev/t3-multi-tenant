@@ -57,7 +57,7 @@ const UploadPhotoForm = ({
           <button
             title='upload images'
             type='submit'
-            className='btn-primary btn-md btn-circle btn absolute left-1/2 bottom-1 -translate-x-1/2'
+            className='btn-primary btn-md btn-circle btn absolute left-1/2 bottom-1 !-translate-x-1/2 transition-colors'
           >
             <UploadIcon />
           </button>

@@ -2,8 +2,7 @@ import { useState } from "react"
 import { api } from "utils/api"
 import { toast } from "react-toastify"
 import Select, { type SingleValue } from "react-select"
-import { reactSelectStyles } from "utils/reactSelectStyles"
-
+import { reactSelectStyles } from "styles/reactSelectStyles"
 
 const AddSiteForm = () => {
   const [websiteName, setWebsiteName] = useState<string>("")
@@ -12,7 +11,6 @@ const AddSiteForm = () => {
   const { data: domains } = api.admin.domain.getAvailableDomains.useQuery()
   const { data: themes } = api.admin.theme.getThemes.useQuery()
   const addSite = api.admin.site.addSite.useMutation()
-
 
   const onWebsiteNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWebsiteName(e.target.value)
@@ -38,10 +36,10 @@ const AddSiteForm = () => {
         themeId: themeId,
       },
       {
-        onSuccess: (data) => {
+        onSuccess: () => {
           toast.success("Site added successfully")
         },
-        onError: (err) => {
+        onError: () => {
           toast.error("Error adding site")
         },
       }
@@ -90,7 +88,7 @@ const AddSiteForm = () => {
           styles={reactSelectStyles}
           options={themes?.map((theme) => ({ label: theme.name, value: theme.id }))}
           onChange={(selected) => void handleThemeChange(selected)}
-        ></Select>
+        />
       </div>
       <button className='btn-primary btn mt-10' type='submit'>
         Add Site

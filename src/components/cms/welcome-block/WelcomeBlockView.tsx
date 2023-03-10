@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { useContext } from "react"
 import { CmsContext } from "../context/CmsContext"
+import WelcomeContentForm from "./WelcomeContentForm"
 import WelcomeImage from "./WelcomeImage"
 
 const animVariants = {
@@ -15,7 +16,7 @@ const WelcomeBlockView = () => {
   return (
     <motion.div
       key={ctx.currentComponentId}
-      className='mx-auto grid w-full max-w-5xl grid-cols-3 gap-5'
+      className='mx-auto grid w-full max-w-screen-xl grid-cols-3 gap-10'
       variants={animVariants}
       initial='initial'
       animate='animate'
@@ -24,7 +25,9 @@ const WelcomeBlockView = () => {
       <div className='col-span-1'>
         <WelcomeImage />
       </div>
-      <div className='col-span-2'></div>
+      <div className='col-span-2'>
+        <WelcomeContentForm />
+      </div>
     </motion.div>
   )
 }

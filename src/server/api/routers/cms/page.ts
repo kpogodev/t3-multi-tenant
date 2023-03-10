@@ -3,10 +3,67 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "server/ap
 import { slugifyString } from "utils/slugifyString"
 
 export const pageRouter = createTRPCRouter({
-  addPage: protectedProcedure
-    .input(z.string())
-    .mutation(async ({ input, ctx }) => {
+  getAllPagesSlug: protectedProcedure.query(async ({ ctx }) => {
+    const site = await ctx.prisma.site.findUnique({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    })
 
+    if (!site) throw new Error("Site not found")
+
+    const pages = await ctx.prisma.page.findMany({
+      where: {
+        siteId: site.id,
+      },
+    })
+
+    if (!pages || !pages.length) throw new Error("No pages found")
+
+    const formatSlug = (page: typeof pages[0]) => {
+      const parentPage = pages.find((parent) => parent.id === page.parentId)
+      if (typeof parentPage === "undefined") return page.slug
+      return `${parentPage?.slug}/${page.slug}`
+    }
+
+    const formattedPages = pages.map((page) => {
+      return {
+        name: page.name,
+        slug: formatSlug(page),
+      }
+    })
+
+    return formattedPages
+  }),
+  addPage: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
+    const site = await ctx.prisma.site.findUnique({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    })
+
+    if (!site) throw new Error("Site not found")
+
+    const page = await ctx.prisma.page.create({
+      data: {
+        name: input,
+        siteId: site.id,
+        slug: slugifyString(input),
+        content: {
+          create: {},
+        },
+      },
+    })
+    return page
+  }),
+  addSubPage: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        parentId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
       const site = await ctx.prisma.site.findUnique({
         where: {
           userId: ctx.session.user.id,
@@ -17,41 +74,17 @@ export const pageRouter = createTRPCRouter({
 
       const page = await ctx.prisma.page.create({
         data: {
-          name: input,
+          name: input.name,
+          parentId: input.parentId,
           siteId: site.id,
-          slug: slugifyString(input),
+          slug: slugifyString(input.name),
           content: {
-            create: {}
-          }
+            create: {},
+          },
         },
       })
       return page
     }),
-  addSubPage: protectedProcedure.input(z.object({
-    name: z.string(),
-    parentId: z.string()
-  })).mutation(async ({ input, ctx }) => {
-      const site = await ctx.prisma.site.findUnique({
-        where: {
-          userId: ctx.session.user.id,
-        },
-      })
-
-      if (!site) throw new Error("Site not found")
-
-    const page = await ctx.prisma.page.create({
-      data: {
-        name: input.name,
-        parentId: input.parentId,
-        siteId: site.id,
-        slug: slugifyString(input.name),
-        content: {
-          create: {}
-        }
-      },
-    })
-    return page
-  }),
   getPageById: publicProcedure.input(z.string()).query(async ({ input, ctx }) => {
     const page = await ctx.prisma.page.findUnique({
       where: {
@@ -112,8 +145,8 @@ export const pageRouter = createTRPCRouter({
         AND: {
           id: {
             not: input,
-          }
-        }
+          },
+        },
       },
     })
 
@@ -125,7 +158,7 @@ export const pageRouter = createTRPCRouter({
 
     return page
   }),
- deleteSubpage: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
+  deleteSubpage: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
     const page = await ctx.prisma.page.delete({
       where: {
         id: input,
@@ -133,5 +166,5 @@ export const pageRouter = createTRPCRouter({
     })
 
     return page
-  })
+  }),
 })

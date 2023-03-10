@@ -225,7 +225,7 @@ model ExternalImage {
 model WelcomeBlock {
   id        String              @id @default(cuid())
   header    String?
-  text      String?
+  text      String?             @db.LongText
   linkText  String?
   linkUrl   String?
   image     ExternalImage?

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { toast } from "react-toastify"
 import Select, { type SingleValue } from "react-select"
-import { reactSelectStyles } from "utils/reactSelectStyles"
+import { reactSelectStyles } from "styles/reactSelectStyles"
 import { api } from "utils/api"
 
 const AssociateTenantForm = () => {
