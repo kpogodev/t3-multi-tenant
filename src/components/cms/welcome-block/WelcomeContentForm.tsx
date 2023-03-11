@@ -5,7 +5,7 @@ import Select, { type SingleValue } from "react-select"
 import { toast } from "react-toastify"
 import EditIcon from "components/icons/EditIcon"
 import CheckMarkIcon from "components/icons/CheckMarkIcon"
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import CancelIcon from "components/icons/CancelIcon"
 
 const animVariants = {

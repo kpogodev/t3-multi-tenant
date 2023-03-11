@@ -1,16 +1,18 @@
 import { createContext, useState, useCallback } from "react"
-// import { useSession } from "next-auth/react"
+import { type Session } from "next-auth"
 import { api } from "utils/api"
+import { capitalizeString } from "utils/capitalizeString"
 
 type UseCmsStateManagerResult = ReturnType<typeof useCmsStateManager>
 
 export const CmsContext = createContext<UseCmsStateManagerResult>({} as UseCmsStateManagerResult)
 
-const useCmsStateManager = (userId: string) => {
+const useCmsStateManager = (userId: string, session: Session) => {
   const [prevView, setPrevView] = useState<string>("default")
   const [currentView, setCurrentView] = useState<string>("default")
   const [currentPageId, setCurrentPageId] = useState<string>("")
   const [currentComponentId, setCurrentComponentId] = useState<string>("")
+  const [currentNavHeader, setCurrentNavHeader] = useState<string>("")
   const [darkTheme, setDarkTheme] = useState<boolean>(false)
 
   const { data: site } = api.admin.site.getSiteByTenantId.useQuery(userId, { enabled: userId ? true : false })
@@ -32,10 +34,11 @@ const useCmsStateManager = (userId: string) => {
 
     if (typeof id === "string") {
       setCurrentComponentId(id)
+      setCurrentNavHeader(components?.find((component) => component.id === id)?.name ?? "")
     } else {
       setCurrentComponentId("")
+      setCurrentNavHeader(capitalizeString(view.replaceAll("-", " ")))
     }
-    return
   }
 
   return {
@@ -44,14 +47,24 @@ const useCmsStateManager = (userId: string) => {
     darkTheme,
     currentPageId,
     currentComponentId,
+    currentNavHeader,
     prevView,
     components,
+    session,
     changeView,
     toggleDarkTheme,
     changeCurrentPageId,
   }
 }
 
-export default function CmsContextProvider({ children, userId }: { children: React.ReactNode; userId: string }) {
-  return <CmsContext.Provider value={useCmsStateManager(userId)}>{children}</CmsContext.Provider>
+export default function CmsContextProvider({
+  children,
+  userId,
+  session,
+}: {
+  children: React.ReactNode
+  userId: string
+  session: Session
+}) {
+  return <CmsContext.Provider value={useCmsStateManager(userId, session)}>{children}</CmsContext.Provider>
 }

@@ -1,12 +1,13 @@
 import type { GetServerSideProps, NextPage, InferGetServerSidePropsType } from "next"
 import CmsContextProvider from "components/cms/context/CmsContext"
 import Layout from "components/cms/Layout"
-import { getServerAuthSession, type UserRole } from "server/auth"
+import { getServerAuthSession } from "server/auth"
 import { prisma } from "server/db"
+import { type Session } from "next-auth"
 
 interface getSSProps {
   userId: string
-  role: UserRole
+  sessionData: Session
 }
 
 export const getServerSideProps: GetServerSideProps<getSSProps> = async (context) => {
@@ -27,7 +28,7 @@ export const getServerSideProps: GetServerSideProps<getSSProps> = async (context
     },
   })
 
-  if (!site || typeof site === "undefined") {
+  if (!site) {
     return {
       redirect: {
         destination: "/cms/no-site",
@@ -39,14 +40,14 @@ export const getServerSideProps: GetServerSideProps<getSSProps> = async (context
   return {
     props: {
       userId: session.user.id,
-      role: session.user.role,
+      sessionData: session,
     },
   }
 }
 
-const CMS: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ userId, role }) => {
+const CMS: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ userId, sessionData }) => {
   return (
-    <CmsContextProvider userId={userId}>
+    <CmsContextProvider userId={userId} session={sessionData}>
       <Layout />
     </CmsContextProvider>
   )
