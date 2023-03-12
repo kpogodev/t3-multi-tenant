@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -16,6 +18,16 @@ module.exports = {
   },
   plugins: [require("daisyui"), require("@tailwindcss/typography")],
   daisyui: {
-    themes: ["light", "luxury"],
+    themes: [
+      "light",
+      {
+        luxury: {
+          ...require("daisyui/src/colors/themes")["[data-theme=luxury]"],
+          primary: "#333",
+          "primary-focus": "#666",
+          "primary-content": "#fff",
+        },
+      },
+    ],
   },
 }

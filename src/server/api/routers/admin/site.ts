@@ -9,6 +9,7 @@ export const siteRouter = createTRPCRouter({
         name: z.string(),
         themeId: z.string(),
         domainId: z.string(),
+        withNewsPage: z.boolean(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -63,12 +64,30 @@ export const siteRouter = createTRPCRouter({
               componentsRelation: {
                 create: {
                   [compotentsRelationModel]: {
-                    create: {}
-                  }
-                }
-              }
+                    create: {},
+                  },
+                },
+              },
             },
           })
+        }
+      }
+
+      if (input.withNewsPage) {
+        try {
+          await ctx.prisma.page.create({
+            data: {
+              siteId: site.id,
+              name: "News",
+              slug: "news",
+              content: {
+                create: {},
+              },
+              special: true,
+            },
+          })
+        } catch (error) {
+          throw new Error('News Page not created')
         }
       }
 
