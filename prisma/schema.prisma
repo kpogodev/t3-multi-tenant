@@ -77,6 +77,7 @@ model Site {
   user       User?       @relation(fields: [userId], references: [id])
   userId     String?     @unique
   components Component[]
+  news       News[]
   pages      Page[]
 
   @@index([themeId])
@@ -96,6 +97,8 @@ model Page {
   id        String       @id @default(cuid())
   name      String
   slug      String
+  hidden    Boolean      @default(false)
+  special   Boolean      @default(false)
   site      Site         @relation(fields: [siteId], references: [id])
   siteId    String
   content   PageContent?
@@ -105,6 +108,7 @@ model Page {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
+  @@unique([name, siteId], name: "PageNameToSite")
   @@index([siteId])
   @@index([parentId])
 }
@@ -141,14 +145,29 @@ enum FeatureType {
 }
 
 model Feature {
-  id      String      @id @default(cuid())
-  name    String
-  type    FeatureType
-  theme   Theme       @relation(fields: [themeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  themeId String
+  id         String      @id @default(cuid())
+  name       String
+  type       FeatureType
+  theme      Theme       @relation(fields: [themeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  themeId    String
   components Component[]
 
   @@index([themeId])
+}
+
+model News {
+  id        String         @id @default(cuid())
+  title     String
+  content   String
+  date      DateTime
+  author    String?
+  image     ExternalImage?
+  site      Site           @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  siteId    String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([siteId])
 }
 
 //Components
@@ -170,9 +189,9 @@ model ComponentsRelation {
   component      Component     @relation(fields: [componentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   componentId    String        @unique
   welcomeBlock   WelcomeBlock? @relation(fields: [welcomeBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  welcomeBlockId String?     @unique
+  welcomeBlockId String?       @unique
   slideshow      Slideshow?    @relation(fields: [slideshowId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  slideshowId    String?   @unique
+  slideshowId    String?       @unique
 
   @@unique([componentId, welcomeBlockId], name: "ComponentWelcomeBlock")
   @@unique([componentId, slideshowId], name: "ComponentSlideshow")
@@ -218,8 +237,8 @@ model ExternalImage {
   slideId        String?       @unique
   welcomeBlock   WelcomeBlock? @relation(fields: [welcomeBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   welcomeBlockId String?       @unique
-
-  @@index([slideId])
+  news           News?         @relation(fields: [newsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  newsId         String?       @unique
 }
 
 model WelcomeBlock {
