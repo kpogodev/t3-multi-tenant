@@ -158,7 +158,7 @@ model Feature {
 model News {
   id        String         @id @default(cuid())
   title     String
-  content   String
+  content   String         @db.LongText
   date      DateTime
   author    String?
   image     ExternalImage?

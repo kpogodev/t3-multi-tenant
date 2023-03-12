@@ -6,9 +6,7 @@ const PageList = () => {
 
   return (
     <div className='grid grid-cols-[repeat(auto-fit,_minmax(240px,_1fr))] gap-4'>
-      {pages?.map((page) => (
-        <PageCard key={page.id} id={page.id} name={page.name} />
-      ))}
+      {pages?.map((page) => (!page.special ? <PageCard key={page.id} id={page.id} name={page.name} /> : null))}
     </div>
   )
 }

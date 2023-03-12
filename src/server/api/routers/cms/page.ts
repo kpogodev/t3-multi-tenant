@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "server/api/trpc"
 import { slugifyString } from "utils/slugifyString"
+import { TRPCError } from "@trpc/server"
 
 export const pageRouter = createTRPCRouter({
   getAllPagesSlug: protectedProcedure.query(async ({ ctx }) => {
@@ -54,6 +55,12 @@ export const pageRouter = createTRPCRouter({
         },
       },
     })
+
+    if(!page) throw new TRPCError({
+      code: 'CONFLICT',
+      message: 'Page already exists'
+    })
+
     return page
   }),
   addSubPage: protectedProcedure

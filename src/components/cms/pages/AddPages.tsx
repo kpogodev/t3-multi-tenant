@@ -1,20 +1,26 @@
 import { useState } from "react"
 import { api } from "utils/api"
 import Heading from "components/common/Heading"
+import { toast } from "react-toastify"
 
 const AddPages = () => {
   const [name, setName] = useState<string>("")
-  const { mutate: addPage } = api.cms.page.addPage.useMutation()
   const clinet = api.useContext()
+  const { mutate: addPage } = api.cms.page.addPage.useMutation({
+    onSuccess: () => {
+      toast.success("Page added successfully")
+      setName("")
+      void clinet.cms.page.getPagesBySiteId.invalidate()
+    },
+    onError: (error) => {
+      console.log(error.message)
+      toast.error(error.message)
+    },
+  })
 
   const onAddPageSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    addPage(name, {
-      onSuccess: () => {
-        void clinet.cms.page.getPagesBySiteId.invalidate()
-        setName("")
-      },
-    })
+    addPage(name)
   }
 
   return (
