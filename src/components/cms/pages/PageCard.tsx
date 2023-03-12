@@ -32,9 +32,9 @@ const PageCard = ({ id, name }: PageCardProps) => {
   }
 
   return (
-    <div className='relative z-0 flex h-[300px] grow flex-col items-center rounded-md bg-base-200 p-4 shadow-md'>
+    <div className='relative z-0 flex grow flex-col items-center rounded-md bg-base-200 p-4 shadow-md gap-5'>
       <h3 className='text-center text-xl font-bold'>{capitalizeString(name)}</h3>
-      <PageIcon className='opacity-30' />
+      <PageIcon className='aspect-square w-1/2 opacity-30' />
       <div className='mt-auto flex w-full justify-center gap-2'>
         <button className='btn-primary btn-sm btn' value={id} onClick={handleEdit}>
           Edit

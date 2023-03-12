@@ -16,16 +16,16 @@ const WelcomeBlockView = () => {
   return (
     <motion.div
       key={ctx.currentComponentId}
-      className='mx-auto grid w-full max-w-screen-xl grid-cols-3 gap-10'
+      className='mx-auto grid w-full max-w-screen-md gap-10 lg:grid-cols-3 lg:max-w-screen-xl'
       variants={animVariants}
       initial='initial'
       animate='animate'
       exit='exit'
     >
-      <div className='col-span-1'>
+      <div className='lg:col-span-1'>
         <WelcomeImage />
       </div>
-      <div className='col-span-2'>
+      <div className='lg:col-span-2'>
         <WelcomeContentForm />
       </div>
     </motion.div>

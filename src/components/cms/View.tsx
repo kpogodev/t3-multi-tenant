@@ -15,6 +15,7 @@ const View = () => {
 
   const view: ViewType = {
     default: <></>,
+    metadata: <></>,
     pages: <PagesView />,
     "edit-page": <EditPage />,
     slideshow: <SlideshowView />,

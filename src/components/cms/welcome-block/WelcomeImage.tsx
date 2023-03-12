@@ -72,7 +72,7 @@ const WelcomeImage = () => {
   if (!welcomeData?.image)
     return (
       <UploadPhotoForm
-        wrapperClassName='w-full border-2 border-dashed aspect-[3/4] rounded-md transition-colors hover:bg-base-200'
+        wrapperClassName='w-full border-2 border-dashed aspect-[16/9] lg:aspect-[3/4] rounded-md transition-colors hover:bg-base-200'
         isSuccessful={isSuccessful}
         isUploading={isUploading}
         uploadImageCallback={(data) => {
@@ -86,7 +86,7 @@ const WelcomeImage = () => {
       <AnimatePresence>
         {isEditing ? (
           <UploadPhotoForm
-            wrapperClassName='w-full border-2 border-dashed aspect-[3/4] rounded-md transition-colors hover:bg-base-200'
+            wrapperClassName='w-full border-2 border-dashed aspect-[16/9] lg:aspect-[3/4] rounded-md transition-colors hover:bg-base-200'
             isSuccessful={isSuccessful}
             isUploading={isUploading}
             uploadImageCallback={(data) => {
@@ -102,7 +102,7 @@ const WelcomeImage = () => {
         ) : (
           <motion.div variants={animVariants} initial='initial' animate='animate' exit='exit'>
             <Image
-              className='aspect-[3/4] w-full object-cover'
+              className='aspect-[16/9] w-full object-cover lg:aspect-[3/4]'
               src={welcomeData.image.secure_url}
               width={welcomeData.image.width}
               height={welcomeData.image.height}
@@ -115,14 +115,14 @@ const WelcomeImage = () => {
         <button
           className={cn(
             isEditing ? "btn-secondary" : "btn-primary",
-            "btn-sm btn-square btn shadow-md transition-colors"
+            "btn-square btn-sm btn shadow-md transition-colors"
           )}
           onClick={() => setIsEditing((prev) => !prev)}
         >
           <EditIcon className='h-4 w-4' />
         </button>
         <button
-          className='btn-primary btn-sm btn-square btn shadow-md'
+          className='btn-primary btn-square btn-sm btn shadow-md'
           onClick={() => {
             if (typeof welcomeData.image?.id !== "undefined" && typeof welcomeData.image?.public_id !== "undefined") {
               void deleteImage({ imageId: welcomeData.image?.id, imagePublicId: welcomeData.image?.public_id })
