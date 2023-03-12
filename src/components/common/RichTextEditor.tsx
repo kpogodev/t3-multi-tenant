@@ -25,7 +25,7 @@ const RichTextEditor = ({ editorState, onEditorStateChange }: RichTextEditorProp
 
     const imgLink = await uploadImage({ imgData: data })
 
-    if(imgLink instanceof Error) return
+    if (imgLink instanceof Error) return
 
     return { data: { link: imgLink.link } }
   }
@@ -42,7 +42,6 @@ const RichTextEditor = ({ editorState, onEditorStateChange }: RichTextEditorProp
           "blockType",
           "list",
           "textAlign",
-          "colorPicker",
           "link",
           "embedded",
           "emoji",

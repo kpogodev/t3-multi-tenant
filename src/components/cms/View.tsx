@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion"
 import WelcomeBlockView from "./welcome-block/WelcomeBlockView"
 
 const EditPage = dynamic(() => import("./pages/EditPage"))
+const EditSubpage = dynamic(() => import("./pages/EditSubpage"))
 const SlideshowView = dynamic(() => import("./slideshow/SlideshowView"))
 const PagesView = dynamic(() => import("./pages/PagesView"))
 
@@ -18,6 +19,7 @@ const View = () => {
     metadata: <></>,
     pages: <PagesView />,
     "edit-page": <EditPage />,
+    "edit-subpage": <EditSubpage />,
     slideshow: <SlideshowView />,
     "welcome-block": <WelcomeBlockView />,
   }

@@ -6,6 +6,7 @@ import { api } from "utils/api"
 import RichTextEditor from "components/common/RichTextEditor"
 import type { RawDraftContentState } from "react-draft-wysiwyg"
 import DisplayRichText from "components/common/DisplayRichText"
+import Heading from "components/common/Heading"
 
 const PageContentEditor = () => {
   const ctx = useContext(CmsContext)
@@ -18,14 +19,14 @@ const PageContentEditor = () => {
   const { mutate: saveDraft } = api.cms.pageContent.updateDraft.useMutation()
   const { mutate: publish } = api.cms.pageContent.updatePublished.useMutation()
 
-    const { data: pagePublishedContent } = api.cms.pageContent.getPublishedByPageId.useQuery(ctx.currentPageId, {
-      onSuccess: (published: string) => {
-        if (published) {
-          const publishedContent = JSON.parse(published) as RawDraftContentState
-          setEditorState(EditorState.createWithContent(convertFromRaw(publishedContent)))
-        }
-      },
-    })
+  const { data: pagePublishedContent } = api.cms.pageContent.getPublishedByPageId.useQuery(ctx.currentPageId, {
+    onSuccess: (published: string) => {
+      if (published) {
+        const publishedContent = JSON.parse(published) as RawDraftContentState
+        setEditorState(EditorState.createWithContent(convertFromRaw(publishedContent)))
+      }
+    },
+  })
   const { data: pageDraftContent } = api.cms.pageContent.getDraftByPageId.useQuery(ctx.currentPageId, {
     onSuccess: (draft: string) => {
       if (draft) {
@@ -60,8 +61,8 @@ const PageContentEditor = () => {
       {
         onSuccess: () => {
           toast.success("Page published")
-     void client.cms.pageContent.getPublishedByPageId.invalidate()
-     void client.cms.pageContent.getDraftByPageId.invalidate()
+          void client.cms.pageContent.getPublishedByPageId.invalidate()
+          void client.cms.pageContent.getDraftByPageId.invalidate()
         },
         onError: () => toast.error("Failed to publish page"),
       }
@@ -69,19 +70,24 @@ const PageContentEditor = () => {
   }
 
   return (
-    <div className='flex flex-col items-end rounded-md bg-base-200 p-4'>
-      <RichTextEditor onEditorStateChange={onEditorStateChange} editorState={editorState} />
-      <div className='mt-4 flex w-full items-center justify-end gap-4'>
-        {draftMode && <p className='mr-auto animate-pulse italic text-base-content opacity-90'>Changes detected...</p>}
-        <button className='btn-accent btn' onClick={onSaveDraft} disabled={!draftMode || editorEmpty}>
-          Save draft
-        </button>
-        <button className='btn-primary btn' onClick={onPublish} disabled={draftMode || !pageDraftContent}>
-          Publish
-        </button>
+    <>
+      <div className='flex flex-col items-end rounded-md bg-base-200 p-4'>
+        <RichTextEditor onEditorStateChange={onEditorStateChange} editorState={editorState} />
+        <div className='mt-4 flex w-full items-center justify-end gap-4'>
+          {draftMode && (
+            <p className='mr-auto animate-pulse italic text-base-content opacity-90'>Changes detected...</p>
+          )}
+          <button className='btn-accent btn' onClick={onSaveDraft} disabled={!draftMode || editorEmpty}>
+            Save draft
+          </button>
+          <button className='btn-primary btn' onClick={onPublish} disabled={draftMode || !pageDraftContent}>
+            Publish
+          </button>
+        </div>
       </div>
-      <DisplayRichText data={pageDraftContent} className='w-full prose prose-lg mr-auto' />
-    </div>
+      <Heading text="Draf Preview"/>
+      <DisplayRichText data={pageDraftContent} className='prose prose-lg mr-auto w-full bg-base-100 p-4 shadow-lg' />
+    </>
   )
 }
 export default PageContentEditor

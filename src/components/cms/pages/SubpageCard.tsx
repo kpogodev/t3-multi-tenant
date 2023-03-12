@@ -27,8 +27,8 @@ const SubpageCard = ({ id, name }: SubpageCardProps) => {
 
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     const id = e.currentTarget.value
-    // ctx.changeView("edit-page")
-    // ctx.changeCurrentPageId(id)
+    ctx.changeView("edit-subpage")
+    ctx.changeCurrentPageId(id)
   }
 
   return (

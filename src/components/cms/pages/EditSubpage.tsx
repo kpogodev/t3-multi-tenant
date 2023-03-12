@@ -1,11 +1,9 @@
 import { useContext } from "react"
 import { CmsContext } from "../context/CmsContext"
-import AddSubpages from "./AddSubpages"
-import SubpagesList from "./SubpagesList"
 import Heading from "components/common/Heading"
 import PageContentEditor from "./PageContentEditor"
 
-const EditPage = () => {
+const EditSubpage = () => {
   const ctx = useContext(CmsContext)
 
   return (
@@ -17,10 +15,7 @@ const EditPage = () => {
         </button>
       </div>
       <PageContentEditor />
-      <div className='divider'></div>
-      <AddSubpages />
-      <SubpagesList />
     </div>
   )
 }
-export default EditPage
+export default EditSubpage

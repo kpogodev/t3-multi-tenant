@@ -45,7 +45,7 @@ export const pageContentRouter = createTRPCRouter({
           pageId: input.pageId,
         },
         data: {
-          richTextDraft: input.draft,
+          richTextDraft: input.draft as Prisma.InputJsonValue,
         },
       })
 
@@ -64,7 +64,7 @@ export const pageContentRouter = createTRPCRouter({
           pageId: input.pageId,
         },
         data: {
-          richText: input.published,
+          richText: input.published as Prisma.InputJsonValue,
           richTextDraft: Prisma.DbNull,
         },
       })
