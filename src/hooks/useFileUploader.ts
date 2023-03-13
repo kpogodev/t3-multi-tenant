@@ -55,6 +55,7 @@ const useFileUplaoder = ({ limit, onSubmit, multiple = false }: IUseFileUploader
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    e.stopPropagation()
     onSubmit(files)
   }
 

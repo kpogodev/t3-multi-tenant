@@ -8,6 +8,7 @@ const EditPage = dynamic(() => import("./pages/EditPage"))
 const EditSubpage = dynamic(() => import("./pages/EditSubpage"))
 const SlideshowView = dynamic(() => import("./slideshow/SlideshowView"))
 const PagesView = dynamic(() => import("./pages/PagesView"))
+const NewsView = dynamic(() => import("./news/NewsView"))
 
 type ViewType = { [key: string]: JSX.Element }
 
@@ -18,6 +19,7 @@ const View = () => {
     default: <></>,
     metadata: <></>,
     pages: <PagesView />,
+    news: <NewsView />,
     "edit-page": <EditPage />,
     "edit-subpage": <EditSubpage />,
     slideshow: <SlideshowView />,

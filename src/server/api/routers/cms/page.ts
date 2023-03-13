@@ -125,6 +125,25 @@ export const pageRouter = createTRPCRouter({
     })
     return pages
   }),
+  getSpecialPages: protectedProcedure.query(async ({ ctx }) => {
+    const site = await ctx.prisma.site.findUnique({
+      where: {
+        userId: ctx.session.user.id,
+      },
+      select: {
+        pages: {
+          where: {
+            special: true,
+          },
+        }
+      }
+    })
+
+    if (!site) throw new Error("Special Pages not found")
+
+    const pages = site.pages
+    return pages
+  }),
   editPageName: protectedProcedure
     .input(
       z.object({

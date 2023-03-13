@@ -2,16 +2,23 @@ import { useEffect } from "react"
 import cn from "classnames"
 import { AnimatePresence } from "framer-motion"
 import useFileUplaoder from "hooks/useFileUploader"
-import UploadPhotoDefault from "./UploadPhotoDefault"
+import UploadPhotoDefault from "./UploadPhotoPlaceholder"
 import UploadPhotoPreview from "./UploadPhotoPreview"
 import UploadProgess from "./UploadProgess"
 import UploadIcon from "components/icons/UploadIcon"
 
+export interface UploadPhotoPlaceholderProps {
+  infoText?: string
+  iconClasses?: React.HTMLAttributes<HTMLOrSVGElement>["className"]
+  labelClasses?: React.HTMLAttributes<HTMLParagraphElement>["className"]
+  infoClasses?: React.HTMLAttributes<HTMLParagraphElement>["className"]
+}
 interface UploadPhotoFormProps {
-  wrapperClassName?: string
+  wrapperClassName?: React.HTMLAttributes<HTMLDivElement>["className"]
   uploadImageCallback: <T>(data: T) => void
   isUploading: boolean
   isSuccessful: boolean
+  uploadPhotoPlaceholderProps?: UploadPhotoPlaceholderProps
 }
 
 const UploadPhotoForm = ({
@@ -19,6 +26,7 @@ const UploadPhotoForm = ({
   uploadImageCallback,
   isUploading,
   isSuccessful = false,
+  uploadPhotoPlaceholderProps,
 }: UploadPhotoFormProps) => {
   const { files, resetFiles, handleChange, handleSubmit } = useFileUplaoder({
     limit: 10 * 1024 * 1024, // in bytes
@@ -46,7 +54,7 @@ const UploadPhotoForm = ({
           />
           <AnimatePresence mode='wait'>
             {files.length === 0 ? (
-              <UploadPhotoDefault infoText='Up to 10MB' />
+              <UploadPhotoDefault {...uploadPhotoPlaceholderProps} />
             ) : (
               <UploadPhotoPreview fileData={files[0] as string} />
             )}

@@ -48,7 +48,8 @@ export const welcomeBlockRouter = createTRPCRouter({
 
       const image = await cloudinary.uploader.upload(input.image, {
         folder: `sites/${siteNameSlug}/welcome-blocks`,
-        transformation: { width: 1024, height: 768, crop: "fill" },
+        transformation: { width: 1024, height: 768, crop: "fill", format: "webp", quality: "auto", fetch_format: "webp" },
+        format: "webp",
       })
 
       if (!image) throw new Error("Image not uploaded")
@@ -101,7 +102,8 @@ export const welcomeBlockRouter = createTRPCRouter({
 
       const image = await cloudinary.uploader.upload(input.image, {
         folder: `sites/${siteNameSlug}/welcome-blocks`,
-        transformation: { width: 1024, height: 768, crop: "fill" },
+        transformation: { width: 1024, height: 768, crop: "fill", format: "webp", quality: "auto", fetch_format: "webp" },
+        format: "webp",
       })
 
       if (!image) throw new Error("Image not re-uploaded")
@@ -167,7 +169,9 @@ export const welcomeBlockRouter = createTRPCRouter({
 
       return welcomeBlock
     }),
-    deleteImage: protectedProcedure.input(z.object({ imageId: z.string(), imagePublicId: z.string() })).mutation(async ({ ctx, input }) => {
+  deleteImage: protectedProcedure
+    .input(z.object({ imageId: z.string(), imagePublicId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
       const deletedImage = await ctx.prisma.externalImage.delete({
         where: {
           id: input.imageId,
@@ -185,5 +189,5 @@ export const welcomeBlockRouter = createTRPCRouter({
         })
 
       return true
-    })
+    }),
 })

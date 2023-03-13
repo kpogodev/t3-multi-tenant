@@ -1,9 +1,10 @@
 import Link from "next/link"
 import PlatformIcon from "components/icons/PlatformIcon"
 import SidebarMenu from "./SidebarMenu"
-import { useContext, useState, useRef, useEffect } from "react"
+import { useContext, useState, useRef } from "react"
 import { CmsContext } from "./context/CmsContext"
 import cn from "classnames"
+import { api } from "utils/api"
 import useMediaQuery from "hooks/useMediaQuery"
 import SidebarIcon from "components/icons/SidebarIcon"
 import CancelIcon from "components/icons/CancelIcon"
@@ -18,15 +19,17 @@ const sidebarStateClasses = {
 
 const Sidebar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
+  const sidebarRef = useRef<HTMLDivElement>(null)
 
   const isLargeScreen = useMediaQuery("(min-width: 1280px)")
 
   const ctx = useContext(CmsContext)
-
-  const sidebarRef = useRef<HTMLDivElement>(null)
-
   const siteComponets =
     ctx.components?.map((component) => ({ id: component.id, name: component.name, type: component.feature.type })) ?? []
+
+  const { data: specialPages } = api.cms.page.getSpecialPages.useQuery(undefined, { enabled: !!ctx.session?.user.id })
+  const siteSpecialPages =
+    typeof specialPages !== "undefined" ? specialPages.map((page) => page.name.toLowerCase().replace(" ", "-")) : []
 
   const handleClose = (e: React.SyntheticEvent<HTMLElement>) => {
     if (e.type === "keydown") {
@@ -59,7 +62,7 @@ const Sidebar = () => {
       >
         {!isLargeScreen && (
           <button
-            className='h-20 btn-secondary btn-square btn pointer-events-auto absolute top-0 left-full rounded-[0_0_20px_0] shadow-lg'
+            className='btn-secondary btn-square btn pointer-events-auto absolute bottom-0 left-full h-20 rounded-[0_0_20px_0] shadow-lg'
             onClick={() => setMenuOpen((prev) => !prev)}
           >
             {menuOpen ? <CancelIcon className='h-4 w-4' /> : <SidebarIcon className='h-6 w-6' />}
@@ -73,7 +76,7 @@ const Sidebar = () => {
           menu={[
             {
               category: "Site",
-              views: ["pages", "metadata"],
+              views: ["pages", "metadata", ...siteSpecialPages],
             },
             {
               category: "Components",

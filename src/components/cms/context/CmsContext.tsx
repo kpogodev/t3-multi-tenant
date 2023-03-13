@@ -19,6 +19,9 @@ const useCmsStateManager = (userId: string, session: Session) => {
   const { data: components } = api.cms.components.general.getComponents.useQuery(undefined, {
     enabled: userId ? true : false,
   })
+  const { data: news } = api.cms.news.getNews.useQuery(undefined, {
+    enabled: userId ? true : false,
+  })
 
   const changeCurrentPageId = useCallback((id: string) => {
     setCurrentPageId(id)
@@ -43,6 +46,7 @@ const useCmsStateManager = (userId: string, session: Session) => {
 
   return {
     site,
+    news,
     currentView,
     darkTheme,
     currentPageId,

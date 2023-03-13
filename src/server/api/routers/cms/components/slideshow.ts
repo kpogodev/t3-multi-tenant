@@ -110,7 +110,8 @@ export const sldieshowRouter = createTRPCRouter({
       const imagesUploadPromises = input.images.map(async (image) => {
         return await cloudinary.uploader.upload(image, {
           folder: `sites/${siteNameSlug}/slideshows/${slideshowName}`,
-          transformation: { width: 1920, height: 1080, crop: "fill" },
+          transformation: { width: 1920, height: 1080, crop: "fill", format:"webp", quality: "auto", fetch_format: "auto" },
+          format: "webp",
         })
       })
 
