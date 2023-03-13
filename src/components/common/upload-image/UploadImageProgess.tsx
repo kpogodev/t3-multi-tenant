@@ -8,7 +8,7 @@ const animVariants = {
   exit: { opacity: 0 },
 }
 
-const UploadProgess = () => {
+const UploadImageProgess = () => {
   const [progress, setProgress] = useState<number>(0)
   const style = { "--value": progress } as CSSProperties
 
@@ -36,4 +36,4 @@ const UploadProgess = () => {
     </motion.div>
   )
 }
-export default UploadProgess
+export default UploadImageProgess

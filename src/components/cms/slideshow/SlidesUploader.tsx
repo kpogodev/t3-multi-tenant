@@ -7,7 +7,7 @@ import UploadIcon from "components/icons/UploadIcon"
 import useFileUploader from "hooks/useFileUploader"
 import SlidesUploaderDefault from "./SlidesUploaderDefault"
 import SlidesUploaderPreview from "./SlidesUploaderPreview"
-import UploadProgess from "../../common/UploadProgess"
+import UploadProgess from "../../common/upload-image/UploadImageProgess"
 import { AnimatePresence } from "framer-motion"
 
 interface ImageUploaderProps {

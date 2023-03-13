@@ -1,5 +1,5 @@
 import { useState, useRef } from "react"
-import UploadPhotoForm from "components/common/UploadPhotoForm"
+import UploadPhotoForm from "components/common/upload-image/UploadImageForm"
 import { motion } from "framer-motion"
 import DatePicker from "react-datepicker"
 import DatePickerWrapper from "./DatePickerWrapper"
@@ -33,7 +33,6 @@ const NewsForm = () => {
   const [text, setText] = useState("")
   const [imageData, setImageData] = useState<ImageDataType | null>(null)
   const [isUploading, setIsUploading] = useState(false)
-  const [isSuccessful, setIsSuccessful] = useState(false)
 
   const mainSubmitRef = useRef<HTMLButtonElement>(null)
 
@@ -43,7 +42,6 @@ const NewsForm = () => {
     onSuccess: (data) => {
       setImageData(data)
       setIsUploading(false)
-      setIsSuccessful(true)
     },
   })
 
@@ -97,14 +95,13 @@ const NewsForm = () => {
         <UploadPhotoForm
           uploadImageCallback={(data) => uploadImage(data as string)}
           wrapperClassName='min-h-[150px] border-2 border-dashed border-base-300 bg-base-100 flex-grow min-w-[280px]'
-          uploadPhotoPlaceholderProps={{
+          uploadImagePlaceholderProps={{
             iconClasses: "mx-auto aspect-square w-full max-w-[40px] opacity-60",
             labelClasses: "flex text-md font-medium text-base-content",
             infoClasses: "text-xs opacity-80",
             infoText: "Up to 10MB",
           }}
           isUploading={isUploading}
-          isSuccessful={isSuccessful}
         />
       )}
       <form className='flex flex-grow flex-wrap gap-4' onSubmit={handleSubmit}>

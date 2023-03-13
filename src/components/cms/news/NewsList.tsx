@@ -27,7 +27,10 @@ const NewsList = ({ wrapperClassName }: NewsListProps) => {
           <AddIcon className='mr-2 h-5 w-5' /> Add New
         </button>
       )}
-      <AnimatePresence>{showForm && <NewsForm />}</AnimatePresence>
+      <AnimatePresence>
+        {showForm && <NewsForm />}
+        {news?.length && news.map((newsItem) => <NewsItem key={newsItem.id} news={newsItem} />)}
+      </AnimatePresence>
     </div>
   )
 }

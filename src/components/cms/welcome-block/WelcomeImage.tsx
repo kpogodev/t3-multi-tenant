@@ -1,7 +1,7 @@
-import { useState, useContext } from "react"
+import { useState, useContext, useRef } from "react"
 import { CmsContext } from "../context/CmsContext"
 import { api } from "utils/api"
-import UploadPhotoForm from "components/common/UploadPhotoForm"
+import UploadImageForm from "components/common/upload-image/UploadImageForm"
 import { toast } from "react-toastify"
 import Image from "next/image"
 import EditIcon from "components/icons/EditIcon"
@@ -17,11 +17,11 @@ const animVariants = {
 
 const WelcomeImage = () => {
   const [isUploading, setIsUploading] = useState(false)
-  const [isSuccessful, setIsSuccessful] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
 
   const ctx = useContext(CmsContext)
   const client = api.useContext()
+  const uploaderRef = useRef(null)
 
   const { data: welcomeData } = api.cms.components.welcomeBlock.getWelcomeBlock.useQuery(
     {
@@ -34,7 +34,6 @@ const WelcomeImage = () => {
     onMutate: () => setIsUploading(true),
     onSuccess: () => {
       setIsUploading(false)
-      setIsSuccessful(true)
       toast.success("Image uploaded successfully")
       void client.cms.components.welcomeBlock.getWelcomeBlock.invalidate()
     },
@@ -48,7 +47,6 @@ const WelcomeImage = () => {
     onMutate: () => setIsUploading(true),
     onSuccess: () => {
       setIsUploading(false)
-      setIsSuccessful(true)
       setIsEditing(false)
       toast.success("Image re-uploaded successfully")
       void client.cms.components.welcomeBlock.getWelcomeBlock.invalidate()
@@ -71,9 +69,9 @@ const WelcomeImage = () => {
 
   if (!welcomeData?.image)
     return (
-      <UploadPhotoForm
+      <UploadImageForm
+        ref={uploaderRef}
         wrapperClassName='w-full border-2 border-dashed aspect-[16/9] lg:aspect-[3/4] rounded-md transition-colors hover:bg-base-200'
-        isSuccessful={isSuccessful}
         isUploading={isUploading}
         uploadImageCallback={(data) => {
           uploadImage({ welcomeBlockId: welcomeData?.id ?? ctx.currentComponentId, image: data as string })
@@ -82,12 +80,12 @@ const WelcomeImage = () => {
     )
 
   return (
-    <div className='relative z-0'>
+    <div className='relative z-0 bg-black'>
       <AnimatePresence>
         {isEditing ? (
-          <UploadPhotoForm
+          <UploadImageForm
+            ref={uploaderRef}
             wrapperClassName='w-full border-2 border-dashed aspect-[16/9] lg:aspect-[3/4] rounded-md transition-colors hover:bg-base-200'
-            isSuccessful={isSuccessful}
             isUploading={isUploading}
             uploadImageCallback={(data) => {
               if (typeof welcomeData.image?.id !== "undefined" && typeof welcomeData.image?.public_id !== "undefined") {
@@ -115,14 +113,14 @@ const WelcomeImage = () => {
         <button
           className={cn(
             isEditing ? "btn-secondary" : "btn-primary",
-            "btn-square btn-sm btn shadow-md transition-colors"
+            "btn-sm btn-square btn shadow-md transition-colors"
           )}
           onClick={() => setIsEditing((prev) => !prev)}
         >
           <EditIcon className='h-4 w-4' />
         </button>
         <button
-          className='btn-primary btn-square btn-sm btn shadow-md'
+          className='btn-primary btn-sm btn-square btn shadow-md'
           onClick={() => {
             if (typeof welcomeData.image?.id !== "undefined" && typeof welcomeData.image?.public_id !== "undefined") {
               void deleteImage({ imageId: welcomeData.image?.id, imagePublicId: welcomeData.image?.public_id })

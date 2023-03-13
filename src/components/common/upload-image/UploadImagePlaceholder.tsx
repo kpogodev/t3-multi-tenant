@@ -1,6 +1,6 @@
 import UploadImageIcon from "components/icons/UploadImageIcon"
 import { motion } from "framer-motion"
-import type { UploadPhotoPlaceholderProps } from "./UploadPhotoForm"
+import type { UploadImagePlaceholderProps } from "./UploadImageForm"
 import cn from "classnames"
 
 const animVariants = {
@@ -8,7 +8,7 @@ const animVariants = {
   animate: { opacity: 1 },
   exit: { opacity: 0 },
 }
-const UploadPhotoPlaceholder = (props: UploadPhotoPlaceholderProps) => {
+const UploadImagePlaceholder = (props: UploadImagePlaceholderProps) => {
   return (
     <motion.div
       key='drop-area-default'
@@ -30,4 +30,4 @@ const UploadPhotoPlaceholder = (props: UploadPhotoPlaceholderProps) => {
     </motion.div>
   )
 }
-export default UploadPhotoPlaceholder
+export default UploadImagePlaceholder

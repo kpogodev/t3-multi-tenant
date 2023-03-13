@@ -1,46 +1,50 @@
-import { useEffect } from "react"
+import { useImperativeHandle, forwardRef } from "react"
 import cn from "classnames"
 import { AnimatePresence } from "framer-motion"
 import useFileUplaoder from "hooks/useFileUploader"
-import UploadPhotoDefault from "./UploadPhotoPlaceholder"
-import UploadPhotoPreview from "./UploadPhotoPreview"
-import UploadProgess from "./UploadProgess"
+import UploadImageDefault from "./UploadImagePlaceholder"
+import UploadImagePreview from "./UploadImagePreview"
+import UploadImageProgess from "./UploadImageProgess"
 import UploadIcon from "components/icons/UploadIcon"
 
-export interface UploadPhotoPlaceholderProps {
+export interface UploadImagePlaceholderProps {
   infoText?: string
   iconClasses?: React.HTMLAttributes<HTMLOrSVGElement>["className"]
   labelClasses?: React.HTMLAttributes<HTMLParagraphElement>["className"]
   infoClasses?: React.HTMLAttributes<HTMLParagraphElement>["className"]
 }
-interface UploadPhotoFormProps {
-  wrapperClassName?: React.HTMLAttributes<HTMLDivElement>["className"]
+interface UploadImageFormProps {
   uploadImageCallback: <T>(data: T) => void
+  wrapperClassName?: React.HTMLAttributes<HTMLDivElement>["className"]
   isUploading: boolean
-  isSuccessful: boolean
-  uploadPhotoPlaceholderProps?: UploadPhotoPlaceholderProps
+  uploadImagePlaceholderProps?: UploadImagePlaceholderProps
+  uploadSizeLimit?: number
+  ref: React.ForwardedRef<{ resetTempFiles: () => void }>
 }
 
-const UploadPhotoForm = ({
-  wrapperClassName,
+const UploadImageForm = ({
   uploadImageCallback,
+  wrapperClassName,
   isUploading,
-  isSuccessful = false,
-  uploadPhotoPlaceholderProps,
-}: UploadPhotoFormProps) => {
+  uploadImagePlaceholderProps,
+  uploadSizeLimit = 10 * 1024 * 1024, // default 10MB
+  ref,
+}: UploadImageFormProps) => {
   const { files, resetFiles, handleChange, handleSubmit } = useFileUplaoder({
-    limit: 10 * 1024 * 1024, // in bytes
+    limit: uploadSizeLimit, // in bytes
     onSubmit: (files) => {
       const imageData = files[0] as string
       uploadImageCallback(imageData)
     },
   })
 
-  useEffect(() => {
-    if (isSuccessful && files.length > 0) {
-      resetFiles()
-    }
-  }, [isSuccessful, files.length, resetFiles])
+  useImperativeHandle(
+    ref,
+    () => ({
+      resetTempFiles: () => resetFiles(),
+    }),
+    [resetFiles]
+  )
 
   return (
     <div className={cn(wrapperClassName ? wrapperClassName : "", "relative")}>
@@ -54,11 +58,11 @@ const UploadPhotoForm = ({
           />
           <AnimatePresence mode='wait'>
             {files.length === 0 ? (
-              <UploadPhotoDefault {...uploadPhotoPlaceholderProps} />
+              <UploadImageDefault {...uploadImagePlaceholderProps} />
             ) : (
-              <UploadPhotoPreview fileData={files[0] as string} />
+              <UploadImagePreview fileData={files[0] as string} />
             )}
-            {isUploading && <UploadProgess />}
+            {isUploading && <UploadImageProgess />}
           </AnimatePresence>
         </label>
         {files.length > 0 && !isUploading && (
@@ -74,4 +78,4 @@ const UploadPhotoForm = ({
     </div>
   )
 }
-export default UploadPhotoForm
+export default forwardRef(UploadImageForm)

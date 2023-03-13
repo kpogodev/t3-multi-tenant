@@ -1,4 +1,15 @@
-const NewsItem = () => {
-  return <div className='w-full rounded-md bg-base-100 p-5 shadow-md border border-base-300'>NewsItem</div>
+import type { inferRouterOutputs } from "@trpc/server"
+import type { AppRouter } from "server/api/root"
+
+type NewsItem = inferRouterOutputs<AppRouter>["cms"]["news"]["getNews"][0]
+
+const NewsItem = ({ news }: { news: NewsItem }) => {
+  return (
+    <div className='w-full rounded-md border border-base-300 bg-base-100 p-5 shadow-md'>
+      <h3 className='text-xl font-bold'>{news.title}</h3>
+      <p className='text-base'>{news.content}</p>
+      {news.date.toLocaleDateString()}
+    </div>
+  )
 }
 export default NewsItem
