@@ -85,7 +85,7 @@ const WelcomeImage = () => {
         {isEditing ? (
           <UploadImageForm
             ref={uploaderRef}
-            wrapperClassName='w-full border-2 border-dashed aspect-[16/9] lg:aspect-[3/4] rounded-md transition-colors hover:bg-base-200'
+            wrapperClassName='w-full border-2 border-dashed aspect-[16/9] lg:aspect-[3/4] transition-colors hover:bg-base-200 bg-base-100'
             isUploading={isUploading}
             uploadImageCallback={(data) => {
               if (typeof welcomeData.image?.id !== "undefined" && typeof welcomeData.image?.public_id !== "undefined") {

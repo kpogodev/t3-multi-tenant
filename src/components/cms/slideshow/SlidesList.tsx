@@ -1,7 +1,7 @@
 import type { inferRouterOutputs } from "@trpc/server"
 import type { AppRouter } from "server/api/root"
 import Image from "next/image"
-import { useState, useContext } from "react"
+import { useState, useContext, useRef } from "react"
 import { Reorder, motion, AnimatePresence } from "framer-motion"
 import { api } from "utils/api"
 import { toast } from "react-toastify"
@@ -28,6 +28,7 @@ const SlidesList = ({ wrapperClassName }: SlidesListProps) => {
 
   const client = api.useContext()
   const ctx = useContext(CmsContext)
+  const listRef = useRef<HTMLUListElement>(null)
 
   const { data: slideshow } = api.cms.components.slideshow.getSlideshow.useQuery(
     { componentId: ctx.currentComponentId },
@@ -93,10 +94,16 @@ const SlidesList = ({ wrapperClassName }: SlidesListProps) => {
     <div className={wrapperClassName}>
       <h3 className='text-2xl font-bold'>Uploaded Slides:</h3>
       {typeof list !== "undefined" && (
-        <Reorder.Group className='mb-auto flex w-full flex-col gap-2' values={list} onReorder={handleOnReorder}>
+        <Reorder.Group
+          ref={listRef}
+          className='mb-auto flex w-full flex-col gap-2'
+          values={list}
+          onReorder={handleOnReorder}
+        >
           {list.length ? (
             list.map((slide) => (
               <Reorder.Item
+                dragConstraints={listRef}
                 key={slide.id}
                 variants={animVariants}
                 initial='initial'
@@ -118,7 +125,7 @@ const SlidesList = ({ wrapperClassName }: SlidesListProps) => {
                     Optimized size: {slide.image?.bytes ? `${(+slide.image?.bytes / 1024).toFixed(2)}KB` : "Unknown"}
                   </p>
                   <button
-                    className='btn-error btn-square btn-sm btn hover:brightness-90'
+                    className='btn-error btn-sm btn-square btn hover:brightness-90'
                     value={slide.id}
                     onClick={handleDeleteSlide}
                   >

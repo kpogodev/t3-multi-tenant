@@ -19,17 +19,18 @@ interface UploadImageFormProps {
   isUploading: boolean
   uploadImagePlaceholderProps?: UploadImagePlaceholderProps
   uploadSizeLimit?: number
-  ref: React.ForwardedRef<{ resetTempFiles: () => void }>
 }
 
-const UploadImageForm = ({
-  uploadImageCallback,
-  wrapperClassName,
-  isUploading,
-  uploadImagePlaceholderProps,
-  uploadSizeLimit = 10 * 1024 * 1024, // default 10MB
-  ref,
-}: UploadImageFormProps) => {
+const UploadImageForm = (
+  {
+    uploadImageCallback,
+    wrapperClassName,
+    isUploading,
+    uploadImagePlaceholderProps,
+    uploadSizeLimit = 10 * 1024 * 1024,
+  }: UploadImageFormProps,
+  ref: React.ForwardedRef<{ resetTempFiles: () => void }>
+) => {
   const { files, resetFiles, handleChange, handleSubmit } = useFileUplaoder({
     limit: uploadSizeLimit, // in bytes
     onSubmit: (files) => {
@@ -38,6 +39,7 @@ const UploadImageForm = ({
     },
   })
 
+  // Called on successfull upload to reset the temp data
   useImperativeHandle(
     ref,
     () => ({

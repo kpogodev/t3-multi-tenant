@@ -4,7 +4,7 @@ import NewsItem from "./NewsItem"
 import AddIcon from "components/icons/AddIcon"
 import CancelIcon from "components/icons/CancelIcon"
 import NewsForm from "./NewsForm"
-import { AnimatePresence } from "framer-motion"
+import { AnimatePresence , motion} from "framer-motion"
 import { api } from "utils/api"
 
 interface NewsListProps {
@@ -17,7 +17,7 @@ const NewsList = ({ wrapperClassName }: NewsListProps) => {
   const { data: news } = api.cms.news.getNews.useQuery()
 
   return (
-    <div className={cn(wrapperClassName ? wrapperClassName : "")}>
+    <motion.div className={cn(wrapperClassName ? wrapperClassName : "")} layout>
       {showForm ? (
         <button className='btn-primary btn' onClick={() => setShowForm(false)}>
           <CancelIcon className='mr-2 h-4 w-4' /> Cancel
@@ -31,7 +31,7 @@ const NewsList = ({ wrapperClassName }: NewsListProps) => {
         {showForm && <NewsForm />}
         {news?.length && news.map((newsItem) => <NewsItem key={newsItem.id} news={newsItem} />)}
       </AnimatePresence>
-    </div>
+    </motion.div>
   )
 }
 export default NewsList

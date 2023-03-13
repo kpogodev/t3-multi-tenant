@@ -16,7 +16,7 @@ const Navbar = () => {
       </div>
       <div className='flex-none'>
         <div className='form-control px-2'>
-          <label className='label cursor-pointer flex gap-2 text-primary-content'>
+          <label className='label flex cursor-pointer gap-2 text-primary-content'>
             <LightModeIcon className='h-6 w-6' />
             <input type='checkbox' className='toggle' onInput={() => void ctx.toggleDarkTheme()} />
             <DarkModeIcon className='h-6 w-6' />
@@ -25,10 +25,13 @@ const Navbar = () => {
         <div className='dropdown-end dropdown'>
           <label tabIndex={0} className='btn-ghost btn-circle avatar btn'>
             <div className='w-10 rounded-full'>
-              <Image src={session?.user.image ?? "/avatar-fallback.png"} alt='' width={40} height={40} />
+              <Image src={session?.user.image ?? "/avatar-fallback.png"} alt='' width={40} height={40} priority />
             </div>
           </label>
-          <ul tabIndex={0} className='dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow-lg'>
+          <ul
+            tabIndex={0}
+            className='dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow-lg'
+          >
             <li>
               <a className='justify-between'>Profile</a>
             </li>

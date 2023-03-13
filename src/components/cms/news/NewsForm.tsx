@@ -6,6 +6,7 @@ import DatePickerWrapper from "./DatePickerWrapper"
 import { api } from "utils/api"
 import { toast } from "react-toastify"
 import Image from "next/image"
+import CheckMarkIcon from "components/icons/CheckMarkIcon"
 
 const animVariants = {
   initial: {
@@ -54,7 +55,6 @@ const NewsForm = () => {
       setText("")
       setImageData(null)
       setIsUploading(false)
-      setIsSuccessful(false)
       void client.cms.news.getNews.invalidate()
     },
     onError: (error) => {
@@ -81,7 +81,7 @@ const NewsForm = () => {
 
   return (
     <motion.div
-      className='flex w-full flex-wrap gap-4 rounded-md border border-base-300 bg-base-200 p-4 shadow-md'
+      className='flex w-full flex-wrap gap-4'
       variants={animVariants}
       initial='initial'
       animate='animate'
@@ -155,8 +155,9 @@ const NewsForm = () => {
             ></textarea>
           </label>
         </div>
-        <button className='btn-primary btn ml-auto' type='submit' ref={mainSubmitRef}>
-          Save
+        <button className='btn-primary btn ml-auto w-full' type='submit' ref={mainSubmitRef}>
+          <CheckMarkIcon className='mr-2 h-4 w-4' />
+          <span>Save</span>
         </button>
       </form>
     </motion.div>

@@ -59,7 +59,7 @@ const Slideshow = ({ wrapperClassName }: SlideshowProps) => {
         {slideshow.slides.map((slide) => (
           <SwiperSlide key={slide.id} className='relative'>
             {slide.image ? (
-              <Image src={slide.image?.secure_url} fill className='object-cover' alt='' />
+              <Image src={slide.image?.secure_url} fill className='object-cover' alt='' sizes='60vw' />
             ) : (
               <p className='text-2xl text-white'>No image uploaded</p>
             )}

@@ -25,7 +25,7 @@ const Navbar = () => {
         <div className='dropdown-end dropdown'>
           <label tabIndex={0} className='btn-ghost btn-circle avatar btn'>
             <div className='w-10 rounded-full'>
-              <Image src={ctx.session?.user.image ?? "/avatar-fallback.png"} alt='' width={40} height={40} />
+              <Image src={ctx.session?.user.image ?? "/avatar-fallback.png"} alt='' width={40} height={40} priority />
             </div>
           </label>
           <ul

@@ -5,14 +5,7 @@ import Select, { type SingleValue } from "react-select"
 import { toast } from "react-toastify"
 import EditIcon from "components/icons/EditIcon"
 import CheckMarkIcon from "components/icons/CheckMarkIcon"
-import { AnimatePresence, motion } from "framer-motion"
 import CancelIcon from "components/icons/CancelIcon"
-
-const animVariants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-}
 
 const WelcomeContentForm = () => {
   const [isEditing, setIsEditing] = useState(false)
@@ -157,40 +150,27 @@ const WelcomeContentForm = () => {
         </label>
       </div>
       <div className='flex w-full gap-5'>
-        <AnimatePresence>
-          <motion.button
-            key='edit-btn'
-            variants={animVariants}
-            initial='initial'
-            animate='animate'
-            exit='exit'
-            className='btn-secondary btn flex-grow'
-            type='button'
-            onClick={() => setIsEditing((prev) => !prev)}
-          >
-            {isEditing ? (
-              <motion.span className='flex'>
-                <CancelIcon className='mr-2 h-4 w-4' /> Cancel
-              </motion.span>
-            ) : (
-              <motion.span className='flex'>
-                <EditIcon className='mr-2 h-4 w-4' /> Edit
-              </motion.span>
-            )}
-          </motion.button>
-          {isEditing && (
-            <motion.button
-              variants={animVariants}
-              initial='initial'
-              animate='animate'
-              exit='exit'
-              className='btn-primary btn flex-grow'
-              type='submit'
-            >
-              <CheckMarkIcon className='mr-2 h-4 w-4' /> Save
-            </motion.button>
+        <button
+          key='edit-btn'
+          className='btn-secondary btn flex-grow'
+          type='button'
+          onClick={() => setIsEditing((prev) => !prev)}
+        >
+          {isEditing ? (
+            <span className='flex'>
+              <CancelIcon className='mr-2 h-4 w-4' /> Cancel
+            </span>
+          ) : (
+            <span className='flex'>
+              <EditIcon className='mr-2 h-4 w-4' /> Edit
+            </span>
           )}
-        </AnimatePresence>
+        </button>
+        {isEditing && (
+          <button key='save-btn' className='btn-primary btn flex-grow' type='submit'>
+            <CheckMarkIcon className='mr-2 h-4 w-4' /> Save
+          </button>
+        )}
       </div>
     </form>
   )
