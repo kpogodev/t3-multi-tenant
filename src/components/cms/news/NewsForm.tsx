@@ -7,6 +7,7 @@ import { api } from "utils/api"
 import { toast } from "react-toastify"
 import Image from "next/image"
 import CheckMarkIcon from "components/icons/CheckMarkIcon"
+import DeleteIcon from "components/icons/DeleteIcon"
 
 const animVariants = {
   initial: {
@@ -41,9 +42,11 @@ const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () =
   const client = api.useContext()
 
   const { mutate: uploadImage } = api.cms.news.uploadNewsImage.useMutation({
+    onMutate: () => setIsUploading(true),
     onSuccess: (data) => {
       setImageData(data)
       setIsUploading(false)
+      uploaderRef.current?.resetTempFiles()
     },
   })
 
@@ -58,7 +61,6 @@ const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () =
       setText("")
       setImageData(null)
       setIsUploading(false)
-      uploaderRef.current?.resetTempFiles()
       void client.cms.news.getNews.invalidate()
     },
     onError: (error) => {
@@ -92,33 +94,44 @@ const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () =
 
   return (
     <motion.div
-      className='flex w-full flex-wrap gap-4'
+      className='flex w-full flex-wrap gap-4 lg:flex-nowrap'
       variants={animVariants}
       initial='initial'
       animate='animate'
       exit='exit'
     >
-      {imageData ? (
-        <div className='relative min-h-[150px] min-w-[280px] flex-grow'>
-          <Image src={imageData.url} fill alt='' className='object-cover' />
-        </div>
-      ) : (
-        <UploadPhotoForm
-          ref={uploaderRef}
-          uploadImageCallback={(data) => uploadImage(data as string)}
-          wrapperClassName='min-h-[150px] border-2 border-dashed border-base-300 bg-base-100 flex-grow min-w-[280px]'
-          uploadImagePlaceholderProps={{
-            iconClasses: "mx-auto aspect-square w-full max-w-[40px] opacity-60",
-            labelClasses: "flex text-md font-medium text-base-content",
-            infoClasses: "text-xs opacity-80",
-            infoText: "Up to 10MB",
-          }}
-          isUploading={isUploading}
-        />
-      )}
+      <div className='relative min-h-[300px] min-w-[280px] flex-grow'>
+        {imageData ? (
+          <>
+            <button
+              className='btn-primary btn-sm btn-square btn absolute top-2 right-2 z-10 shadow-md'
+              onClick={() => {
+                deleteImage(imageData.id)
+                setImageData(null)
+              }}
+            >
+              <DeleteIcon className='h-4 w-4' />
+            </button>
+            <Image src={imageData.url} fill alt='' className='object-cover' />
+          </>
+        ) : (
+          <UploadPhotoForm
+            ref={uploaderRef}
+            uploadImageCallback={(data) => uploadImage(data as string)}
+            wrapperClassName='border-2 border-dashed border-base-300 bg-base-100 flex-grow min-w-[280px] h-full'
+            uploadImagePlaceholderProps={{
+              iconClasses: "mx-auto aspect-square w-full max-w-[40px] opacity-60",
+              labelClasses: "flex text-md font-medium text-base-content",
+              infoClasses: "text-xs opacity-80",
+              infoText: "Up to 10MB",
+            }}
+            isUploading={isUploading}
+          />
+        )}
+      </div>
       <form className='flex flex-grow flex-wrap gap-4' onSubmit={handleSubmit}>
         <div className='flex min-w-[280px] flex-grow flex-wrap gap-4'>
-          <div className='form-control w-full'>
+          <div className='form-control w-full flex-grow'>
             <label className='input-group input-group-vertical'>
               <span>Title</span>
               <input
@@ -143,8 +156,8 @@ const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () =
             </label>
           </div>
           <div className='form-control min-w-[200px] flex-grow'>
-            <label>
-              <span className='block w-full rounded-tl-lg rounded-tr-lg bg-base-300 px-4'>Date</span>
+            <label className='w-full'>
+              <span className='flex w-full rounded-tl-lg rounded-tr-lg bg-base-300 px-4'>Date</span>
               <DatePickerWrapper>
                 <DatePicker
                   className='input-bordered input w-full rounded-tl-none rounded-tr-none'

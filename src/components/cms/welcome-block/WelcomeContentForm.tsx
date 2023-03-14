@@ -38,7 +38,7 @@ const WelcomeContentForm = () => {
 
   const { mutate: updateWelcomeBlock } = api.cms.components.welcomeBlock.updateWelcomeBlock.useMutation({
     onSuccess: () => {
-      toast.success("Welcome block updated")
+      toast.success("Content has been updated")
       void client.cms.components.welcomeBlock.getWelcomeBlock.invalidate()
     },
   })
@@ -152,7 +152,7 @@ const WelcomeContentForm = () => {
       <div className='flex w-full gap-5'>
         <button
           key='edit-btn'
-          className='btn-secondary btn flex-grow'
+          className='btn-primary btn flex-grow'
           type='button'
           onClick={() => setIsEditing((prev) => !prev)}
         >

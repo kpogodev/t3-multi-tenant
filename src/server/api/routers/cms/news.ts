@@ -200,4 +200,39 @@ export const newsRouter = createTRPCRouter({
 
     return true
   }),
+  deleteNews: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
+    const news = await ctx.prisma.news.findUnique({
+      where: {
+        id: input,
+      },
+      include: {
+        image: true,
+      }
+    })
+
+    if (!news) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "News not found",
+      })
+    }
+
+    if (news.image) {
+      await cloudinary.uploader
+        .destroy(news.image.public_id, {
+          invalidate: true,
+        })
+        .catch((err) => {
+          if (err)
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "Image couldn't be deleted from cloudinary",
+            })
+        })
+    }
+
+    await ctx.prisma.news.delete({ where: { id: input } })
+
+    return true
+  })
 })
