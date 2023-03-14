@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useImperativeHandle, forwardRef } from "react"
 import UploadPhotoForm from "components/common/upload-image/UploadImageForm"
 import { motion } from "framer-motion"
 import DatePicker from "react-datepicker"
@@ -27,7 +27,7 @@ type ImageDataType = {
   height: number
 }
 
-const NewsForm = () => {
+const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () => void }>) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
@@ -36,6 +36,7 @@ const NewsForm = () => {
   const [isUploading, setIsUploading] = useState(false)
 
   const mainSubmitRef = useRef<HTMLButtonElement>(null)
+  const uploaderRef = useRef<{ resetTempFiles: () => void }>(null)
 
   const client = api.useContext()
 
@@ -46,6 +47,8 @@ const NewsForm = () => {
     },
   })
 
+  const { mutate: deleteImage } = api.cms.news.deleteNewsImage.useMutation()
+
   const { mutate: addNews } = api.cms.news.addNews.useMutation({
     onSuccess: () => {
       toast.success("News added successfully")
@@ -55,6 +58,7 @@ const NewsForm = () => {
       setText("")
       setImageData(null)
       setIsUploading(false)
+      uploaderRef.current?.resetTempFiles()
       void client.cms.news.getNews.invalidate()
     },
     onError: (error) => {
@@ -79,6 +83,13 @@ const NewsForm = () => {
     })
   }
 
+  useImperativeHandle(ref, () => ({
+    onCancellation: () => {
+      if (!imageData) return
+      deleteImage(imageData.id)
+    },
+  }))
+
   return (
     <motion.div
       className='flex w-full flex-wrap gap-4'
@@ -93,6 +104,7 @@ const NewsForm = () => {
         </div>
       ) : (
         <UploadPhotoForm
+          ref={uploaderRef}
           uploadImageCallback={(data) => uploadImage(data as string)}
           wrapperClassName='min-h-[150px] border-2 border-dashed border-base-300 bg-base-100 flex-grow min-w-[280px]'
           uploadImagePlaceholderProps={{
@@ -163,4 +175,4 @@ const NewsForm = () => {
     </motion.div>
   )
 }
-export default NewsForm
+export default forwardRef(NewsForm)

@@ -21,7 +21,7 @@ const WelcomeImage = () => {
 
   const ctx = useContext(CmsContext)
   const client = api.useContext()
-  const uploaderRef = useRef(null)
+  const uploaderRef = useRef<{ resetTempFiles: () => void }>(null)
 
   const { data: welcomeData } = api.cms.components.welcomeBlock.getWelcomeBlock.useQuery(
     {
@@ -35,6 +35,7 @@ const WelcomeImage = () => {
     onSuccess: () => {
       setIsUploading(false)
       toast.success("Image uploaded successfully")
+      uploaderRef.current?.resetTempFiles()
       void client.cms.components.welcomeBlock.getWelcomeBlock.invalidate()
     },
     onError: (err) => {
@@ -49,6 +50,7 @@ const WelcomeImage = () => {
       setIsUploading(false)
       setIsEditing(false)
       toast.success("Image re-uploaded successfully")
+      uploaderRef.current?.resetTempFiles()
       void client.cms.components.welcomeBlock.getWelcomeBlock.invalidate()
     },
     onError: (err) => {
