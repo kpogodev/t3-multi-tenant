@@ -1,0 +1,102 @@
+.container {
+  position: absolute;
+  top: 4rem;
+  right: 4rem;
+  z-index: 100;
+}
+
+.list {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.item {
+  position: relative;
+}
+
+.link {
+  color: #fff;
+  font-weight: 700;
+  font-size: clamp(1rem, 1.2vw, 1.25rem);
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.2s ease-in-out;
+}
+
+.item:hover .link::after,
+.item:focus-within .link::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.sub-list {
+  min-width: 12rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: absolute;
+  top: calc(100% + 1rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(var(--translate-y, -1rem));
+  padding-block: 1rem;
+  border-radius: 0.75rem;
+  background-color: #fff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.item:last-child .sub-list {
+  right: 0;
+  left: unset;
+  transform: translateX(0);
+}
+
+.item:hover .sub-list,
+.item:focus-within .sub-list {
+  --translate-y: 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.item:hover .sub-list::before,
+.item:focus-within .sub-list::before {
+  content: '';
+  position: absolute;
+  top: -1rem;
+  left: 0;
+  width: 100%;
+  height: 1rem;
+}
+
+.sub-item {
+  width: 100%;
+}
+
+.sub-link {
+  display: flex;
+  width: 100%;
+  color: #000;
+  font-weight: 600;
+  font-size: clamp(0.875rem, 1vw, 1.1rem);
+  padding-inline: 1rem;
+  padding-block: 0.25rem;
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.sub-link:hover,
+.sub-link:focus-visible {
+  color: #fff;
+  background-color: #063970;
+}
