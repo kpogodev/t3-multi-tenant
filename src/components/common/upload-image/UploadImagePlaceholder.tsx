@@ -2,6 +2,7 @@ import UploadImageIcon from "components/icons/UploadImageIcon"
 import { motion } from "framer-motion"
 import type { UploadImagePlaceholderProps } from "./UploadImageForm"
 import cn from "classnames"
+import { generateRandomKey } from "utils/generateRandomKey"
 
 const animVariants = {
   initial: { opacity: 0 },
@@ -11,7 +12,6 @@ const animVariants = {
 const UploadImagePlaceholder = (props: UploadImagePlaceholderProps) => {
   return (
     <motion.div
-      key='drop-area-default'
       className='pointer-events-none my-auto p-2 text-center'
       variants={animVariants}
       initial='initial'

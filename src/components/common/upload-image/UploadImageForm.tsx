@@ -2,7 +2,7 @@ import { useImperativeHandle, forwardRef } from "react"
 import cn from "classnames"
 import { AnimatePresence } from "framer-motion"
 import useFileUplaoder from "hooks/useFileUploader"
-import UploadImageDefault from "./UploadImagePlaceholder"
+import UploadImagePlaceholder from "./UploadImagePlaceholder"
 import UploadImagePreview from "./UploadImagePreview"
 import UploadImageProgess from "./UploadImageProgess"
 import UploadIcon from "components/icons/UploadIcon"
@@ -58,14 +58,14 @@ const UploadImageForm = (
             accept='image/png, image/jpeg, image/jpg'
             onChange={handleChange}
           />
-          <AnimatePresence mode='wait'>
+          <AnimatePresence>
             {files.length === 0 ? (
-              <UploadImageDefault {...uploadImagePlaceholderProps} />
+              <UploadImagePlaceholder {...uploadImagePlaceholderProps} />
             ) : (
               <UploadImagePreview fileData={files[0] as string} />
             )}
-            {isUploading && <UploadImageProgess />}
           </AnimatePresence>
+          {isUploading && <UploadImageProgess />}
         </label>
         {files.length > 0 && !isUploading && (
           <button

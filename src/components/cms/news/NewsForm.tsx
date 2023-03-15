@@ -99,6 +99,7 @@ const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () =
       initial='initial'
       animate='animate'
       exit='exit'
+      layout
     >
       <div className='relative min-h-[300px] min-w-[280px] flex-grow'>
         {imageData ? (

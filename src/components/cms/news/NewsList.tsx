@@ -11,6 +11,18 @@ interface NewsListProps {
   wrapperClassName?: React.HTMLAttributes<HTMLDivElement>["className"]
 }
 
+const animVariants = {
+  initial: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+  },
+  exit: {
+    opacity: 0,
+  },
+}
+
 const NewsList = ({ wrapperClassName }: NewsListProps) => {
   const [showForm, setShowForm] = useState(false)
 
@@ -27,7 +39,7 @@ const NewsList = ({ wrapperClassName }: NewsListProps) => {
   }
 
   return (
-    <motion.div className={cn(wrapperClassName ? wrapperClassName : "")} layout>
+    <motion.div className={cn(wrapperClassName ? wrapperClassName : "")}>
       {showForm ? (
         <button className='btn-primary btn' onClick={handleToggleForm}>
           <CancelIcon className='mr-2 h-4 w-4' /> Cancel

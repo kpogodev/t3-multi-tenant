@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import type { CSSProperties } from "react"
 import { motion } from "framer-motion"
+import { generateRandomKey } from "utils/generateRandomKey"
 
 const animVariants = {
   initial: { opacity: 0 },
@@ -22,7 +23,6 @@ const UploadImageProgess = () => {
 
   return (
     <motion.div
-      key='upload-progress'
       variants={animVariants}
       initial='initial'
       animate='animate'
