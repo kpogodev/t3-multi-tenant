@@ -7,7 +7,7 @@ type inputType = {
 // Helper function to fetch the theme name from the database
 export async function fetchThemeName({protocol, subDomain, apexDomain}: inputType) {
   const response = await fetch(`${protocol}://${apexDomain}/api/site`, {
-    method: "POST",
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
     },

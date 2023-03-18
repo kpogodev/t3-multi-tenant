@@ -15,3 +15,7 @@ export interface VercelAddDomainResponse {
     reason: string
   }[]
 }
+
+export interface VercelDeleteDomainResponse {
+  [key: string]: unknown
+}

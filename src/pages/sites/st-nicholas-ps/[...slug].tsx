@@ -3,6 +3,8 @@ import PageNotFoundRedirectHelper from "utils/sites/PageNotFoundRedirectHelper"
 import PrefetchPageData from "themes/st-nicholas-ps/utils/PrefetchPageData"
 import ContentPages from "themes/st-nicholas-ps/content-pages"
 
+
+
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   return await PageNotFoundRedirectHelper(context, () => PrefetchPageData(context))
 }

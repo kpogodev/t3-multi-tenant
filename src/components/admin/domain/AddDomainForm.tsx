@@ -4,6 +4,7 @@ import cn from "classnames"
 import { api } from "utils/api"
 import { toast } from "react-toastify"
 import { slugifyString } from "utils/slugifyString"
+import { type } from "os"
 
 const AddDomainForm = ({ isCustomDomain }: { isCustomDomain?: boolean }) => {
   const [domainAvailable, setDomainAvailable] = useState<boolean | undefined>()
@@ -11,21 +12,37 @@ const AddDomainForm = ({ isCustomDomain }: { isCustomDomain?: boolean }) => {
   const [debouncedDomain] = useDebounce(domain, 1500)
   const [isChecking, setIsChecking] = useState<boolean>(false)
 
-  const addDomain = api.admin.domain.addDomain.useMutation()
-  const { data } = api.admin.domain.checkDomainAvailability.useQuery(
+  api.admin.domain.checkDomainAvailability.useQuery(
     { name: isCustomDomain ? debouncedDomain : `${debouncedDomain}.kpwebdev.com` },
-    { enabled: debouncedDomain.length > 0 }
+    {
+      enabled: debouncedDomain.length > 0,
+      onSuccess: (data) => {
+        setDomainAvailable(data.available)
+      },
+    }
   )
 
+  const { mutate: addDomain } = api.admin.domain.addDomain.useMutation({
+    onSuccess: (data) => {
+      setDomain("")
+      setDomainAvailable(undefined)
+      toast.success(`${data.name} has been successfully added`)
+    },
+    onError: (error) => {
+      if (error.data?.zodErrorMessages) {
+        toast.error(`Validation Errors: ${error.data.zodErrorMessages}`)
+      } else {
+        toast.error(error.data?.code || "Something went wrong")
+      }
+    },
+  })
+
   useEffect(() => {
-    if (data) {
-      setDomainAvailable(data.available)
-    }
     if (debouncedDomain.length === 0) {
       setDomainAvailable(undefined)
     }
     setIsChecking(false)
-  }, [debouncedDomain, data])
+  }, [debouncedDomain])
 
   const onDomainTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDomain(e.target.value)
@@ -37,21 +54,11 @@ const AddDomainForm = ({ isCustomDomain }: { isCustomDomain?: boolean }) => {
 
     if (!domainAvailable) return toast.error("Domain is not available")
 
-    addDomain.mutate(
-      { name: slugifyString(debouncedDomain), isCustom: isCustomDomain ? isCustomDomain : false },
-      {
-        onSuccess: () => {
-          setDomain("")
-          setDomainAvailable(undefined)
-          toast.success("Domain has been successfully added")
-        },
-        onError: (error) => {
-          if (error.data) {
-            toast.error(`Error: ${error.data.code}`)
-          }
-        },
-      }
-    )
+    console.log(debouncedDomain)
+
+    isCustomDomain && typeof isCustomDomain !== "undefined"
+      ? addDomain({ name: debouncedDomain.trim(), isCustom: true })
+      : addDomain({ name: slugifyString(debouncedDomain.trim()), isCustom: false })
   }
 
   return (

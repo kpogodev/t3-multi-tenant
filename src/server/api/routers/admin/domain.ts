@@ -1,12 +1,15 @@
 import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "server/api/trpc"
-import { addDomainToVercelProject } from "server/vercel"
+import { addDomainToVercelProject, deleteDomainFromVercelProject } from "server/vercel"
+import { TRPCError } from "@trpc/server"
 
 export const domainRouter = createTRPCRouter({
   addDomain: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
+        name: z.string().regex(/^(?=.{1,253}$)[a-zA-Z0-9](?:(?:[a-zA-Z0-9-]){0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$/, {
+          message: "Invalid domain name pattern",
+        }),
         isCustom: z.boolean(),
       })
     )
@@ -23,6 +26,7 @@ export const domainRouter = createTRPCRouter({
             name: customDomain.name,
             apexName: customDomain.apexName,
             verified: customDomain.verified,
+            isCustom: true,
           },
         })
 
@@ -81,7 +85,15 @@ export const domainRouter = createTRPCRouter({
       },
     })
 
-    if (!domain) throw new Error("Domain not found")
+    if (!domain)
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Domain not found",
+      })
+
+    if (domain.isCustom) {
+      await deleteDomainFromVercelProject(domain.name)
+    }
 
     const deletedDomain = await ctx.prisma.domain.delete({
       where: {

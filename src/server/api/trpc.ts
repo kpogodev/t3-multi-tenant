@@ -17,6 +17,7 @@
  */
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type Session } from "next-auth";
+import {ZodError} from "zod";
 
 import { getServerAuthSession } from "../auth";
 import { prisma } from "../db";
@@ -70,8 +71,15 @@ import superjson from "superjson";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
-  errorFormatter({ shape }) {
-    return shape;
+  errorFormatter({ shape, error }) {
+    console.log(error.cause)
+    return {
+      ...shape,
+      data: {
+        ...shape.data,
+        zodErrorMessages: error.code === 'BAD_REQUEST' && error.cause instanceof ZodError ? error.cause.issues.map(issue => issue.message).join(', ') : null,
+      }
+    };
   },
 });
 
