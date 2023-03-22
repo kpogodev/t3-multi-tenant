@@ -7,9 +7,10 @@ export const domainRouter = createTRPCRouter({
   addDomain: protectedProcedure
     .input(
       z.object({
-        name: z.string().regex(/^(?=.{1,253}$)[a-zA-Z0-9](?:(?:[a-zA-Z0-9-]){0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$/, {
-          message: "Invalid domain name pattern",
-        }),
+        name: z.string(),
+        // .regex(/^(?=.{1,253}$)[a-zA-Z0-9](?:(?:[a-zA-Z0-9-]){0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$/, {
+        //   message: "Invalid domain name pattern",
+        // }),
         isCustom: z.boolean(),
       })
     )
