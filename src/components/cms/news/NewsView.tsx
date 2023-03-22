@@ -14,10 +14,12 @@ const NewsView = () => {
       initial='initial'
       animate='animate'
       exit='exit'
-      className='flex w-full flex-col overflow-hidden rounded-lg border border-base-300 shadow-sm'
+      className='flex w-full flex-col md:p-5 xl:p-10'
     >
-      <h3 className='bg-base-200 p-5 text-xl font-semibold text-base-content'>News List</h3>
-      <NewsList wrapperClassName='p-5 flex flex-col gap-3 md:gap-5 items-stretch' />
+      <div className='flex w-full flex-col overflow-hidden border border-base-300 shadow-sm md:rounded-lg '>
+        <h3 className='bg-base-200 p-5 text-xl font-semibold text-base-content'>News List</h3>
+        <NewsList wrapperClassName='flex flex-col gap-3 md:gap-5 items-stretch p-5' />
+      </div>
     </motion.div>
   )
 }

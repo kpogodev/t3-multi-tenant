@@ -8,6 +8,7 @@ import { api } from "utils/api"
 import { toast } from "react-toastify"
 import DeleteIcon from "components/icons/DeleteIcon"
 import EditIcon from "components/icons/EditIcon"
+import NewsForm from "./NewsForm"
 
 type NewsItem = inferRouterOutputs<AppRouter>["cms"]["news"]["getNews"][0]
 
@@ -18,6 +19,7 @@ const animVariants = {
 }
 
 const NewsItem = ({ news }: { news: NewsItem }) => {
+  const [editMode, setEditMode] = useState(false)
   const formattedDate = news.date.toLocaleDateString("en-GB", {
     weekday: "long",
     year: "numeric",
@@ -33,6 +35,8 @@ const NewsItem = ({ news }: { news: NewsItem }) => {
       void client.cms.news.getNews.invalidate()
     },
   })
+
+  if (editMode) return <NewsForm editMode closeSelf={() => setEditMode(false)} newsId={news.id} />
 
   return (
     <motion.div
@@ -67,7 +71,10 @@ const NewsItem = ({ news }: { news: NewsItem }) => {
           <DeleteIcon className='mr-2 h-4 w-4' />
           delete
         </button>
-        <button className='btn-primary btn flex-grow rounded-none md:flex-grow-0 md:rounded-md'>
+        <button
+          className='btn-primary btn flex-grow rounded-none md:flex-grow-0 md:rounded-md'
+          onClick={() => setEditMode(true)}
+        >
           <EditIcon className='mr-2 h-4 w-4' />
           edit
         </button>

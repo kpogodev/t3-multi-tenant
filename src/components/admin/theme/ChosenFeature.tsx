@@ -30,7 +30,7 @@ const ChosenFeature = ({ id, type }: ChosenFeaturesProps) => {
   return (
     <div className='relative flex w-full items-end gap-1 rounded-md bg-base-100 p-3 shadow-md'>
       <div className='badge-secondary badge absolute right-2 top-2 font-semibold shadow-md'>
-        {capitalizeString(type.toLowerCase().replace("_", ""))}
+        {capitalizeString(type.toLowerCase().replace("_", " "))}
       </div>
       <div className='form-control w-full'>
         <label className='label'>

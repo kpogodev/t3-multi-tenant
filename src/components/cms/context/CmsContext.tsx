@@ -1,5 +1,5 @@
 import { createContext, useState, useCallback } from "react"
-import { type Session } from "next-auth"
+import type { Session } from "next-auth"
 import { api } from "utils/api"
 import { capitalizeString } from "utils/capitalizeString"
 

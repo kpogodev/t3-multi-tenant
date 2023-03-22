@@ -26,7 +26,7 @@ export const newsRouter = createTRPCRouter({
                 created_at: true,
               },
             },
-          }
+          },
         },
       },
     })
@@ -44,6 +44,19 @@ export const newsRouter = createTRPCRouter({
     const news = await ctx.prisma.news.findUnique({
       where: {
         id: input,
+      },
+      include: {
+        image: {
+          select: {
+            id: true,
+            bytes: true,
+            width: true,
+            height: true,
+            secure_url: true,
+            public_id: true,
+            created_at: true,
+          },
+        },
       },
     })
 
@@ -116,7 +129,9 @@ export const newsRouter = createTRPCRouter({
 
       return news
     }),
-  uploadNewsImage: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
+  uploadNewsImage: protectedProcedure.input(z.object({
+    imageDataString: z.string(),
+  })).mutation(async ({ input, ctx }) => {
     const site = await ctx.prisma.site.findUnique({
       where: {
         userId: ctx.session.user.id,
@@ -132,7 +147,7 @@ export const newsRouter = createTRPCRouter({
 
     const siteNameSlug = site.name.toLowerCase().replace(/ /g, "_")
 
-    const image = await cloudinary.uploader.upload(input, {
+    const image = await cloudinary.uploader.upload(input.imageDataString, {
       folder: `sites/${siteNameSlug}/news`,
       transformation: { width: 1024, height: 768, crop: "fill", format: "webp", quality: "auto", fetch_format: "webp" },
       format: "webp",
@@ -170,6 +185,70 @@ export const newsRouter = createTRPCRouter({
       height: imageDbResponse.height,
     }
   }),
+  updateNews: protectedProcedure
+    .input(
+      z.object({
+        newsId: z.string(),
+        title: z.string(),
+        content: z.string(),
+        date: z.date(),
+        author: z.string().optional(),
+        imageId: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const news = await ctx.prisma.news.findUnique({
+        where: {
+          id: input.newsId,
+        },
+      })
+
+      if (!news) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "News not found",
+        })
+      }
+
+      const updatedNews = await ctx.prisma.news.update({
+        where: {
+          id: input.newsId,
+        },
+        data: {
+          title: input.title,
+          content: input.content,
+          author: input.author,
+          date: input.date,
+        },
+      })
+
+      if (!updatedNews) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "News couldn't be updated",
+        })
+      }
+
+      if (typeof input.imageId !== "undefined") {
+        try {
+          await ctx.prisma.externalImage.update({
+            where: {
+              id: input.imageId,
+            },
+            data: {
+              newsId: news.id,
+            },
+          })
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Image couldn't be updated",
+          })
+        }
+      }
+
+      return updatedNews
+    }),
   deleteNewsImage: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
     const image = await ctx.prisma.externalImage.findUnique({
       where: {
@@ -207,7 +286,7 @@ export const newsRouter = createTRPCRouter({
       },
       include: {
         image: true,
-      }
+      },
     })
 
     if (!news) {
@@ -234,5 +313,5 @@ export const newsRouter = createTRPCRouter({
     await ctx.prisma.news.delete({ where: { id: input } })
 
     return true
-  })
+  }),
 })

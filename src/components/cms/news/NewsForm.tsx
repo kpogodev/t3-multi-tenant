@@ -8,6 +8,7 @@ import { toast } from "react-toastify"
 import Image from "next/image"
 import CheckMarkIcon from "components/icons/CheckMarkIcon"
 import DeleteIcon from "components/icons/DeleteIcon"
+import CancelIcon from "components/icons/CancelIcon"
 
 const animVariants = {
   initial: {
@@ -28,7 +29,15 @@ type ImageDataType = {
   height: number
 }
 
-const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () => void }>) => {
+type RefType = React.ForwardedRef<{ onCancellation: () => void }>
+
+interface NewsFormProps {
+  editMode?: boolean
+  newsId?: string
+  closeSelf?: () => void
+}
+
+const NewsForm = (props: NewsFormProps, ref: RefType) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
@@ -41,16 +50,42 @@ const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () =
 
   const client = api.useContext()
 
+  // Runs only when editMode is true
+  const { data: initialData } = api.cms.news.getNewsById.useQuery(props.newsId ?? "", {
+    enabled: !!props.editMode,
+    onSuccess: (data) => {
+      setSelectedDate(new Date(data.date))
+      setTitle(data.title)
+      setAuthor(data.author ?? "")
+      setText(data.content)
+      if (data.image) {
+        setImageData({
+          url: data.image?.secure_url,
+          id: data.image?.id,
+          width: data.image?.width,
+          height: data.image?.height,
+        })
+      }
+    },
+  })
+
   const { mutate: uploadImage } = api.cms.news.uploadNewsImage.useMutation({
     onMutate: () => setIsUploading(true),
     onSuccess: (data) => {
+      toast.success("Image has been pre-uploaded")
       setImageData(data)
       setIsUploading(false)
       uploaderRef.current?.resetTempFiles()
     },
   })
 
-  const { mutate: deleteImage } = api.cms.news.deleteNewsImage.useMutation()
+  const { mutate: deleteImage } = api.cms.news.deleteNewsImage.useMutation({
+    onSuccess: () => {
+      toast.success("Image has been deleted")
+      setImageData(null)
+      void client.cms.news.getNews.invalidate()
+    },
+  })
 
   const { mutate: addNews } = api.cms.news.addNews.useMutation({
     onSuccess: () => {
@@ -68,21 +103,44 @@ const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () =
     },
   })
 
+  const { mutate: updateNews } = api.cms.news.updateNews.useMutation({
+    onSuccess: () => {
+      toast.success("News updated successfully")
+      void client.cms.news.getNews.invalidate()
+      typeof props.closeSelf !== "undefined" && props.closeSelf()
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     e.stopPropagation()
 
-    if (!title) return toast.error("Title is required")
-    if (!text) return toast.error("Text is required")
+    if (!title || !title.length) return toast.error("Title is required")
+    if (!text || !text.length) return toast.error("Text is required")
     if (!selectedDate) return toast.error("Date is required")
 
-    addNews({
-      title,
-      author,
-      content: text,
-      date: selectedDate,
-      imageId: imageData?.id,
-    })
+    if (props.editMode && typeof props.newsId !== "undefined") {
+      updateNews({
+        newsId: props.newsId,
+        title,
+        author,
+        content: text,
+        date: selectedDate,
+        imageId: imageData?.id,
+      })
+      return
+    } else {
+      addNews({
+        title,
+        author,
+        content: text,
+        date: selectedDate,
+        imageId: imageData?.id,
+      })
+    }
   }
 
   useImperativeHandle(ref, () => ({
@@ -91,6 +149,16 @@ const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () =
       deleteImage(imageData.id)
     },
   }))
+
+  // Used to self cancelation if editMode is true
+  const handleSelfCancelation = () => {
+    if (props.editMode && props.closeSelf) {
+      if (typeof initialData !== "undefined" && !initialData.image && imageData) {
+        deleteImage(imageData.id)
+      }
+      props.closeSelf()
+    }
+  }
 
   return (
     <motion.div
@@ -105,7 +173,7 @@ const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () =
         {imageData ? (
           <>
             <button
-              className='btn-primary btn-sm btn-square btn absolute top-2 right-2 z-10 shadow-md'
+              className='btn-error btn-square btn-sm btn absolute top-2 right-2 z-10 shadow-md hover:brightness-90'
               onClick={() => {
                 deleteImage(imageData.id)
                 setImageData(null)
@@ -118,7 +186,11 @@ const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () =
         ) : (
           <UploadPhotoForm
             ref={uploaderRef}
-            uploadImageCallback={(data) => uploadImage(data as string)}
+            uploadImageCallback={(data) =>
+              uploadImage({
+                imageDataString: data as string,
+              })
+            }
             wrapperClassName='border-2 border-dashed border-base-300 bg-base-100 flex-grow min-w-[280px] h-full'
             uploadImagePlaceholderProps={{
               iconClasses: "mx-auto aspect-square w-full max-w-[40px] opacity-60",
@@ -181,10 +253,18 @@ const NewsForm = (props: unknown, ref: React.ForwardedRef<{ onCancellation: () =
             ></textarea>
           </label>
         </div>
-        <button className='btn-primary btn ml-auto w-full' type='submit' ref={mainSubmitRef}>
-          <CheckMarkIcon className='mr-2 h-4 w-4' />
-          <span>Save</span>
-        </button>
+        <div className='flex w-full items-center justify-center gap-2'>
+          {props.editMode && (
+            <button className='btn-outline btn ml-auto flex-grow' type='button' onClick={handleSelfCancelation}>
+              <CancelIcon className='mr-2 h-4 w-4' />
+              <span>Cancel</span>
+            </button>
+          )}
+          <button className='btn-primary btn ml-auto flex-grow' type='submit' ref={mainSubmitRef}>
+            <CheckMarkIcon className='mr-2 h-4 w-4' />
+            <span>Save</span>
+          </button>
+        </div>
       </form>
     </motion.div>
   )

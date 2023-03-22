@@ -11,18 +11,6 @@ interface NewsListProps {
   wrapperClassName?: React.HTMLAttributes<HTMLDivElement>["className"]
 }
 
-const animVariants = {
-  initial: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-  },
-  exit: {
-    opacity: 0,
-  },
-}
-
 const NewsList = ({ wrapperClassName }: NewsListProps) => {
   const [showForm, setShowForm] = useState(false)
 

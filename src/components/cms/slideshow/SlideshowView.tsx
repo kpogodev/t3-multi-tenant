@@ -17,7 +17,7 @@ const SlideshowView = () => {
   return (
     <motion.div
       key={ctx.currentComponentId}
-      className='grid w-full grid-cols-3 gap-5 xl:gap-10'
+      className='grid w-full grid-cols-3 gap-5 p-5 xl:gap-10 xl:p-10'
       variants={animVariants}
       initial='initial'
       animate='animate'
