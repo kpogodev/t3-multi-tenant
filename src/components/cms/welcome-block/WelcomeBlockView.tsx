@@ -15,7 +15,7 @@ const WelcomeBlockView = () => {
 
   return (
     <motion.div
-      key={ctx.currentComponentId}
+      key={ctx.currentView.id}
       className='mx-auto grid w-full max-w-screen-md gap-10 p-5 lg:max-w-screen-xl lg:grid-cols-3 xl:p-10'
       variants={animVariants}
       initial='initial'

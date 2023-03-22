@@ -28,7 +28,7 @@ const View = () => {
 
   return (
     <main className='flex w-full flex-col gap-5 xl:gap-10'>
-      <AnimatePresence mode='wait'>{view[ctx.currentView]}</AnimatePresence>
+      <AnimatePresence mode='wait'>{view[ctx.currentView.view]}</AnimatePresence>
     </main>
   )
 }

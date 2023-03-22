@@ -26,9 +26,9 @@ const IntervalForm = () => {
   })
 
   const { data: slideshow } = api.cms.components.slideshow.getSlideshow.useQuery(
-    { componentId: ctx.currentComponentId },
+    { componentId: ctx.currentView.id ?? "" },
     {
-      enabled: !!ctx.currentComponentId,
+      enabled: !!ctx.currentView.id,
       onSuccess: (data) => (data.interval ? setInterval(data.interval) : setInterval(5000)),
     }
   )

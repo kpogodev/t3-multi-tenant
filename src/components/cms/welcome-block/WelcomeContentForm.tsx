@@ -20,10 +20,10 @@ const WelcomeContentForm = () => {
   const { data: welcomeBlock, isInitialLoading: initialLoadingWelcomeData } =
     api.cms.components.welcomeBlock.getWelcomeBlock.useQuery(
       {
-        componentId: ctx.currentComponentId,
+        componentId: ctx.currentView.id ?? "",
       },
       {
-        enabled: !!ctx.currentComponentId,
+        enabled: !!ctx.currentView.id,
         onSuccess: (data) => {
           setHeading(data.header ?? "")
           setParagraph(data.text ?? "")

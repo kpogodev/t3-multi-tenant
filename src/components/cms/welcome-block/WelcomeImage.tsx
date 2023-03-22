@@ -25,9 +25,9 @@ const WelcomeImage = () => {
 
   const { data: welcomeData } = api.cms.components.welcomeBlock.getWelcomeBlock.useQuery(
     {
-      componentId: ctx.currentComponentId,
+      componentId: ctx.currentView.id ?? "",
     },
-    { enabled: !!ctx.currentComponentId }
+    { enabled: !!ctx.currentView.id }
   )
 
   const { mutate: uploadImage } = api.cms.components.welcomeBlock.uploadImage.useMutation({
@@ -76,7 +76,7 @@ const WelcomeImage = () => {
         wrapperClassName='w-full border-2 border-dashed aspect-[16/9] lg:aspect-[3/4] rounded-md transition-colors hover:bg-base-200'
         isUploading={isUploading}
         uploadImageCallback={(data) => {
-          uploadImage({ welcomeBlockId: welcomeData?.id ?? ctx.currentComponentId, image: data as string })
+          uploadImage({ welcomeBlockId: welcomeData?.id ?? ctx.currentView.id ?? "", image: data as string })
         }}
       />
     )

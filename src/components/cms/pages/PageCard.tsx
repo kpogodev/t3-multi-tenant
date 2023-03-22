@@ -26,11 +26,10 @@ const PageCard = ({ id, name }: PageCardProps) => {
   }
 
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (name.toLowerCase() === "news") return ctx.changeView("news")
-    if (name.toLowerCase() === "events") return ctx.changeView("events")
+    if (name.toLowerCase() === "news") return ctx.changeView({ view: "news" })
+    if (name.toLowerCase() === "events") return ctx.changeView({ view: "events" })
     const id = e.currentTarget.value
-    ctx.changeView("edit-page")
-    ctx.changeCurrentPageId(id)
+    ctx.changeView({ view: "edit-page", id })
   }
 
   return (

@@ -10,7 +10,10 @@ const EditSubpage = () => {
     <div className='flex w-full flex-col items-start gap-10 p-5 xl:p-10'>
       <div className='flex w-full items-center justify-between'>
         <Heading text='Edit Main Content Area' />
-        <button className='btn-secondary btn' onClick={() => void ctx.changeView(ctx.prevView)}>
+        <button
+          className='btn-secondary btn'
+          onClick={() => void ctx.changeView({ view: ctx.prevView.view, id: ctx.prevView.id })}
+        >
           Go Back
         </button>
       </div>

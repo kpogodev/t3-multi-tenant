@@ -31,8 +31,8 @@ const SlidesList = ({ wrapperClassName }: SlidesListProps) => {
   const listRef = useRef<HTMLUListElement>(null)
 
   const { data: slideshow } = api.cms.components.slideshow.getSlideshow.useQuery(
-    { componentId: ctx.currentComponentId },
-    { enabled: !!ctx.currentComponentId, onSuccess: (data) => setList(data.slides) }
+    { componentId: ctx.currentView.id ?? "" },
+    { enabled: !!ctx.currentView.id, onSuccess: (data) => setList(data.slides) }
   )
 
   const { mutate: deleteSlide, isLoading: isDeleting } = api.cms.components.slideshow.deleteSlide.useMutation({
@@ -125,7 +125,7 @@ const SlidesList = ({ wrapperClassName }: SlidesListProps) => {
                     Optimized size: {slide.image?.bytes ? `${(+slide.image?.bytes / 1024).toFixed(2)}KB` : "Unknown"}
                   </p>
                   <button
-                    className='btn-error btn-sm btn-square btn hover:brightness-90'
+                    className='btn-error btn-square btn-sm btn hover:brightness-90'
                     value={slide.id}
                     onClick={handleDeleteSlide}
                   >

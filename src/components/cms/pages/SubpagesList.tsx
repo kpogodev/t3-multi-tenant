@@ -5,7 +5,7 @@ import { CmsContext } from "../context/CmsContext"
 
 const SubpagesList = () => {
   const ctx = useContext(CmsContext)
-  const { data: subpages } = api.cms.page.getSubpagesByPageId.useQuery(ctx.currentPageId)
+  const { data: subpages } = api.cms.page.getSubpagesByPageId.useQuery(ctx.currentView.id ?? "")
 
   return (
     <div className='w-full'>

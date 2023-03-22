@@ -24,10 +24,10 @@ const SidebarMenu = ({ menu }: SidebarMenuProps) => {
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (e.currentTarget.dataset.id) {
-      ctx.changeView(e.currentTarget.value, e.currentTarget.dataset.id)
+      ctx.changeView({ view: e.currentTarget.value, id: e.currentTarget.dataset.id })
       return
     }
-    ctx.changeView(e.currentTarget.value)
+    ctx.changeView({ view: e.currentTarget.value })
   }
 
   return (
@@ -43,7 +43,7 @@ const SidebarMenu = ({ menu }: SidebarMenuProps) => {
                 className={cn({
                   active:
                     typeof view === "string"
-                      ? view === ctx.currentView
+                      ? view === ctx.currentView.view
                       : capitalizeString(view.name.replace("-", " ")) === ctx.currentNavHeader,
                 })}
                 onClick={handleClick}

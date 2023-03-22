@@ -12,7 +12,7 @@ const EditPage = () => {
     <div className='flex w-full flex-col items-start gap-10 p-5 xl:p-10'>
       <div className='flex w-full items-center justify-between'>
         <Heading text='Edit Main Content Area' />
-        <button className='btn-secondary btn' onClick={() => void ctx.changeView("pages")}>
+        <button className='btn-secondary btn' onClick={() => void ctx.changeView({ view: "pages" })}>
           Go Back
         </button>
       </div>

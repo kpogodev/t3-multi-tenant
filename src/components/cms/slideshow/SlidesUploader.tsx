@@ -20,8 +20,8 @@ const ImageUploader = ({ wrapperClassName }: ImageUploaderProps) => {
   const ctx = useContext(CmsContext)
 
   const { data: slideshow } = api.cms.components.slideshow.getSlideshow.useQuery(
-    { componentId: ctx.currentComponentId },
-    { enabled: !!ctx.currentComponentId }
+    { componentId: ctx.currentView.id ?? "" },
+    { enabled: !!ctx.currentView.id }
   )
 
   const { files, currentLoad, handleChange, handleSubmit, resetFiles } = useFileUploader({

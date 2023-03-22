@@ -19,7 +19,7 @@ const PageContentEditor = () => {
   const { mutate: saveDraft } = api.cms.pageContent.updateDraft.useMutation()
   const { mutate: publish } = api.cms.pageContent.updatePublished.useMutation()
 
-  const { data: pagePublishedContent } = api.cms.pageContent.getPublishedByPageId.useQuery(ctx.currentPageId, {
+  api.cms.pageContent.getPublishedByPageId.useQuery(ctx.currentView.id ?? "", {
     onSuccess: (published: string) => {
       if (published) {
         const publishedContent = JSON.parse(published) as RawDraftContentState
@@ -27,7 +27,7 @@ const PageContentEditor = () => {
       }
     },
   })
-  const { data: pageDraftContent } = api.cms.pageContent.getDraftByPageId.useQuery(ctx.currentPageId, {
+  const { data: pageDraftContent } = api.cms.pageContent.getDraftByPageId.useQuery(ctx.currentView.id ?? "", {
     onSuccess: (draft: string) => {
       if (draft) {
         const draftContent = JSON.parse(draft) as RawDraftContentState
@@ -42,8 +42,9 @@ const PageContentEditor = () => {
   }
 
   const onSaveDraft = () => {
+    if (!ctx.currentView.id) return
     saveDraft(
-      { pageId: ctx.currentPageId, draft: editorStateStringified },
+      { pageId: ctx.currentView.id, draft: editorStateStringified },
       {
         onSuccess: () => {
           toast.success("Draft saved")
@@ -56,8 +57,9 @@ const PageContentEditor = () => {
   }
 
   const onPublish = () => {
+    if (!ctx.currentView.id) return
     publish(
-      { pageId: ctx.currentPageId, published: editorStateStringified },
+      { pageId: ctx.currentView.id, published: editorStateStringified },
       {
         onSuccess: () => {
           toast.success("Page published")
@@ -85,7 +87,7 @@ const PageContentEditor = () => {
           </button>
         </div>
       </div>
-      <Heading text="Draf Preview"/>
+      <Heading text='Draf Preview' />
       <DisplayRichText data={pageDraftContent} className='prose prose-lg mr-auto w-full bg-base-100 p-4 shadow-lg' />
     </>
   )

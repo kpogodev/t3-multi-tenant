@@ -11,8 +11,9 @@ const AddSubpages = () => {
 
   const onAddSubpageSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!ctx.currentView.id) return
     addPage(
-      { name, parentId: ctx.currentPageId },
+      { name, parentId: ctx.currentView.id },
       {
         onSuccess: () => {
           void clinet.cms.page.getSubpagesByPageId.invalidate()

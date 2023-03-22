@@ -1,6 +1,7 @@
 import { createContext, useState, useCallback } from "react"
 import type { Session } from "next-auth"
 import { api } from "utils/api"
+import useCustomRouter from "hooks/useCustomRouter"
 import { capitalizeString } from "utils/capitalizeString"
 
 type UseCmsStateManagerResult = ReturnType<typeof useCmsStateManager>
@@ -8,52 +9,30 @@ type UseCmsStateManagerResult = ReturnType<typeof useCmsStateManager>
 export const CmsContext = createContext<UseCmsStateManagerResult>({} as UseCmsStateManagerResult)
 
 const useCmsStateManager = (userId: string, session: Session) => {
-  const [prevView, setPrevView] = useState<string>("default")
-  const [currentView, setCurrentView] = useState<string>("default")
-  const [currentPageId, setCurrentPageId] = useState<string>("")
-  const [currentComponentId, setCurrentComponentId] = useState<string>("")
-  const [currentNavHeader, setCurrentNavHeader] = useState<string>("")
+  const { currentView, prevView, changeView } = useCustomRouter()
   const [darkTheme, setDarkTheme] = useState<boolean>(false)
-
   //Fetch essential data
   const { data: site } = api.admin.site.getSiteByTenantId.useQuery(userId, { enabled: !!userId })
   const { data: components } = api.cms.components.general.getComponents.useQuery(undefined, { enabled: !!userId })
+
+  const currentNavHeader = !currentView.id
+    ? capitalizeString(currentView.view.replace("-", " "))
+    : components?.find((c) => c.id === currentView.id)?.name ?? ""
 
   const toggleDarkTheme = useCallback(() => {
     setDarkTheme((prev) => !prev)
   }, [])
 
-
-  const changeCurrentPageId = useCallback((id: string) => {
-    setCurrentPageId(id)
-  }, [])
-
-  const changeView = (view: string, id?: string) => {
-    setPrevView(currentView)
-    setCurrentView(view)
-
-    if (typeof id === "string") {
-      setCurrentComponentId(id)
-      setCurrentNavHeader(components?.find((component) => component.id === id)?.name ?? "")
-    } else {
-      setCurrentComponentId("")
-      setCurrentNavHeader(capitalizeString(view.replaceAll("-", " ")))
-    }
-  }
-
   return {
     site,
     currentView,
     darkTheme,
-    currentPageId,
-    currentComponentId,
     currentNavHeader,
     prevView,
     components,
     session,
     changeView,
     toggleDarkTheme,
-    changeCurrentPageId,
   }
 }
 
