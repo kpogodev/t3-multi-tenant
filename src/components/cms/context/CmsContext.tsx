@@ -15,20 +15,17 @@ const useCmsStateManager = (userId: string, session: Session) => {
   const [currentNavHeader, setCurrentNavHeader] = useState<string>("")
   const [darkTheme, setDarkTheme] = useState<boolean>(false)
 
-  const { data: site } = api.admin.site.getSiteByTenantId.useQuery(userId, { enabled: userId ? true : false })
-  const { data: components } = api.cms.components.general.getComponents.useQuery(undefined, {
-    enabled: userId ? true : false,
-  })
-  const { data: news } = api.cms.news.getNews.useQuery(undefined, {
-    enabled: userId ? true : false,
-  })
-
-  const changeCurrentPageId = useCallback((id: string) => {
-    setCurrentPageId(id)
-  }, [])
+  //Fetch essential data
+  const { data: site } = api.admin.site.getSiteByTenantId.useQuery(userId, { enabled: !!userId })
+  const { data: components } = api.cms.components.general.getComponents.useQuery(undefined, { enabled: !!userId })
 
   const toggleDarkTheme = useCallback(() => {
     setDarkTheme((prev) => !prev)
+  }, [])
+
+
+  const changeCurrentPageId = useCallback((id: string) => {
+    setCurrentPageId(id)
   }, [])
 
   const changeView = (view: string, id?: string) => {
@@ -46,7 +43,6 @@ const useCmsStateManager = (userId: string, session: Session) => {
 
   return {
     site,
-    news,
     currentView,
     darkTheme,
     currentPageId,
