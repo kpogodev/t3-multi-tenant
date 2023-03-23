@@ -10,7 +10,7 @@ const Navbar = () => {
   const ctx = useContext(CmsContext)
 
   return (
-    <div className='navbar bg-primary pr-5 pl-14 xl:px-10'>
+    <div className='navbar bg-primary px-5 xl:px-10'>
       <div className='flex-1'>
         <h2 className='text-xl font-bold text-primary-content'>{ctx.currentNavHeader}</h2>
       </div>

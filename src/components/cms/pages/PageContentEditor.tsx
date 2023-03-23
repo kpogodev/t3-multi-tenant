@@ -73,7 +73,7 @@ const PageContentEditor = () => {
 
   return (
     <>
-      <div className='flex flex-col items-end rounded-md bg-base-200 p-4'>
+      <div className='flex w-full flex-col items-end rounded-md bg-base-200 p-4'>
         <RichTextEditor onEditorStateChange={onEditorStateChange} editorState={editorState} />
         <div className='mt-4 flex w-full items-center justify-end gap-4'>
           {draftMode && (
@@ -88,7 +88,7 @@ const PageContentEditor = () => {
         </div>
       </div>
       <Heading text='Draf Preview' />
-      <DisplayRichText data={pageDraftContent} className='prose prose-lg mr-auto w-full bg-base-100 p-4 shadow-lg' />
+      <DisplayRichText data={pageDraftContent} className='prose w-full xl:prose-xl' />
     </>
   )
 }

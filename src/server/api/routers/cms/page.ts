@@ -2,6 +2,7 @@ import { z } from "zod"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "server/api/trpc"
 import { slugifyString } from "utils/slugifyString"
 import { TRPCError } from "@trpc/server"
+import { capitalizeString } from "utils/capitalizeString"
 
 export const pageRouter = createTRPCRouter({
   getAllPagesSlug: protectedProcedure.query(async ({ ctx }) => {
@@ -21,7 +22,7 @@ export const pageRouter = createTRPCRouter({
 
     if (!pages || !pages.length) throw new Error("No pages found")
 
-    const formatSlug = (page: typeof pages[0]) => {
+    const formatSlug = (page: (typeof pages)[0]) => {
       const parentPage = pages.find((parent) => parent.id === page.parentId)
       if (typeof parentPage === "undefined") return page.slug
       return `${parentPage?.slug}/${page.slug}`
@@ -47,7 +48,7 @@ export const pageRouter = createTRPCRouter({
 
     const page = await ctx.prisma.page.create({
       data: {
-        name: input,
+        name: capitalizeString(input),
         siteId: site.id,
         slug: slugifyString(input),
         content: {
@@ -56,10 +57,11 @@ export const pageRouter = createTRPCRouter({
       },
     })
 
-    if(!page) throw new TRPCError({
-      code: 'CONFLICT',
-      message: 'Page already exists'
-    })
+    if (!page)
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "Page already exists",
+      })
 
     return page
   }),
@@ -81,7 +83,7 @@ export const pageRouter = createTRPCRouter({
 
       const page = await ctx.prisma.page.create({
         data: {
-          name: input.name,
+          name: capitalizeString(input.name),
           parentId: input.parentId,
           siteId: site.id,
           slug: slugifyString(input.name),
@@ -122,6 +124,9 @@ export const pageRouter = createTRPCRouter({
         siteId: site.id,
         parentId: null,
       },
+      orderBy: {
+        name: "asc",
+      },
     })
     return pages
   }),
@@ -135,8 +140,8 @@ export const pageRouter = createTRPCRouter({
           where: {
             special: true,
           },
-        }
-      }
+        },
+      },
     })
 
     if (!site) throw new Error("Special Pages not found")
@@ -152,15 +157,24 @@ export const pageRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const page = await ctx.prisma.page.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          name: input.name,
-          slug: slugifyString(input.name),
-        },
-      })
+      const page = await ctx.prisma.page
+        .update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            name: capitalizeString(input.name),
+            slug: slugifyString(input.name),
+          },
+        })
+        .catch((err) => {
+          if (err)
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "Page name must be unique",
+            })
+        })
+
       return page
     }),
   deletePage: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {

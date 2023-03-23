@@ -62,7 +62,7 @@ const Sidebar = () => {
       >
         {!isLargeScreen && (
           <button
-            className='btn-secondary btn-square btn pointer-events-auto absolute bottom-0 left-full h-20 rounded-[0_0_20px_0] shadow-lg'
+            className='btn-secondary btn-square btn pointer-events-auto absolute bottom-0 left-full h-20 rounded-[0_20px_20px_0] shadow-lg'
             onClick={() => setMenuOpen((prev) => !prev)}
           >
             {menuOpen ? <CancelIcon className='h-4 w-4' /> : <SidebarIcon className='h-6 w-6' />}

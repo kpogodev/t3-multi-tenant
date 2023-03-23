@@ -34,7 +34,10 @@ const RichTextEditor = ({ editorState, onEditorStateChange }: RichTextEditorProp
     <Editor
       editorState={editorState}
       toolbarClassName='flex sticky top-0 z-50 !justify-center mx-auto'
-      editorClassName='bg-base-100 shadow-md rounded-md p-4 mt-4 !h-[500px] prose max-w-full'
+      editorClassName='w-full bg-base-100 shadow-md rounded-md p-4 mt-4 !h-[500px] prose xl:prose-xl max-w-full'
+      wrapperClassName='w-full'
+      stripPastedStyles
+      spellCheck
       onEditorStateChange={onEditorStateChange}
       toolbar={{
         options: [
