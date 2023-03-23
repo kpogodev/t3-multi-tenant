@@ -9,15 +9,17 @@ const EditSubpage = dynamic(() => import("./pages/EditSubpage"))
 const SlideshowView = dynamic(() => import("./slideshow/SlideshowView"))
 const PagesView = dynamic(() => import("./pages/PagesView"))
 const NewsView = dynamic(() => import("./news/NewsView"))
+const NavigationView = dynamic(() => import("./navigation/NavigationView"))
 
 type ViewType = { [key: string]: JSX.Element }
 
-const View = () => {
+const Views = () => {
   const ctx = useContext(CmsContext)
 
   const view: ViewType = {
     default: <></>,
     metadata: <></>,
+    navigation: <NavigationView />,
     pages: <PagesView />,
     news: <NewsView />,
     "edit-page": <EditPage />,
@@ -32,4 +34,4 @@ const View = () => {
     </main>
   )
 }
-export default View
+export default Views

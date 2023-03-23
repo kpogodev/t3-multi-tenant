@@ -76,7 +76,7 @@ const Sidebar = () => {
           menu={[
             {
               category: "Site",
-              views: ["pages", "metadata", ...siteSpecialPages],
+              views: ["pages", "metadata", "navigation", ...siteSpecialPages],
             },
             {
               category: "Components",

@@ -4,17 +4,19 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Navbar from "./Navbar"
 import Sidebar from "./Sidebar"
-import View from "./View"
+import Views from "./Views"
 
 const Layout = () => {
   const ctx = useContext(CmsContext)
 
   return (
-    <div className='w-full xl:grid xl:grid-cols-w-sidebar' data-theme={ctx.darkTheme ? "luxury" : "light"}>
-      <Sidebar />
-      <div className='flex min-h-screen w-full flex-col justify-start'>
-        <Navbar />
-        <View />
+    <>
+      <div className='w-full xl:grid xl:grid-cols-w-sidebar' data-theme={ctx.darkTheme ? "luxury" : "light"}>
+        <Sidebar />
+        <div className='flex min-h-screen w-full flex-col justify-start'>
+          <Navbar />
+          <Views />
+        </div>
       </div>
       <ToastContainer
         position='bottom-center'
@@ -28,7 +30,7 @@ const Layout = () => {
         pauseOnHover
         theme='light'
       />
-    </div>
+    </>
   )
 }
 export default Layout
