@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `News` MODIFY `content` LONGTEXT NOT NULL;
+
+-- AlterTable
+ALTER TABLE `Page` ADD COLUMN `order` INTEGER NOT NULL DEFAULT 0;

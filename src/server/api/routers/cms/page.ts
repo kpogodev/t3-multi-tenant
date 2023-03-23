@@ -42,15 +42,21 @@ export const pageRouter = createTRPCRouter({
       where: {
         userId: ctx.session.user.id,
       },
+      include: {
+        pages: true,
+      }
     })
 
     if (!site) throw new Error("Site not found")
+
+    const pagesTotalCount = site.pages.length > 0 ? site.pages.filter(page => !page.parentId ).length : 0
 
     const page = await ctx.prisma.page.create({
       data: {
         name: capitalizeString(input),
         siteId: site.id,
         slug: slugifyString(input),
+        order: pagesTotalCount,
         content: {
           create: {},
         },
@@ -77,9 +83,14 @@ export const pageRouter = createTRPCRouter({
         where: {
           userId: ctx.session.user.id,
         },
+        include: {
+          pages: true,
+        },
       })
 
       if (!site) throw new Error("Site not found")
+
+      const sibilingPagesTotalCount = site.pages.filter(page => page.parentId === input.parentId).length
 
       const page = await ctx.prisma.page.create({
         data: {
@@ -87,6 +98,7 @@ export const pageRouter = createTRPCRouter({
           parentId: input.parentId,
           siteId: site.id,
           slug: slugifyString(input.name),
+          order: sibilingPagesTotalCount,
           content: {
             create: {},
           },

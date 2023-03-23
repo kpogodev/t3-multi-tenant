@@ -97,6 +97,7 @@ model Page {
   id        String       @id @default(cuid())
   name      String
   slug      String
+  order     Int          @default(0)
   hidden    Boolean      @default(false)
   special   Boolean      @default(false)
   site      Site         @relation(fields: [siteId], references: [id])

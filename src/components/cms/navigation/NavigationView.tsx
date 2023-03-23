@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import { api } from "utils/api"
 
 const animVariants = {
   initial: { opacity: 0 },
@@ -7,6 +8,10 @@ const animVariants = {
 }
 
 const NavigationView = () => {
+  const { data } = api.cms.navigation.getNavigation.useQuery()
+
+  console.log(data)
+
   return (
     <motion.div
       key='pages-view'
