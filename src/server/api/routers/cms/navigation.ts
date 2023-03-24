@@ -41,4 +41,26 @@ export const navigationRouter = createTRPCRouter({
 
     return navigation
   }),
+  reorderPages: protectedProcedure
+    .input(
+      z.array(
+        z.object({
+          pageId: z.string(),
+          newOrder: z.number(),
+        })
+      )
+    )
+    .mutation(async ({ ctx, input }) => {
+      for (const page of input) {
+        await ctx.prisma.page.update({
+          where: {
+            id: page.pageId,
+          },
+          data: {
+            order: page.newOrder,
+          },
+        })
+      }
+      return
+    }),
 })

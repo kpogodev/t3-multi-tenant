@@ -1,5 +1,6 @@
+import Heading from "components/common/Heading"
 import { motion } from "framer-motion"
-import { api } from "utils/api"
+import NavigationList from "./NavigationList"
 
 const animVariants = {
   initial: { opacity: 0 },
@@ -8,9 +9,7 @@ const animVariants = {
 }
 
 const NavigationView = () => {
-  const { data } = api.cms.navigation.getNavigation.useQuery()
 
-  console.log(data)
 
   return (
     <motion.div
@@ -21,7 +20,8 @@ const NavigationView = () => {
       exit='exit'
       className='flex w-full flex-col gap-10 p-5 xl:p-10'
     >
-      nav view
+      <Heading text='Navigation Structure' />
+      <NavigationList />
     </motion.div>
   )
 }

@@ -9,7 +9,6 @@ const Navbar = ({ domain }: { domain: string }) => {
   if (typeof navigation === "undefined") return <></>
 
   // alphabetically sort the navigation
-  const sortedNavigation = navigation.sort((a, b) => a.name.localeCompare(b.name))
 
   return (
     <nav className={styles.container}>
@@ -19,7 +18,7 @@ const Navbar = ({ domain }: { domain: string }) => {
             Home
           </Link>
         </li>
-        {sortedNavigation.map((page) => (
+        {navigation.map((page) => (
           <li key={page.id} className={styles.item}>
             <Link href={`/${page.slug}`} className={styles.link}>
               {page.name}

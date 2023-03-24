@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { createTRPCRouter, publicProcedure } from "server/api/trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "server/api/trpc"
 
 export const navigationRouter = createTRPCRouter({
   getNavigation: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
@@ -25,6 +25,9 @@ export const navigationRouter = createTRPCRouter({
       },
       include: {
         children: true,
+      },
+      orderBy: {
+        order: 'asc'
       }
     })
 
@@ -32,14 +35,16 @@ export const navigationRouter = createTRPCRouter({
       id: page.id,
       name: page.name,
       slug: page.slug,
+      order: page.order,
       children: page.children.map((child) => ({
         id: child.id,
         name: child.name,
         slug: `${page.slug}/${child.slug}`,
         parentId: child.parentId,
+        order: child.order,
       }))
     }))
 
     return navigation
-  })
+  }),
 })

@@ -7,7 +7,7 @@ export const HomepageContext = createContext<UseHomepageStateManagerResult>({} a
 
 const useHomepageStateManager = ({ domain }: IProviderProps["initialParams"]) => {
   const { data: mainSlideshow } = api.sites.slideshow.getSlideshowByName.useQuery(
-    { domain, name: "Slideshow Home" },
+    { domain, name: "Home Slideshow" },
     { enabled: !!domain }
   )
   return {
