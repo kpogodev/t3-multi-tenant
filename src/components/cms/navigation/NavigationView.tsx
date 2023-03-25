@@ -9,8 +9,6 @@ const animVariants = {
 }
 
 const NavigationView = () => {
-
-
   return (
     <motion.div
       key='pages-view'
@@ -19,6 +17,7 @@ const NavigationView = () => {
       animate='animate'
       exit='exit'
       className='flex w-full flex-col gap-10 p-5 xl:p-10'
+      layout
     >
       <Heading text='Navigation Structure' />
       <NavigationList />

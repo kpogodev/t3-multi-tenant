@@ -1,7 +1,7 @@
 import { api } from "utils/api"
 import PageCard from "./PageCard"
 
-const PageList = () => {
+const PageItem = () => {
   const { data: pages } = api.cms.page.getPagesBySiteId.useQuery()
 
   return (
@@ -12,4 +12,4 @@ const PageList = () => {
     </div>
   )
 }
-export default PageList
+export default PageItem
