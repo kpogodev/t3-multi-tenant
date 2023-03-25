@@ -23,13 +23,16 @@ const PageCollapsable = ({ page, index, isDragging }: PageCollapsableProps) => {
   }
 
   return (
-    <Draggable draggableId={page.id} index={index}>
+    <Draggable draggableId={page.id} index={index} isDragDisabled={isOpen}>
       {(provided) => (
         <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
           <motion.div
-            className='rounded-lg border border-base-300 bg-base-100'
+            className={cn(
+              isOpen ? "border-info" : "border-base-300",
+              "rounded-lg border bg-base-100 transition-colors"
+            )}
             layout={!isDragging}
-            style={{ boxShadow: "1px 3px 9px rgba(0,0,0,0.1)", borderRadius: "0.5rem" }}
+            initial={{ boxShadow: "1px 2px 6px rgba(0,0,0,0.08)", borderRadius: "0.5rem" }}
           >
             <motion.div layout={!isDragging ? "position" : false} className='flex w-full justify-between p-3'>
               <motion.h3 className='font-semibold' layout={!isDragging ? "position" : false}>

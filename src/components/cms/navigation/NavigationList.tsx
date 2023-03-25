@@ -145,6 +145,7 @@ const NavigationList = () => {
             style={{
               background: snapshot.isDraggingOver ? "rgba(0,0,0,0.1)" : "transparent",
             }}
+            layout
           >
             {pages?.map((page, index) => (
               <PageItem key={page.id} page={page} index={index} isDragging={isDragging} />
