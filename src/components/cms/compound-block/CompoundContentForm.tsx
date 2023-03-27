@@ -7,7 +7,7 @@ import EditIcon from "components/icons/EditIcon"
 import CheckMarkIcon from "components/icons/CheckMarkIcon"
 import CancelIcon from "components/icons/CancelIcon"
 
-const WelcomeContentForm = () => {
+const CompoundContentForm = () => {
   const [isEditing, setIsEditing] = useState(false)
   const [heading, setHeading] = useState("")
   const [paragraph, setParagraph] = useState("")
@@ -17,8 +17,8 @@ const WelcomeContentForm = () => {
   const ctx = useContext(CmsContext)
   const client = api.useContext()
 
-  const { data: welcomeBlock, isInitialLoading: initialLoadingWelcomeData } =
-    api.cms.components.welcomeBlock.getWelcomeBlock.useQuery(
+  const { data: compoundBlock, isInitialLoading: initialLoadingCompoundData } =
+    api.cms.components.compoundBlock.getCompoundBlock.useQuery(
       {
         componentId: ctx.currentView.id ?? "",
       },
@@ -36,10 +36,10 @@ const WelcomeContentForm = () => {
 
   const { data: pages, isInitialLoading: initialLoadingPages } = api.cms.page.getAllPagesSlug.useQuery()
 
-  const { mutate: updateWelcomeBlock } = api.cms.components.welcomeBlock.updateWelcomeBlock.useMutation({
+  const { mutate: updateCompoundBlock } = api.cms.components.compoundBlock.updateCompoundBlock.useMutation({
     onSuccess: () => {
       toast.success("Content has been updated")
-      void client.cms.components.welcomeBlock.getWelcomeBlock.invalidate()
+      void client.cms.components.compoundBlock.getCompoundBlock.invalidate()
     },
   })
 
@@ -54,10 +54,10 @@ const WelcomeContentForm = () => {
 
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!welcomeBlock) return
+    if (!compoundBlock) return
 
-    updateWelcomeBlock({
-      welcomeBlockId: welcomeBlock?.id,
+    updateCompoundBlock({
+      compoundBlockId: compoundBlock?.id,
       header: heading,
       text: paragraph,
       linkText: linkText,
@@ -65,7 +65,7 @@ const WelcomeContentForm = () => {
     })
   }
 
-  if (initialLoadingPages || initialLoadingWelcomeData) return <div>Loading...</div>
+  if (initialLoadingPages || initialLoadingCompoundData) return <div>Loading...</div>
 
   return (
     <form className='flex h-full w-full flex-col gap-5' onSubmit={handleSave}>
@@ -142,7 +142,7 @@ const WelcomeContentForm = () => {
                 color: "inherit",
               }),
             }}
-            defaultValue={{ label: findPageName(welcomeBlock?.linkUrl ?? ""), value: welcomeBlock?.linkUrl ?? "" }}
+            defaultValue={{ label: findPageName(compoundBlock?.linkUrl ?? ""), value: compoundBlock?.linkUrl ?? "" }}
             options={pages?.map((page) => ({ label: page.name, value: page.slug }))}
             onChange={(selected) => handlePageLinkSelection(selected)}
             isDisabled={!isEditing}
@@ -175,4 +175,4 @@ const WelcomeContentForm = () => {
     </form>
   )
 }
-export default WelcomeContentForm
+export default CompoundContentForm

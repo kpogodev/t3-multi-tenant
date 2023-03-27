@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { CmsContext } from "./context/CmsContext"
 import dynamic from "next/dynamic"
 import { AnimatePresence } from "framer-motion"
-import WelcomeBlockView from "./welcome-block/WelcomeBlockView"
+import CompoundBlockView from "./compound-block/CompoundBlockView"
 
 const EditPage = dynamic(() => import("./pages/EditPage"))
 const EditSubpage = dynamic(() => import("./pages/EditSubpage"))
@@ -25,7 +25,7 @@ const Views = () => {
     "edit-page": <EditPage />,
     "edit-subpage": <EditSubpage />,
     slideshow: <SlideshowView />,
-    "welcome-block": <WelcomeBlockView />,
+    "compound-block": <CompoundBlockView />,
   }
 
   return (

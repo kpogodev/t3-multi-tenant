@@ -2,9 +2,9 @@ import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "server/api/trpc"
 import cloudinary from "utils/cloudinary"
 
-export const welcomeBlockRouter = createTRPCRouter({
-  getWelcomeBlock: protectedProcedure.input(z.object({ componentId: z.string() })).query(async ({ ctx, input }) => {
-    const welcomeBlock = await ctx.prisma.welcomeBlock.findFirst({
+export const compoundBlockRouter = createTRPCRouter({
+  getCompoundBlock: protectedProcedure.input(z.object({ componentId: z.string() })).query(async ({ ctx, input }) => {
+    const compoundBlock = await ctx.prisma.compoundBlock.findFirst({
       where: {
         component: {
           componentId: input.componentId,
@@ -24,14 +24,14 @@ export const welcomeBlockRouter = createTRPCRouter({
       },
     })
 
-    if (!welcomeBlock) {
-      throw new Error("Welcome block not found")
+    if (!compoundBlock) {
+      throw new Error("Compound block not found")
     }
 
-    return welcomeBlock
+    return compoundBlock
   }),
   uploadImage: protectedProcedure
-    .input(z.object({ welcomeBlockId: z.string(), image: z.string() }))
+    .input(z.object({ compoundBlockId: z.string(), image: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const siteInfo = await ctx.prisma.site.findUnique({
         where: {
@@ -47,16 +47,23 @@ export const welcomeBlockRouter = createTRPCRouter({
       const siteNameSlug = siteInfo.name.toLowerCase().replace(/ /g, "_")
 
       const image = await cloudinary.uploader.upload(input.image, {
-        folder: `sites/${siteNameSlug}/welcome-blocks`,
-        transformation: { width: 1024, height: 768, crop: "fill", format: "webp", quality: "auto", fetch_format: "webp" },
+        folder: `sites/${siteNameSlug}/compound-blocks`,
+        transformation: {
+          width: 1024,
+          height: 768,
+          crop: "fill",
+          format: "webp",
+          quality: "auto",
+          fetch_format: "webp",
+        },
         format: "webp",
       })
 
       if (!image) throw new Error("Image not uploaded")
 
-      const welcomeBlock = await ctx.prisma.welcomeBlock.update({
+      const compoundBlock = await ctx.prisma.compoundBlock.update({
         where: {
-          id: input.welcomeBlockId,
+          id: input.compoundBlockId,
         },
         data: {
           image: {
@@ -80,9 +87,9 @@ export const welcomeBlockRouter = createTRPCRouter({
         },
       })
 
-      if (!welcomeBlock) throw new Error("WelcomeBlock not updated")
+      if (!compoundBlock) throw new Error("CompoundBlock not updated")
 
-      return welcomeBlock
+      return compoundBlock
     }),
   reuploadImage: protectedProcedure
     .input(z.object({ imageId: z.string(), imagePublicId: z.string(), image: z.string() }))
@@ -101,8 +108,15 @@ export const welcomeBlockRouter = createTRPCRouter({
       const siteNameSlug = siteInfo.name.toLowerCase().replace(/ /g, "_")
 
       const image = await cloudinary.uploader.upload(input.image, {
-        folder: `sites/${siteNameSlug}/welcome-blocks`,
-        transformation: { width: 1024, height: 768, crop: "fill", format: "webp", quality: "auto", fetch_format: "webp" },
+        folder: `sites/${siteNameSlug}/compound-blocks`,
+        transformation: {
+          width: 1024,
+          height: 768,
+          crop: "fill",
+          format: "webp",
+          quality: "auto",
+          fetch_format: "webp",
+        },
         format: "webp",
       })
 
@@ -142,10 +156,10 @@ export const welcomeBlockRouter = createTRPCRouter({
 
       return true
     }),
-  updateWelcomeBlock: protectedProcedure
+  updateCompoundBlock: protectedProcedure
     .input(
       z.object({
-        welcomeBlockId: z.string(),
+        compoundBlockId: z.string(),
         header: z.string().optional(),
         text: z.string().optional(),
         linkText: z.string().optional(),
@@ -153,9 +167,9 @@ export const welcomeBlockRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const welcomeBlock = await ctx.prisma.welcomeBlock.update({
+      const compoundBlock = await ctx.prisma.compoundBlock.update({
         where: {
-          id: input.welcomeBlockId,
+          id: input.compoundBlockId,
         },
         data: {
           header: input.header,
@@ -165,9 +179,9 @@ export const welcomeBlockRouter = createTRPCRouter({
         },
       })
 
-      if (!welcomeBlock) throw new Error("WelcomeBlock not updated")
+      if (!compoundBlock) throw new Error("CompoundBlock not updated")
 
-      return welcomeBlock
+      return compoundBlock
     }),
   deleteImage: protectedProcedure
     .input(z.object({ imageId: z.string(), imagePublicId: z.string() }))

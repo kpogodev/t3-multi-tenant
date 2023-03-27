@@ -1,8 +1,8 @@
 import { motion } from "framer-motion"
 import { useContext } from "react"
 import { CmsContext } from "../context/CmsContext"
-import WelcomeContentForm from "./WelcomeContentForm"
-import WelcomeImage from "./WelcomeImage"
+import CompoundContentForm from "./CompoundContentForm"
+import CompoundImage from "./CompoundImage"
 
 const animVariants = {
   initial: { opacity: 0 },
@@ -10,7 +10,7 @@ const animVariants = {
   exit: { opacity: 0 },
 }
 
-const WelcomeBlockView = () => {
+const CompoundBlockView = () => {
   const ctx = useContext(CmsContext)
 
   return (
@@ -23,12 +23,12 @@ const WelcomeBlockView = () => {
       exit='exit'
     >
       <div className='lg:col-span-1'>
-        <WelcomeImage />
+        <CompoundImage />
       </div>
       <div className='lg:col-span-2'>
-        <WelcomeContentForm />
+        <CompoundContentForm />
       </div>
     </motion.div>
   )
 }
-export default WelcomeBlockView
+export default CompoundBlockView
