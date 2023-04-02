@@ -13,7 +13,10 @@ const useCmsStateManager = (userId: string, session: Session) => {
   const [darkTheme, setDarkTheme] = useState<boolean>(false)
   //Fetch essential data
   const { data: site } = api.admin.site.getSiteByTenantId.useQuery(userId, { enabled: !!userId })
-  const { data: components } = api.cms.components.general.getComponents.useQuery(undefined, { enabled: !!userId })
+  const { data: components, isLoading: componetsAreLoading } = api.cms.components.general.getComponents.useQuery(
+    undefined,
+    { enabled: !!userId }
+  )
 
   const currentNavHeader = !currentView.id
     ? capitalizeString(currentView.view.replace("-", " "))
@@ -28,6 +31,7 @@ const useCmsStateManager = (userId: string, session: Session) => {
     currentView,
     darkTheme,
     currentNavHeader,
+    componetsAreLoading,
     prevView,
     components,
     session,

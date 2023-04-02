@@ -14,6 +14,7 @@ import { slideshowRouter } from "./routers/sites/slideshow";
 import { compoundBlockRouter } from "./routers/cms/components/compoundBlock";
 import { newsRouter } from "./routers/cms/news";
 import { navigationRouter as cmsNavigationRouter } from "./routers/cms/navigation";
+import { textBlockRouter } from "./routers/cms/components/textBlock";
 
 /**
  * This is the primary router for your server.
@@ -36,6 +37,7 @@ export const appRouter = createTRPCRouter({
       general: generalRouter,
       slideshow: sldieshowRouter,
       compoundBlock: compoundBlockRouter,
+      textBlock: textBlockRouter
     }),
   }),
   sites: createTRPCRouter({
