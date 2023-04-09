@@ -18,6 +18,7 @@ const PrefetchHomeData = async (context: GetServerSidePropsContext) => {
     if (domain) {
       await ssg.sites.navigation.getNavigation.prefetch(domain)
       await ssg.sites.slideshow.getSlideshowByName.prefetch({ domain, name: 'Slideshow Home' })
+      await ssg.sites.compound.getCompoundByName.prefetch(domain)
     }
 
     return {
