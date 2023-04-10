@@ -14,6 +14,9 @@ export default async function middleware(req: NextRequest) {
   const hostname = req.headers.get("host")
   const subDomain = hostname?.replace(`.${apexDomain}`, "") as string
 
+  console.log('hostname', hostname)
+  console.log('subdomain',subDomain)
+
   if(subDomain.length && !subDomain.startsWith(apexDomain)) {
 
     const themeName = await fetchThemeName({ protocol, subDomain, apexDomain })
