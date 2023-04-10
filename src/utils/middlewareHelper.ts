@@ -1,19 +1,12 @@
-type inputType = {
+interface inputType {
   protocol: string,
-  subDomain: string,
+  domain: string,
   apexDomain: string
 }
 
 // Helper function to fetch the theme name from the database
-export async function fetchThemeName({protocol, subDomain, apexDomain}: inputType) {
-  const response = await fetch(`${protocol}://${apexDomain}/api/site`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(`${subDomain}.kpwebdev.com`),
-  })
-
+export async function fetchThemeName({protocol, domain, apexDomain}: inputType) {
+  const response = await fetch(`${protocol}://${apexDomain}/api/site?domain=${domain}`)
   const {themeName} = await response.json() as {themeName: string}
 
   return themeName

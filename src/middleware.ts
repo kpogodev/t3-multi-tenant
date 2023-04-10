@@ -11,23 +11,17 @@ export const config = {
 export default async function middleware(req: NextRequest) {
   const url = req.nextUrl.clone()
   const { pathname } = req.nextUrl
-  const hostname = req.headers.get("host")
-  const subDomain = hostname?.replace(`.${apexDomain}`, "") as string
+  const hostname = req.headers.get("host") as string
 
-  console.log('hostname', hostname)
-  console.log('subdomain',subDomain)
+  const domain = hostname.includes(apexDomain) ? hostname.replace(`.${apexDomain}`, ".kpwebdev.com") : hostname
 
-  if(subDomain.length && !subDomain.startsWith(apexDomain)) {
+  if (domain.startsWith(apexDomain)) return NextResponse.next()
 
-    const themeName = await fetchThemeName({ protocol, subDomain, apexDomain })
+  const themeName = await fetchThemeName({ protocol, domain, apexDomain })
 
-    if (!themeName) {
-      return NextResponse.rewrite(`${protocol}://${apexDomain}/404`)
-    }
+  if (!themeName) return NextResponse.rewrite(`${protocol}://${apexDomain}/404`)
 
-    url.pathname = `/sites/${themeName}${pathname}`
-    return NextResponse.rewrite(new URL(url))
-  }
+  url.pathname = `/sites/${themeName}${pathname}`
 
-  return NextResponse.next()
+  return NextResponse.rewrite(new URL(url))
 }
