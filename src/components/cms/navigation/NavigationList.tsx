@@ -39,6 +39,14 @@ const NavigationList = () => {
     },
   })
 
+  // Mutate Subapge to become a Page
+  const { mutate: transformIntoPage } = api.cms.navigation.transformIntoPage.useMutation({
+    onSuccess: () => {
+      toast.success("Navigation structure updated")
+      void client.cms.navigation.getNavigation.invalidate()
+    },
+  })
+
   const handleOnDragStart = useCallback(() => {
     setIsDragging(true)
   }, [])
@@ -63,7 +71,7 @@ const NavigationList = () => {
 
     // Handle Subpage Actions
     if (result.source.droppableId.startsWith("subpage-list")) {
-      // Reordering of Subpages
+      // Reorder Subpages
       if (result.source.droppableId === result.destination.droppableId) {
         const pageId = result.source.droppableId.split("-")[2]
         const page = pages?.find((page) => page.id === pageId)
@@ -87,8 +95,8 @@ const NavigationList = () => {
         })
         setPages(newPages)
         reorderPages(items.map((item) => ({ pageId: item.id, newOrder: item.order })))
-      } else {
-        // Moving Subpage to another Page
+      } else if (result.destination.droppableId.startsWith("subpage-list")) {
+        // Move Subpage to another Page
         const sourcePageId = result.source.droppableId.split("-")[2]
         const destinationPageId = result.destination.droppableId.split("-")[2]
         if (!sourcePageId || !destinationPageId) return
@@ -130,30 +138,69 @@ const NavigationList = () => {
 
         movePage({ pageId: movedItem.id, newParentId: destinationPageId })
         setPages(newPages)
+      } else {
+        // Transform Subpage to become a Page
+        const sourcePageId = result.source.droppableId.split("-")[2]
+        const sourcePage = pages?.find((page) => page.id === sourcePageId)
+
+        if (!sourcePage) return
+
+        const sourceItems = [...sourcePage.children]
+        const [movedItem] = sourceItems.splice(result.source.index, 1)
+        if (!movedItem) return
+
+        sourceItems.forEach((item, index) => {
+          item.order = index
+        })
+
+        const newParentChildren = sourceItems.map((item) => {
+          return { pageId: item.id, newOrder: item.order }
+        })
+
+        transformIntoPage({ pageId: movedItem.id, parentChildren: newParentChildren, newOrder: pages.length })
       }
     }
   }
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd} onDragStart={handleOnDragStart}>
-      <Droppable droppableId='page-list' type='PAGES'>
-        {(provided, snapshot) => (
-          <motion.div
-            className='flex flex-col gap-2'
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            style={{
-              background: snapshot.isDraggingOver ? "rgba(0,0,0,0.1)" : "transparent",
-            }}
-            layout
-          >
-            {pages?.map((page, index) => (
-              <PageItem key={page.id} page={page} index={index} isDragging={isDragging} />
-            ))}
-            {provided.placeholder}
-          </motion.div>
-        )}
-      </Droppable>
+      <div>
+        <Droppable droppableId='page-list' type='PAGES'>
+          {(provided, snapshot) => (
+            <motion.div
+              className='flex flex-col gap-2'
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              style={{
+                background: snapshot.isDraggingOver ? "rgba(0,0,0,0.1)" : "transparent",
+              }}
+              layout
+            >
+              {pages?.map((page, index) => (
+                <PageItem key={page.id} page={page} index={index} isDragging={isDragging} />
+              ))}
+              {provided.placeholder}
+            </motion.div>
+          )}
+        </Droppable>
+        <Droppable droppableId='pop-subpage' type='SUBPAGES'>
+          {(provided, snapshot) => (
+            <div
+              className='relative z-0 mt-2 h-[60px] w-full border-2 border-dashed border-base-300'
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              style={{
+                background: snapshot.isDraggingOver ? "rgba(0,0,0,0.1)" : "transparent",
+              }}
+            >
+              <span className='absolute top-1/2 left-1/2 -z-10 -translate-x-1/2 -translate-y-1/2 font-semibold italic text-base-content'>
+                Drop Subpage here to transfrom it into Page
+              </span>
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </div>
     </DragDropContext>
   )
 }

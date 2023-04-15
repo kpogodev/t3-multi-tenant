@@ -2,7 +2,6 @@ import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "server/api/trpc"
 import { TRPCError } from "@trpc/server"
 
-
 export const navigationRouter = createTRPCRouter({
   getNavigation: protectedProcedure.query(async ({ ctx }) => {
     const site = await ctx.prisma.site.findUnique({
@@ -25,12 +24,14 @@ export const navigationRouter = createTRPCRouter({
 
     const navigation = pages.map((page) => {
       const children = site.pages.filter((child) => child.parentId === page.id)
-      const formatedChildren = children.map((child) => ({
-        id: child.id,
-        name: child.name,
-        order: child.order,
-        parentId: child.parentId,
-      })).sort((a, b) => a.order - b.order)
+      const formatedChildren = children
+        .map((child) => ({
+          id: child.id,
+          name: child.name,
+          order: child.order,
+          parentId: child.parentId,
+        }))
+        .sort((a, b) => a.order - b.order)
 
       return {
         id: page.id,
@@ -64,18 +65,58 @@ export const navigationRouter = createTRPCRouter({
       }
       return
     }),
-  movePage: protectedProcedure.input(z.object({
-    pageId: z.string(),
-    newParentId: z.string().nullable(),
-  })).mutation(async ({ ctx, input }) => {
-    await ctx.prisma.page.update({
-      where: {
-        id: input.pageId,
-      },
-      data: {
-        parentId: input.newParentId ? input.newParentId : null,
-      },
-    })
-    return
-  }),
+  movePage: protectedProcedure
+    .input(
+      z.object({
+        pageId: z.string(),
+        newParentId: z.string().nullable(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.page.update({
+        where: {
+          id: input.pageId,
+        },
+        data: {
+          parentId: input.newParentId ? input.newParentId : null,
+        },
+      })
+      return
+    }),
+  transformIntoPage: protectedProcedure
+    .input(
+      z.object({
+        parentChildren: z.array(
+          z.object({
+            pageId: z.string(),
+            newOrder: z.number(),
+          })
+        ),
+        pageId: z.string(),
+        newOrder: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.page.update({
+        where: {
+          id: input.pageId,
+        },
+        data: {
+          parentId: null,
+          order: input.newOrder,
+        },
+      })
+
+      for (const page of input.parentChildren) {
+        await ctx.prisma.page.update({
+          where: {
+            id: page.pageId,
+          },
+          data: {
+            order: page.newOrder,
+          },
+        })
+      }
+      return
+    }),
 })

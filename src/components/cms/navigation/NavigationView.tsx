@@ -17,7 +17,7 @@ const NavigationView = () => {
       initial='initial'
       animate='animate'
       exit='exit'
-      className='flex w-full flex-col gap-10 p-5 xl:p-10 pb-32'
+      className='flex w-full flex-col gap-5 p-5 xl:p-10 pb-32'
       layout
     >
       <Heading text='Navigation Structure' />
