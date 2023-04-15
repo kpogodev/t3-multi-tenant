@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext, GetServerSidePropsResult } from "next"
 
 const PageNotFoundRedirectHelper = async (
   context: GetServerSidePropsContext,
-  cb: () => Promise<GetServerSidePropsResult<{ [key: string]: any }>>
+  cb: () => Promise<GetServerSidePropsResult<{ [key: string]: unknown }>>
 ) => {
   if (
     typeof context.params === "undefined" ||

@@ -7,7 +7,7 @@ import { generalRouter } from "./routers/cms/components/general";
 import { pageRouter } from "./routers/cms/page";
 import { pageContentRouter } from "./routers/cms/pageContent";
 import { contentRouter } from "./routers/sites/content";
-import { homepageRouter } from "./routers/sites/homepage";
+import { videoBlockRouter } from "./routers/sites/video";
 import { navigationRouter } from "./routers/sites/navigation";
 import { createTRPCRouter } from "./trpc";
 import { slideshowRouter } from "./routers/sites/slideshow";
@@ -45,7 +45,7 @@ export const appRouter = createTRPCRouter({
   }),
   sites: createTRPCRouter({
     content: contentRouter,
-    homepage: homepageRouter,
+    video: videoBlockRouter,
     navigation: navigationRouter,
     slideshow: slideshowRouter,
     compound: compoundRouter

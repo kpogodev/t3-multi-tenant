@@ -4,7 +4,6 @@ import PrefetchPageData from "themes/boilerplate/utils/PrefetchPageData"
 import Layout from "themes/boilerplate/Layout"
 import ContentPages from "themes/boilerplate/ContentPages"
 
-
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   return await PageNotFoundRedirectHelper(context, () => PrefetchPageData(context))
 }
@@ -16,7 +15,7 @@ export interface IPageProps {
 
 const Page: NextPage<IPageProps> = (props) => {
   return (
-    <Layout domain={props.domain} >
+    <Layout domain={props.domain}>
       <ContentPages {...props} />
     </Layout>
   )

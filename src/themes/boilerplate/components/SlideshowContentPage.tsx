@@ -45,6 +45,7 @@ const SlideshowContentPage = ({ wrapperClassName }: SlideshowProps) => {
 
   return (
     <div className={cn(wrapperClassName ? wrapperClassName : "", "relative bg-black")}>
+      <div className='absolute top-0 left-0 z-20 h-1/2 w-full bg-gradient-to-b from-[rgb(30_64_175_/_0.7)] to-transparent' />
       <Swiper key={swiperKey} {...swiperProps} className='absolute inset-0 h-full w-full'>
         {slideshow.slides.map((slide) => (
           <SwiperSlide key={slide.id} className='swiper-no-swiping relative'>

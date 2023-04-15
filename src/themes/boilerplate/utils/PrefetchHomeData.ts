@@ -17,7 +17,7 @@ const PrefetchHomeData = async (context: GetServerSidePropsContext) => {
     // Prefetch data queries
     if (domain) {
       await ssg.sites.navigation.getNavigation.prefetch(domain)
-      await ssg.sites.slideshow.getSlideshowByName.prefetch({ domain, name: 'Slideshow Home' })
+      await ssg.sites.video.getVideoByName.prefetch({ name: "Homepage Video Background", domain })
     }
 
     return {

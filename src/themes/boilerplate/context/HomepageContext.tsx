@@ -6,12 +6,12 @@ type UseHomepageStateManagerResult = ReturnType<typeof useHomepageStateManager>
 export const HomepageContext = createContext<UseHomepageStateManagerResult>({} as UseHomepageStateManagerResult)
 
 const useHomepageStateManager = ({ domain }: IProviderProps["initialParams"]) => {
-  const { data: mainSlideshow } = api.sites.slideshow.getSlideshowByName.useQuery(
-    { domain, name: "Home Slideshow" },
+  const { data: videoBackground } = api.sites.video.getVideoByName.useQuery(
+    { domain, name: "Homepage Video Background" },
     { enabled: !!domain }
   )
   return {
-    mainSlideshow,
+    videoBackground,
   }
 }
 
