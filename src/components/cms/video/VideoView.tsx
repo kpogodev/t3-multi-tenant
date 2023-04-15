@@ -28,7 +28,7 @@ const VideoView = () => {
       className='flex w-full flex-col gap-10 p-5 pb-32 xl:p-10'
       layout
     >
-      <div className='flex w-full max-w-2xl flex-col gap-10 p-5 xl:p-10'>
+      <div className='flex w-full max-w-2xl flex-col gap-10'>
         <Heading text={`Edit - ${ctx.currentNavHeader}`} />
         {videoData?.secure_url ? (
           <>

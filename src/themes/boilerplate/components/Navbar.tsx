@@ -8,7 +8,11 @@ const Navbar = ({ domain }: { domain: string }) => {
 
   if (typeof navigation === "undefined") return <></>
 
-  // alphabetically sort the navigation
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const target = e.target as HTMLAnchorElement
+    target.blur()
+  }
 
   return (
     <nav className={styles.container}>
@@ -20,14 +24,14 @@ const Navbar = ({ domain }: { domain: string }) => {
         </li>
         {navigation.map((page) => (
           <li key={page.id} className={styles.item}>
-            <Link href={`/${page.slug}`} className={styles.link}>
+            <Link href={`/${page.slug}`} className={styles.link} onClick={handleLinkClick}>
               {page.name}
             </Link>
             {page.children.length > 0 && (
               <ul className={styles["sub-list"]}>
                 {page.children.map((child) => (
                   <li key={child.id} className={styles["sub-item"]}>
-                    <Link href={`/${child.slug}`} className={styles["sub-link"]}>
+                    <Link href={`/${child.slug}`} className={styles["sub-link"]} onClick={handleLinkClick}>
                       {child.name}
                     </Link>
                   </li>
