@@ -1,4 +1,3 @@
-import { link } from "fs"
 import Link from "next/link"
 import { api } from "utils/api"
 import styles from "../styles/Navbar.module.css"

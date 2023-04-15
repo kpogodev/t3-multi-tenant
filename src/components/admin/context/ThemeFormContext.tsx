@@ -78,7 +78,7 @@ const useThemeFormStateManager = () => {
 
     createTheme({
       name: themeName,
-      features: chosenFeatures.map(({ id, ...rest }) => rest),
+      features: chosenFeatures.map(({ ...rest }) => rest),
     })
   }
 

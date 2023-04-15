@@ -4,7 +4,7 @@ import cn from "classnames"
 import { api } from "utils/api"
 import { toast } from "react-toastify"
 import { slugifyString } from "utils/slugifyString"
-import { type } from "os"
+
 
 const AddDomainForm = ({ isCustomDomain }: { isCustomDomain?: boolean }) => {
   const [domainAvailable, setDomainAvailable] = useState<boolean | undefined>()

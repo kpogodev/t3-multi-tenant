@@ -1,6 +1,4 @@
-import { type SVGIcon } from "types/icons"
-
-const WarningIcon = ({ ...props }: SVGIcon) => {
+const WarningIcon = () => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'

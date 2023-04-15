@@ -2,7 +2,6 @@ import UploadImageIcon from "components/icons/UploadImageIcon"
 import { motion } from "framer-motion"
 import type { UploadImagePlaceholderProps } from "./UploadImageForm"
 import cn from "classnames"
-import { generateRandomKey } from "utils/generateRandomKey"
 
 const animVariants = {
   initial: { opacity: 0 },

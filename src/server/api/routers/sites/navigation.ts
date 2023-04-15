@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "server/api/trpc"
+import { createTRPCRouter, publicProcedure } from "server/api/trpc"
 
 export const navigationRouter = createTRPCRouter({
   getNavigation: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
