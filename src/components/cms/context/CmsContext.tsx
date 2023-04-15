@@ -10,6 +10,7 @@ export const CmsContext = createContext<UseCmsStateManagerResult>({} as UseCmsSt
 
 const useCmsStateManager = (userId: string, session: Session) => {
   const { currentView, prevView, changeView } = useCustomRouter()
+  
   const [darkTheme, setDarkTheme] = useState<boolean>(false)
   //Fetch essential data
   const { data: site } = api.admin.site.getSiteByTenantId.useQuery(userId, { enabled: !!userId })

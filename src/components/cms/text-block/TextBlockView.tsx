@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { useContext } from "react"
 import { CmsContext } from "../context/CmsContext"
 
+
 const animVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
@@ -23,7 +24,7 @@ const TextBlockView = () => {
       className='flex w-full flex-col gap-10 p-5 pb-32 xl:p-10'
       layout
     >
-      <Heading text='Edit Text' />
+      <Heading text={`Edit - ${ctx.currentNavHeader}`} />
       <TextBlockForm />
     </motion.div>
   )

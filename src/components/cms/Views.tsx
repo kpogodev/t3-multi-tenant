@@ -11,6 +11,7 @@ const NewsView = dynamic(() => import("./news/NewsView"))
 const NavigationView = dynamic(() => import("./navigation/NavigationView"))
 const CompoundBlockView = dynamic(() => import("./compound-block/CompoundBlockView"))
 const TextBlockView = dynamic(() => import("./text-block/TextBlockView"))
+const VideoView = dynamic(() => import("./video/VideoView"))
 
 type ViewType = { [key: string]: JSX.Element }
 
@@ -19,7 +20,6 @@ const Views = () => {
 
   const view: ViewType = {
     default: <></>,
-    metadata: <></>,
     navigation: <NavigationView />,
     pages: <PagesView />,
     news: <NewsView />,
@@ -28,6 +28,7 @@ const Views = () => {
     slideshow: <SlideshowView />,
     "compound-block": <CompoundBlockView />,
     "text-block": <TextBlockView />,
+    video: <VideoView />,
   }
 
   return (

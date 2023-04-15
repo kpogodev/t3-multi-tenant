@@ -2,7 +2,7 @@ import FeatureBadge from "./FeatureBadge"
 import type { FeatureType } from "@prisma/client"
 
 const FeatureList = () => {
-  const features: FeatureType[] = ["COMPOUND_BLOCK", "SLIDESHOW", "TEXT_BLOCK"]
+  const features: FeatureType[] = ["COMPOUND_BLOCK", "SLIDESHOW", "TEXT_BLOCK", "VIDEO"]
 
   return (
     <div className='flex w-full max-w-xl flex-col gap-4'>

@@ -8,6 +8,5 @@ interface inputType {
 export async function fetchThemeName({protocol, domain, apexDomain}: inputType) {
   const response = await fetch(`${protocol}://${apexDomain}/api/site?domain=${domain}`)
   const {themeName} = await response.json() as {themeName: string}
-
   return themeName
 }

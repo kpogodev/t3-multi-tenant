@@ -40,12 +40,15 @@ const SidebarMenu = ({ menu }: SidebarMenuProps) => {
           {item.views.map((view) => (
             <li key={generateRandomKey()}>
               <button
-                className={cn({
-                  active:
-                    typeof view === "string"
-                      ? view === ctx.currentView.view
-                      : capitalizeString(view.name.replace("-", " ")) === ctx.currentNavHeader,
-                })}
+                className={cn(
+                  {
+                    active:
+                      typeof view === "string"
+                        ? view === ctx.currentView.view
+                        : capitalizeString(view.name.replace("-", " ")) === ctx.currentNavHeader,
+                  },
+                  "text-left"
+                )}
                 onClick={handleClick}
                 value={typeof view === "string" ? view : view.type.toLowerCase().replace("_", "-")}
                 data-id={typeof view === "string" ? "" : view.id}

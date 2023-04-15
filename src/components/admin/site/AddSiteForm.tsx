@@ -2,7 +2,7 @@ import { useState } from "react"
 import { api } from "utils/api"
 import { toast } from "react-toastify"
 import Select, { type SingleValue } from "react-select"
-import { reactSelectStyles } from "styles/reactSelectStyles"
+import { reactSelectStyles } from "utils/reactSelectStyles"
 
 const AddSiteForm = () => {
   const [websiteName, setWebsiteName] = useState<string>("")

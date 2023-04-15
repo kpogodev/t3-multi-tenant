@@ -100,7 +100,7 @@ model Page {
   order     Int          @default(0)
   hidden    Boolean      @default(false)
   special   Boolean      @default(false)
-  site      Site         @relation(fields: [siteId], references: [id])
+  site      Site         @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   siteId    String
   content   PageContent?
   parentId  String?
@@ -135,9 +135,6 @@ model Theme {
 
 // Features
 enum FeatureType {
-  CARD
-  CONTACT_FORM
-  IMAGE_BLOCK
   MAP
   SLIDESHOW
   TEXT_BLOCK
@@ -195,13 +192,13 @@ model ComponentsRelation {
   slideshowId     String?        @unique
   textBlock       TextBlock?     @relation(fields: [textBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   textBlockId     String?        @unique
+  video           Video?         @relation(fields: [videoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  videoId         String?        @unique
 
   @@unique([componentId, compoundBlockId], name: "ComponentCompoundBlock")
   @@unique([componentId, slideshowId], name: "ComponentSlideshow")
   @@unique([componentId, textBlockId], name: "ComponentTextBlock")
-  @@index([compoundBlockId])
-  @@index([slideshowId])
-  @@index([textBlockId])
+  @@unique([componentId, videoId], name: "ComponentVideo")
 }
 
 model Slideshow {
@@ -260,4 +257,16 @@ model TextBlock {
   id        String              @id @default(cuid())
   text      String?             @db.LongText
   component ComponentsRelation?
+}
+
+model Video {
+  id              String         @id @default(cuid())
+  public_id       String?
+  width           Int?
+  height          Int?
+  format          String?
+  resource_type   String?
+  secure_url      String?
+  created_at      DateTime      @default(now())
+  component       ComponentsRelation?
 }
