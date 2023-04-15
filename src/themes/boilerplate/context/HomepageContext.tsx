@@ -6,12 +6,24 @@ type UseHomepageStateManagerResult = ReturnType<typeof useHomepageStateManager>
 export const HomepageContext = createContext<UseHomepageStateManagerResult>({} as UseHomepageStateManagerResult)
 
 const useHomepageStateManager = ({ domain }: IProviderProps["initialParams"]) => {
+  // Fetch Homepage Video Background
   const { data: videoBackground } = api.sites.video.getVideoByName.useQuery(
     { domain, name: "Homepage Video Background" },
     { enabled: !!domain }
   )
+
+  // Fetch Welcome Section
+  const { data: welcomeSection } = api.sites.compound.getCompoundByName.useQuery(
+    {
+      domain,
+      name: "Welcome Section",
+    },
+    { enabled: !!domain }
+  )
+
   return {
     videoBackground,
+    welcomeSection,
   }
 }
 

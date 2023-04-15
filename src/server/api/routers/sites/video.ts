@@ -24,6 +24,7 @@ export const videoBlockRouter = createTRPCRouter({
         select: {
           components: {
             where: {
+              name: input.name,
               feature: {
                 type: "VIDEO",
               },
