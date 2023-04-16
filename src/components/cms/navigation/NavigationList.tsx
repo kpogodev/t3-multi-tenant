@@ -42,7 +42,15 @@ const NavigationList = () => {
   // Mutate Subapge to become a Page
   const { mutate: transformIntoPage } = api.cms.navigation.transformIntoPage.useMutation({
     onSuccess: () => {
-      toast.success("Navigation structure updated")
+      toast.success("Subpage successfuly transformed into a Page")
+      void client.cms.navigation.getNavigation.invalidate()
+    },
+  })
+
+  // Mutate Page to become a Subpage
+  const { mutate: transformIntoSubpage } = api.cms.navigation.transformIntoSubpage.useMutation({
+    onSuccess: () => {
+      toast.success("Page successfuly transformed into a Subpage")
       void client.cms.navigation.getNavigation.invalidate()
     },
   })
@@ -134,7 +142,7 @@ const NavigationList = () => {
     setPages(newPages)
   }
 
-  // Transform Subpage itoto a top level Page
+  // Transform Subpage into a top level Page
   const handleTransformIntoPage = (result: DropResult) => {
     if (!result.destination || !result.source) return
     const sourcePageId = result.source.droppableId.split("-")[2]
@@ -157,6 +165,32 @@ const NavigationList = () => {
     transformIntoPage({ pageId: movedItem.id, parentChildren: newParentChildren, newOrder: pages.length })
   }
 
+  // Transform Page into a Subpage
+  const handleTransformIntoSubpage = (result: DropResult) => {
+    if (!result.combine) return
+    const newParentPage = pages?.find((page) => page.id === result.combine?.draggableId)
+    if (!newParentPage) return
+
+    const sourceItems = [...pages]
+    const [movedItem] = sourceItems.splice(result.source.index, 1)
+
+    if (!movedItem) return
+    if (movedItem.children.length > 0) return toast.error("Cannot transform a page with subpages into a subpage")
+
+    sourceItems.forEach((item, index) => {
+      item.order = index
+    })
+
+    const updatedPages = sourceItems.map((item) => ({ pageId: item.id, newOrder: item.order }))
+
+    transformIntoSubpage({
+      pageId: movedItem.id,
+      newParentId: newParentPage.id,
+      newOrder: newParentPage.children.length,
+      pages: updatedPages,
+    })
+  }
+
   // Event Handlers
   const handleOnDragStart = useCallback(() => {
     setIsDragging(true)
@@ -164,13 +198,18 @@ const NavigationList = () => {
 
   const handleOnDragEnd = (result: DropResult) => {
     setIsDragging(false)
+
+    if (result.combine) return handleTransformIntoSubpage(result)
+
     if (!result.destination || !result.source) return
 
     if (result.destination.droppableId === "page-list" && pages) return handlePageReorder(result)
-    
+
     if (result.source.droppableId.startsWith("subpage-list")) {
       if (result.source.droppableId === result.destination.droppableId) return handleSubpageReorder(result)
+
       if (result.destination.droppableId.startsWith("subpage-list")) return handleMoveSubpageToAnotherPage(result)
+
       if (result.destination.droppableId === "pop-subpage") return handleTransformIntoPage(result)
     }
   }
@@ -178,7 +217,7 @@ const NavigationList = () => {
   return (
     <DragDropContext onDragEnd={handleOnDragEnd} onDragStart={handleOnDragStart}>
       <div>
-        <Droppable droppableId='page-list' type='PAGES'>
+        <Droppable droppableId='page-list' type='PAGES' isCombineEnabled={true}>
           {(provided, snapshot) => (
             <motion.div
               className='flex flex-col gap-2'

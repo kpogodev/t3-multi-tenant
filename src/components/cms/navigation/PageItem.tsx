@@ -24,12 +24,13 @@ const PageCollapsable = ({ page, index, isDragging }: PageCollapsableProps) => {
 
   return (
     <Draggable draggableId={page.id} index={index} isDragDisabled={isOpen}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
           <motion.div
             className={cn(
+              snapshot.combineTargetFor ? "bg-base-200" : "bg-base-100",
               isOpen ? "border-info" : "border-base-300",
-              "rounded-lg border bg-base-100 transition-colors"
+              "rounded-lg border transition-colors"
             )}
             layout={!isDragging}
             initial={{ boxShadow: "1px 2px 6px rgba(0,0,0,0.08)", borderRadius: "0.5rem" }}

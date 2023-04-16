@@ -119,4 +119,38 @@ export const navigationRouter = createTRPCRouter({
       }
       return
     }),
+    transformIntoSubpage: protectedProcedure.input(z.object({
+      pageId: z.string(),
+      newParentId: z.string(),
+      newOrder: z.number(),
+      pages: z.array(
+        z.object({
+          pageId: z.string(),
+          newOrder: z.number(),
+        }),
+      ),
+    })).mutation(async ({ ctx, input }) => {
+      await ctx.prisma.page.update({
+        where: {
+          id: input.pageId,
+        },
+        data: {
+          parentId: input.newParentId,
+          order: input.newOrder,
+        },
+      })
+
+      for (const page of input.pages) {
+        await ctx.prisma.page.update({
+          where: {
+            id: page.pageId,
+          },
+          data: {
+            order: page.newOrder,
+          },
+        })
+      }
+
+      return
+    }),
 })
