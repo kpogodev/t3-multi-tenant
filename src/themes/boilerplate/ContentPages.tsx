@@ -1,4 +1,4 @@
-import type { IPageProps } from "pages/sites/boilerplate/[...slug]"
+import type { IPageProps } from "pages/sites/boilerplate/[[..slug]]"
 import ContentPageContextProvider from "./context/ContentPageContext"
 import MainContent from "./components/MainContent"
 import SlideshowContentPage from "./components/SlideshowContentPage"
