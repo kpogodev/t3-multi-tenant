@@ -15,7 +15,7 @@ const DisplayRichText = ({ data, className }: DisplayRichTextProps) => {
   const html = draftToHtml(rawData)
 
   return (
-    <div className='xl:py-16 flex w-full justify-center rounded-lg py-10 '>
+    <div className='flex w-full justify-start rounded-lg '>
       <div className={className} dangerouslySetInnerHTML={{ __html: html }}></div>
     </div>
   )

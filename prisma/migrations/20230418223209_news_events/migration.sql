@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `Page` ADD COLUMN `withEvents` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `withNews` BOOLEAN NOT NULL DEFAULT false;

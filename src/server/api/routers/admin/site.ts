@@ -47,7 +47,6 @@ export const siteRouter = createTRPCRouter({
       if (themeFeautes.length > 0) {
         for (const feature of themeFeautes) {
           const compotentsRelationModel = toCamelCase(feature.type).trim()
-          console.log(compotentsRelationModel)
           await ctx.prisma.component.create({
             data: {
               name: feature.name,

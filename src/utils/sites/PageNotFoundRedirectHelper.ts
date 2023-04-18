@@ -12,19 +12,20 @@ const PageNotFoundRedirectHelper = async (
   )
     return { notFound: true }
 
-  const hostDomain = context.req.headers.host
-  const domainToCheck =
+
+    const hostDomain = context.req.headers.host
+    const domainToCheck =
     process.env.NODE_ENV === "production" ? hostDomain : hostDomain.replace(".localhost:3000", ".kpwebdev.com")
 
-  const siteSlugs = await prisma.page.findMany({
-    where: {
-      site: {
-        domain: {
-          name: domainToCheck,
+    const siteSlugs = await prisma.page.findMany({
+      where: {
+        site: {
+          domain: {
+            name: domainToCheck,
+          },
         },
       },
-    },
-    select: {
+      select: {
       slug: true,
       children: true,
       special: true,
@@ -32,7 +33,7 @@ const PageNotFoundRedirectHelper = async (
   })
 
   const { slug } = context.params
-  const formattedSlug = [...slug].join("/")
+  const formattedSlug =   Array.isArray(slug) ?  [...slug].join("/") : slug
 
   const formattedSiteRouts = [
     ...siteSlugs.map((page) => page.slug),
@@ -40,6 +41,7 @@ const PageNotFoundRedirectHelper = async (
   ]
 
   if (!formattedSiteRouts.includes(formattedSlug)) return { notFound: true }
+
 
   return cb()
 }
