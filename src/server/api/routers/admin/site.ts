@@ -83,12 +83,15 @@ export const siteRouter = createTRPCRouter({
                 create: {},
               },
               special: true,
+              withNews: true,
             },
           })
         } catch (error) {
           throw new Error('News Page not created')
         }
       }
+
+      
 
       return site
     }),

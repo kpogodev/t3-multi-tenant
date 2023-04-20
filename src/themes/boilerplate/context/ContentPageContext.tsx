@@ -20,10 +20,12 @@ const useContentPageStateManager = ({ slug, domain }: IProviderProps["initialPar
     }
   )
 
+  const { data: news } = api.sites.news.getNews.useQuery({ domain, limit: 20 }, { enabled: !!domain })
 
   return {
     slideshowContenentPage,
     pageData,
+    news,
   }
 }
 

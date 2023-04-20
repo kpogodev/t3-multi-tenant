@@ -29,7 +29,9 @@ const Sidebar = () => {
 
   const { data: specialPages } = api.cms.page.getSpecialPages.useQuery(undefined, { enabled: !!ctx.session?.user.id })
   const siteSpecialPages =
-    typeof specialPages !== "undefined" ? specialPages.map((page) => page.name.toLowerCase().replace(" ", "-")) : []
+    typeof specialPages !== "undefined"
+      ? [...new Set(specialPages.map((page) => page.name.toLowerCase().replace(" ", "-")))]
+      : []
 
   const handleClose = (e: React.SyntheticEvent<HTMLElement>) => {
     if (e.type === "keydown") {

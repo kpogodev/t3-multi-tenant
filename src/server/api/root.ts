@@ -12,11 +12,12 @@ import { navigationRouter } from "./routers/sites/navigation";
 import { createTRPCRouter } from "./trpc";
 import { slideshowRouter } from "./routers/sites/slideshow";
 import { compoundBlockRouter } from "./routers/cms/components/compoundBlock";
-import { newsRouter } from "./routers/cms/news";
+import { newsRouter as cmsNewsRouter } from "./routers/cms/news";
 import { navigationRouter as cmsNavigationRouter } from "./routers/cms/navigation";
 import { textBlockRouter } from "./routers/cms/components/textBlock";
 import { compoundRouter } from "./routers/sites/compound";
 import { videoRouter } from "./routers/cms/components/video";
+import { newsRouter } from "./routers/sites/news";
 
 /**
  * This is the primary router for your server.
@@ -34,7 +35,7 @@ export const appRouter = createTRPCRouter({
     page: pageRouter,
     pageContent: pageContentRouter,
     navigation: cmsNavigationRouter,
-    news: newsRouter,
+    news: cmsNewsRouter,
     components: createTRPCRouter({
       general: generalRouter,
       slideshow: sldieshowRouter,
@@ -48,7 +49,8 @@ export const appRouter = createTRPCRouter({
     video: videoBlockRouter,
     navigation: navigationRouter,
     slideshow: slideshowRouter,
-    compound: compoundRouter
+    compound: compoundRouter,
+    news: newsRouter,
   }),
 });
 

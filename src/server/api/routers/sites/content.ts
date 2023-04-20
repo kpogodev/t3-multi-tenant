@@ -12,6 +12,7 @@ export const contentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const domainToLookFor =
         process.env.NODE_ENV === "production" ? input.domain : input.domain.replace(".localhost:3000", ".kpwebdev.com")
+
       const slug =
         input.pageSlug instanceof Array
           ? input.pageSlug.length > 1
@@ -47,6 +48,8 @@ export const contentRouter = createTRPCRouter({
       const responseObj = {
         pageName: page.name,
         content: page.content,
+        withNews: page.withNews,
+        withEvents: page.withEvents,
       }
 
       return responseObj
