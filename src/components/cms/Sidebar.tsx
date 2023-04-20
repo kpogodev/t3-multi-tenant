@@ -24,14 +24,14 @@ const Sidebar = () => {
   const isLargeScreen = useMediaQuery("(min-width: 1280px)")
 
   const ctx = useContext(CmsContext)
+
+  // Labels for components views
   const siteComponets =
     ctx.components?.map((component) => ({ id: component.id, name: component.name, type: component.feature.type })) ?? []
 
+  // Labels for special pages
   const { data: specialPages } = api.cms.page.getSpecialPages.useQuery(undefined, { enabled: !!ctx.session?.user.id })
-  const siteSpecialPages =
-    typeof specialPages !== "undefined"
-      ? [...new Set(specialPages.map((page) => page.name.toLowerCase().replace(" ", "-")))]
-      : []
+  const siteSpecialPages = specialPages ?? []
 
   const handleClose = (e: React.SyntheticEvent<HTMLElement>) => {
     if (e.type === "keydown") {

@@ -143,23 +143,24 @@ export const pageRouter = createTRPCRouter({
     return pages
   }),
   getSpecialPages: protectedProcedure.query(async ({ ctx }) => {
-    const site = await ctx.prisma.site.findUnique({
+    const pages = await ctx.prisma.page.findMany({
       where: {
-        userId: ctx.session.user.id,
-      },
-      select: {
-        pages: {
-          where: {
-            special: true,
-          },
-        },
+        site: {
+          userId: ctx.session.user.id,
+        }
       },
     })
 
-    if (!site) throw new Error("Special Pages not found")
+    if(!pages) throw new TRPCError({ code: 'NOT_FOUND', message: 'No pages found'})
 
-    const pages = site.pages
-    return pages
+    const pageWithNews = pages.find(page => page.withNews)
+    const pageWithEvents = pages.find(page => page.withEvents)
+
+    const specialPages = []
+    if(pageWithNews) specialPages.push('news')
+    if(pageWithEvents) specialPages.push('events')
+
+    return specialPages
   }),
   editPageName: protectedProcedure
     .input(
