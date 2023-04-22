@@ -3,7 +3,8 @@ import moment from "moment"
 
 const localizer = momentLocalizer(moment)
 
-const BigCalendar = (props: { props: Omit<CalendarProps, "localizer"> }) => {
+const BigCalendar = (props: Omit<CalendarProps, "localizer">) => {
   return <Calendar {...props} localizer={localizer} />
 }
+
 export default BigCalendar

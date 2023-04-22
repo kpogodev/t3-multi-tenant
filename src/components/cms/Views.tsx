@@ -12,6 +12,7 @@ const NavigationView = dynamic(() => import("./navigation/NavigationView"))
 const CompoundBlockView = dynamic(() => import("./compound-block/CompoundBlockView"))
 const TextBlockView = dynamic(() => import("./text-block/TextBlockView"))
 const VideoView = dynamic(() => import("./video/VideoView"))
+const EventsView = dynamic(() => import("./events/EventsView"))
 
 type ViewType = { [key: string]: JSX.Element }
 
@@ -29,10 +30,11 @@ const Views = () => {
     "compound-block": <CompoundBlockView />,
     "text-block": <TextBlockView />,
     video: <VideoView />,
+    events: <EventsView />,
   }
 
   return (
-    <main className='flex w-full flex-col gap-5 xl:gap-10 flex-grow'>
+    <main className='flex w-full flex-grow flex-col gap-5 xl:gap-10'>
       <AnimatePresence mode='wait'>{view[ctx.currentView.view]}</AnimatePresence>
     </main>
   )

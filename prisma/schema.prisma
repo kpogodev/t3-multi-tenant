@@ -78,6 +78,7 @@ model Site {
   userId     String?     @unique
   components Component[]
   news       News[]
+  events     Events[]
   pages      Page[]
 
   @@index([themeId])
@@ -162,6 +163,20 @@ model News {
   date      DateTime
   author    String?
   image     ExternalImage?
+  site      Site           @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  siteId    String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([siteId])
+}
+
+model Events {
+  id        String         @id @default(cuid())
+  title     String
+  start     DateTime
+  end       DateTime
+  allDay    Boolean
   site      Site           @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   siteId    String
   createdAt DateTime       @default(now())
