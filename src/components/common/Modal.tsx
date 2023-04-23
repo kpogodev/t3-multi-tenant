@@ -49,8 +49,8 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
         className={cn(isOpen && "pointer-events-auto visible opacity-100", "modal modal-bottom sm:modal-middle")}
         onClick={handleOutsideClick}
       >
-        <div className='modal-box relative'>
-          <button className='btn-sm btn-primary btn-circle btn absolute right-2 top-2' onClick={onClose}>
+        <div className='modal-box relative overflow-visible'>
+          <button className='btn-primary btn-sm btn-circle btn absolute right-2 top-2' onClick={onClose}>
             <CancelIcon className='h-3 w-3' />
           </button>
           {children}
