@@ -6,6 +6,7 @@ import Heading from "components/common/Heading"
 import PageContentEditor from "./PageContentEditor"
 import EditPageName from "./EditPageName"
 import { motion } from "framer-motion"
+import PageOptions from "./PageOptions"
 
 const animVariants = {
   initial: { opacity: 0 },
@@ -35,6 +36,9 @@ const EditPage = () => {
       <div className='divider'></div>
       <Heading text='Main Content' />
       <PageContentEditor />
+      <div className='divider'></div>
+      <Heading text='Page Options' />
+      <PageOptions />
       <div className='divider'></div>
       <AddSubpages />
       <SubpagesList />

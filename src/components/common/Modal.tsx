@@ -1,5 +1,5 @@
 import CancelIcon from "components/icons/CancelIcon"
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom"
 import cn from "classnames"
 
@@ -7,9 +7,10 @@ interface ModalProps {
   isOpen: boolean
   onClose: () => void
   children: React.ReactNode | React.ReactNode[]
+  boxClassName?: string
 }
 
-const Modal = ({ isOpen, onClose, children }: ModalProps) => {
+const Modal = ({ isOpen, onClose, boxClassName, children }: ModalProps) => {
   const [isMounted, setIsMounted] = useState(false)
   const modalRootRef = useRef<HTMLElement | null>(null)
 
@@ -49,7 +50,7 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
         className={cn(isOpen && "pointer-events-auto visible opacity-100", "modal modal-bottom sm:modal-middle")}
         onClick={handleOutsideClick}
       >
-        <div className='modal-box relative overflow-visible'>
+        <div className={cn("modal-box relative overflow-visible", boxClassName)}>
           <button className='btn-primary btn-sm btn-circle btn absolute right-2 top-2' onClick={onClose}>
             <CancelIcon className='h-3 w-3' />
           </button>

@@ -7,10 +7,12 @@ import RichTextEditor from "components/common/RichTextEditor"
 import type { RawDraftContentState } from "react-draft-wysiwyg"
 import DisplayRichText from "components/common/DisplayRichText"
 import Heading from "components/common/Heading"
+import Modal from "components/common/Modal"
 
 const PageContentEditor = () => {
   const ctx = useContext(CmsContext)
   const client = api.useContext()
+  const [showDraft, setShowDraft] = useState(false)
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
   const [draftMode, setDraftMode] = useState(false)
   const editorStateStringified = JSON.stringify(convertToRaw(editorState.getCurrentContent()))
@@ -79,6 +81,11 @@ const PageContentEditor = () => {
           {draftMode && (
             <p className='mr-auto animate-pulse italic text-base-content opacity-90'>Changes detected...</p>
           )}
+          {pageDraftContent && (
+            <button className='btn-outline btn' onClick={() => setShowDraft(true)}>
+              Show Draft
+            </button>
+          )}
           <button className='btn-accent btn' onClick={onSaveDraft} disabled={!draftMode || editorEmpty}>
             Save draft
           </button>
@@ -87,8 +94,10 @@ const PageContentEditor = () => {
           </button>
         </div>
       </div>
-      <Heading text='Draf Preview' />
-      <DisplayRichText data={pageDraftContent} className='prose w-full xl:prose-xl' />
+      <Modal isOpen={showDraft} onClose={() => setShowDraft(false)} boxClassName='overflow-y-auto !max-w-3xl flex flex-col gap-4'>
+        <Heading text='Draf Preview' />
+        <DisplayRichText data={pageDraftContent} className='prose w-full xl:prose-xl' />
+      </Modal>
     </>
   )
 }

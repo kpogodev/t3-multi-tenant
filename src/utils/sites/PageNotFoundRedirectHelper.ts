@@ -28,7 +28,6 @@ const PageNotFoundRedirectHelper = async (
       select: {
       slug: true,
       children: true,
-      special: true,
     },
   })
 

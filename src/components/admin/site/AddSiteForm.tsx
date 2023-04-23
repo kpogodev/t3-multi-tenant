@@ -50,6 +50,7 @@ const AddSiteForm = () => {
       domainId: domainId,
       themeId: themeId,
       withNewsPage,
+      withEventsPage,
     })
   }
 

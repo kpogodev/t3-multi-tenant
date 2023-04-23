@@ -44,12 +44,12 @@ export const pageRouter = createTRPCRouter({
       },
       include: {
         pages: true,
-      }
+      },
     })
 
     if (!site) throw new Error("Site not found")
 
-    const pagesTotalCount = site.pages.length > 0 ? site.pages.filter(page => !page.parentId ).length : 0
+    const pagesTotalCount = site.pages.length > 0 ? site.pages.filter((page) => !page.parentId).length : 0
 
     const page = await ctx.prisma.page.create({
       data: {
@@ -90,7 +90,7 @@ export const pageRouter = createTRPCRouter({
 
       if (!site) throw new Error("Site not found")
 
-      const sibilingPagesTotalCount = site.pages.filter(page => page.parentId === input.parentId).length
+      const sibilingPagesTotalCount = site.pages.filter((page) => page.parentId === input.parentId).length
 
       const page = await ctx.prisma.page.create({
         data: {
@@ -140,6 +140,7 @@ export const pageRouter = createTRPCRouter({
         name: "asc",
       },
     })
+    
     return pages
   }),
   getSpecialPages: protectedProcedure.query(async ({ ctx }) => {
@@ -147,18 +148,18 @@ export const pageRouter = createTRPCRouter({
       where: {
         site: {
           userId: ctx.session.user.id,
-        }
+        },
       },
     })
 
-    if(!pages) throw new TRPCError({ code: 'NOT_FOUND', message: 'No pages found'})
+    if (!pages) throw new TRPCError({ code: "NOT_FOUND", message: "No pages found" })
 
-    const pageWithNews = pages.find(page => page.withNews)
-    const pageWithEvents = pages.find(page => page.withEvents)
+    const pageWithNews = pages.find((page) => page.withNews)
+    const pageWithEvents = pages.find((page) => page.withEvents)
 
     const specialPages = []
-    if(pageWithNews) specialPages.push('news')
-    if(pageWithEvents) specialPages.push('events')
+    if (pageWithNews) specialPages.push("news")
+    if (pageWithEvents) specialPages.push("events")
 
     return specialPages
   }),
@@ -187,6 +188,22 @@ export const pageRouter = createTRPCRouter({
               message: "Page name must be unique",
             })
         })
+
+      return page
+    }),
+  editPageOptions: protectedProcedure
+    .input(z.object({ id: z.string(), withNews: z.boolean(), withEvents: z.boolean(), hidden: z.boolean() }))
+    .mutation(async ({ input, ctx }) => {
+      const page = await ctx.prisma.page.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          withNews: input.withNews,
+          withEvents: input.withEvents,
+          hidden: input.hidden,
+        },
+      })
 
       return page
     }),
