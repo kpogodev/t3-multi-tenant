@@ -135,26 +135,6 @@ model Theme {
   features Feature[]
 }
 
-// Features
-enum FeatureType {
-  MAP
-  SLIDESHOW
-  TEXT_BLOCK
-  COMPOUND_BLOCK
-  VIDEO
-}
-
-model Feature {
-  id         String      @id @default(cuid())
-  name       String
-  type       FeatureType
-  theme      Theme       @relation(fields: [themeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  themeId    String
-  components Component[]
-
-  @@index([themeId])
-}
-
 model News {
   id        String         @id @default(cuid())
   title     String
@@ -171,17 +151,37 @@ model News {
 }
 
 model Events {
-  id        String         @id @default(cuid())
+  id        String   @id @default(cuid())
   title     String
   start     DateTime
   end       DateTime
   allDay    Boolean
-  site      Site           @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   siteId    String
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([siteId])
+}
+
+model Feature {
+  id         String      @id @default(cuid())
+  name       String
+  type       FeatureType
+  theme      Theme       @relation(fields: [themeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  themeId    String
+  components Component[]
+
+  @@index([themeId])
+}
+
+enum FeatureType {
+  MAP
+  SLIDESHOW
+  TEXT_BLOCK
+  COMPOUND_BLOCK
+  CUSTOM_BLOCK
+  VIDEO
 }
 
 //Components
@@ -204,6 +204,7 @@ model ComponentsRelation {
   componentId     String         @unique
   compoundBlock   CompoundBlock? @relation(fields: [compoundBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   compoundBlockId String?        @unique
+  customBlock     CustomBlock[]
   slideshow       Slideshow?     @relation(fields: [slideshowId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   slideshowId     String?        @unique
   textBlock       TextBlock?     @relation(fields: [textBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -257,6 +258,8 @@ model ExternalImage {
   compoundBlockId String?        @unique
   news            News?          @relation(fields: [newsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   newsId          String?        @unique
+  imageField      ImageField     @relation(fields: [imageFieldId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  imageFieldId    String         @unique
 }
 
 model CompoundBlock {
@@ -285,4 +288,92 @@ model Video {
   secure_url    String?
   created_at    DateTime            @default(now())
   component     ComponentsRelation?
+}
+
+// Custom Block
+model CustomBlock {
+  id              String             @id @default(cuid())
+  shortTextFields ShortTextField[]
+  longTextFields  LongTextField[]
+  linkFields      LinkField[]
+  imageField      ImageField[]
+  numberField     NumberField[]
+  checkBoxFields  CheckBoxField[]
+  dateFields      DateField[]
+  component       ComponentsRelation @relation(fields: [componentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  componentId     String
+
+  @@index([componentId])
+}
+
+model ShortTextField {
+  id            String      @id @default(cuid())
+  name          String
+  text          String?     @db.LongText
+  customBlock   CustomBlock @relation(fields: [customBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customBlockId String
+
+  @@index([customBlockId])
+}
+
+model LongTextField {
+  id            String      @id @default(cuid())
+  name          String
+  text          String?     @db.LongText
+  customBlock   CustomBlock @relation(fields: [customBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customBlockId String
+
+  @@index([customBlockId])
+}
+
+model LinkField {
+  id            String      @id @default(cuid())
+  name          String
+  text          String?
+  url           String
+  inNewWindow   Boolean     @default(false)
+  customBlock   CustomBlock @relation(fields: [customBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customBlockId String
+
+  @@index([customBlockId])
+}
+
+model ImageField {
+  id            String         @id @default(cuid())
+  name          String
+  image         ExternalImage?
+  customBlock   CustomBlock    @relation(fields: [customBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customBlockId String
+
+  @@index([customBlockId])
+}
+
+model NumberField {
+  id            String      @id @default(cuid())
+  name          String
+  number        Int
+  customBlock   CustomBlock @relation(fields: [customBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customBlockId String
+
+  @@index([customBlockId])
+}
+
+model CheckBoxField {
+  id            String      @id @default(cuid())
+  name          String
+  checked       Boolean     @default(false)
+  customBlock   CustomBlock @relation(fields: [customBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customBlockId String
+
+  @@index([customBlockId])
+}
+
+model DateField {
+  id            String      @id @default(cuid())
+  name          String
+  date          DateTime
+  customBlock   CustomBlock @relation(fields: [customBlockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customBlockId String
+
+  @@index([customBlockId])
 }
